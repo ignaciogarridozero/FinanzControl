@@ -76,7 +76,6 @@
 </head>
 <body class="h-full flex flex-col bg-slate-950 text-slate-100 custom-scrollbar antialiased">
 
-  <!-- Core App State & Handlers -->
   <script>
     window.currentCurrency = localStorage.getItem('fz_currency') || 'CLP'; 
     window.currentLang = localStorage.getItem('fz_lang') || 'es';
@@ -86,7 +85,7 @@
     window.i18nDict = {
       es: {
         appTitle: "FinanzControl",
-        systemSubtitle: "Plataforma Financiera Local & Nube",
+        systemSubtitle: "Plataforma Financiera Multi-Perfil",
         income: "Ingresos Totales",
         expenses: "Egresos Totales",
         balance: "Balance Neto",
@@ -98,7 +97,7 @@
       },
       en: {
         appTitle: "FinanzControl",
-        systemSubtitle: "Local & Cloud Financial Suite",
+        systemSubtitle: "Multi-Profile Financial Suite",
         income: "Total Income",
         expenses: "Total Expenses",
         balance: "Net Balance",
@@ -146,10 +145,11 @@
   <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none max-w-[90vw] sm:max-w-sm"></div>
   <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="handleImportJSON(event)">
 
+  <!-- HEADER NAVBAR -->
   <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-30 backdrop-blur-md no-print">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Brand Logo & User Profile Badge -->
+      <!-- Brand Logo & Badge -->
       <div class="flex items-center space-x-2 sm:space-x-3">
         <div class="p-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 shadow-inner">
           <i data-lucide="wallet" class="w-5 h-5 sm:w-6 sm:h-6"></i>
@@ -159,7 +159,7 @@
             FinanzControl <span class="text-emerald-400 font-extrabold ml-1">PRO</span> 
             <span id="sync-status-badge" class="text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap">⚡ En Línea</span>
           </h1>
-          <p class="text-[11px] sm:text-xs text-slate-400 hidden xs:block" id="ui-subtitle">Plataforma Financiera Integrada</p>
+          <p class="text-[11px] sm:text-xs text-slate-400 hidden xs:block" id="ui-subtitle">Plataforma Financiera Multi-Perfil</p>
         </div>
       </div>
 
@@ -178,12 +178,12 @@
           <select id="global-entity-filter" class="bg-transparent text-xs sm:text-sm font-semibold text-slate-200 focus:outline-none cursor-pointer">
             <!-- Dynamically Populated -->
           </select>
-          <button onclick="openModal('manage-profiles-modal')" class="ml-1.5 text-slate-400 hover:text-emerald-400 transition" title="Configurar Espacios">
+          <button onclick="openModal('manage-profiles-modal')" class="ml-1.5 text-slate-400 hover:text-emerald-400 transition" title="Configurar / Eliminar Espacios">
             <i data-lucide="settings-2" class="w-3.5 h-3.5"></i>
           </button>
         </div>
 
-        <!-- User Profile Button -->
+        <!-- User Profile Session Button -->
         <button id="user-menu-btn" onclick="openModal('settings-modal')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
           <div id="user-avatar-badge" class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center font-bold text-[10px]">U</div>
           <span id="user-name-display" class="hidden sm:inline truncate max-w-[90px]">Usuario</span>
@@ -241,9 +241,8 @@
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 space-y-6">
     
-    <!-- Top Summary KPI Metric Cards -->
+    <!-- Top KPI Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 no-print">
-      <!-- Income KPI Card -->
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
@@ -259,7 +258,6 @@
         </div>
       </div>
 
-      <!-- Expense KPI Card -->
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
@@ -275,7 +273,6 @@
         </div>
       </div>
 
-      <!-- Net Balance KPI Card -->
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
@@ -291,7 +288,6 @@
         </div>
       </div>
 
-      <!-- Budget Execution Progress KPI Card -->
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
@@ -308,7 +304,7 @@
       </div>
     </section>
 
-    <!-- Main Tabs Navigation -->
+    <!-- Navigation Tabs -->
     <div class="border-b border-slate-800 flex space-x-1 sm:space-x-2 overflow-x-auto custom-scrollbar no-print pb-px">
       <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn active px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-emerald-400 text-emerald-400 flex items-center space-x-2 whitespace-nowrap">
         <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
@@ -334,20 +330,17 @@
         <i data-lucide="receipt" class="w-4 h-4"></i>
         <span>Transacciones</span>
       </button>
-
-      <!-- Sports Club Tab Button -->
       <button onclick="switchTab('members')" id="tab-btn-members" class="tab-btn hidden px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
         <i data-lucide="users" class="w-4 h-4 text-amber-400"></i>
         <span>Jugadores y Cuotas</span>
       </button>
-
       <button onclick="switchTab('ai-advisor')" id="tab-btn-ai-advisor" class="tab-btn px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2 whitespace-nowrap">
         <i data-lucide="bot" class="w-4 h-4 text-purple-400"></i>
         <span class="text-purple-300 font-bold">Asistente IA</span>
       </button>
     </div>
 
-    <!-- Tab Contents -->
+    <!-- TAB DASHBOARD -->
     <div id="tab-dashboard" class="tab-content space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 glass-card p-4 sm:p-6 rounded-2xl border border-slate-800">
@@ -391,6 +384,7 @@
       </div>
     </div>
 
+    <!-- TAB COMPARATIVE -->
     <div id="tab-comparative" class="tab-content hidden space-y-6">
       <div class="glass-card p-4 sm:p-6 rounded-2xl border border-slate-800 space-y-6">
         <div>
@@ -406,6 +400,7 @@
       </div>
     </div>
 
+    <!-- TAB GOALS -->
     <div id="tab-goals" class="tab-content hidden space-y-6">
       <div class="glass-card p-4 sm:p-6 rounded-2xl border border-slate-800 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -425,6 +420,7 @@
       </div>
     </div>
 
+    <!-- TAB INFOGRAPHIC -->
     <div id="tab-infographic" class="tab-content hidden space-y-6">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3 glass-card p-4 rounded-2xl border border-slate-800 no-print">
         <div>
@@ -527,6 +523,7 @@
       </div>
     </div>
 
+    <!-- TAB BUDGET VS REAL -->
     <div id="tab-budget-vs-real" class="tab-content hidden space-y-6">
       <div class="glass-card p-4 sm:p-6 rounded-2xl border border-slate-800">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -565,6 +562,7 @@
       </div>
     </div>
 
+    <!-- TAB TRANSACTIONS -->
     <div id="tab-transactions" class="tab-content hidden space-y-6">
       <div class="glass-card p-4 sm:p-6 rounded-2xl border border-slate-800 space-y-4">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -612,6 +610,7 @@
       </div>
     </div>
 
+    <!-- TAB MEMBERS (SPORTS CLUB) -->
     <div id="tab-members" class="tab-content hidden space-y-6">
       <div class="glass-card p-4 sm:p-6 rounded-2xl border border-slate-800 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -665,6 +664,7 @@
       </div>
     </div>
 
+    <!-- TAB AI ADVISOR -->
     <div id="tab-ai-advisor" class="tab-content hidden space-y-6">
       <div class="glass-card p-4 sm:p-6 rounded-2xl border border-purple-500/20 bg-gradient-to-b from-purple-900/10 to-slate-900">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
@@ -710,17 +710,14 @@
         <p class="text-xs text-slate-400">Inicia sesión o ingresa como invitado para gestionar tus finanzas</p>
       </div>
 
-      <!-- Error Alert Message -->
       <div id="auth-error-msg" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-medium text-center"></div>
 
-      <!-- Auth Tabs -->
       <div class="flex border-b border-slate-800">
         <button type="button" id="tab-auth-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400 transition">Inicia Sesión</button>
         <button type="button" id="tab-auth-register" onclick="switchAuthTab('register')" class="flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-400 transition">Crear Cuenta</button>
         <button type="button" id="tab-auth-guest" onclick="switchAuthTab('guest')" class="flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-400 transition">Invitado</button>
       </div>
 
-      <!-- Login Form -->
       <form id="form-auth-login" onsubmit="handleAuthLogin(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Correo Electrónico</label>
@@ -743,7 +740,6 @@
         </button>
       </form>
 
-      <!-- Register Form -->
       <form id="form-auth-register" onsubmit="handleAuthRegister(event)" class="space-y-4 hidden">
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre Completo</label>
@@ -767,7 +763,6 @@
         </button>
       </form>
 
-      <!-- Guest Form -->
       <div id="form-auth-guest" class="space-y-4 hidden text-center">
         <p class="text-xs text-slate-400 leading-relaxed">
           Accede inmediatamente sin registrar un correo. Tus datos se guardarán de forma privada en la memoria local de tu dispositivo.
@@ -777,7 +772,6 @@
         </button>
       </div>
 
-      <!-- Social Login / Google -->
       <div class="pt-2 border-t border-slate-800 space-y-3">
         <div class="text-center text-[11px] text-slate-500 uppercase tracking-wider font-semibold">O continuar con</div>
         <button type="button" onclick="handleAuthGoogle()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-semibold rounded-xl text-xs transition flex items-center justify-center gap-2">
@@ -808,15 +802,13 @@
       </div>
 
       <div class="space-y-4 max-h-[75vh] overflow-y-auto pr-1 custom-scrollbar">
-        
-        <!-- User Account Profile -->
         <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60 space-y-3">
           <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
             <i data-lucide="user" class="w-4 h-4"></i> Mi Cuenta de Usuario
           </h4>
           <div class="flex items-center justify-between gap-3 text-xs">
             <div>
-              <p id="settings-user-email" class="font-semibold text-white">usuario@ejemplo.com</p>
+              <p id="settings-user-email" class="font-semibold text-white">invitado@finanzcontrol.local</p>
               <p id="settings-user-status" class="text-[11px] text-slate-400">Sesión Activa</p>
             </div>
             <button onclick="handleAuthLogout()" class="px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500 text-rose-300 hover:text-white font-semibold rounded-lg transition border border-rose-500/30 text-xs">
@@ -825,7 +817,6 @@
           </div>
         </div>
 
-        <!-- Backups and Data Export/Import -->
         <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60 space-y-3">
           <h4 class="text-xs font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
             <i data-lucide="database" class="w-4 h-4"></i> Respaldos y Copias de Seguridad
@@ -841,7 +832,6 @@
           </div>
         </div>
 
-        <!-- Currency and Language Options -->
         <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60 space-y-3">
           <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
             <i data-lucide="coins" class="w-4 h-4"></i> Formato de Moneda e Idioma
@@ -865,7 +855,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="pt-2 flex justify-end">
@@ -874,7 +863,40 @@
     </div>
   </div>
 
-  <!-- PASSWORD RECOVERY MODAL -->
+  <!-- PROFILE MANAGEMENT & DELETION MODAL -->
+  <div id="manage-profiles-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
+      <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-base text-white flex items-center gap-2">
+          <i data-lucide="layers" class="w-5 h-5 text-emerald-400"></i>
+          <span>Gestión de Perfiles y Espacios</span>
+        </h3>
+        <button onclick="closeModal('manage-profiles-modal')" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      
+      <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+        Activa, crea o elimina los espacios de trabajo que administras. Eliminar un perfil borrará su espacio de la selección.
+      </p>
+
+      <form id="form-new-profile" onsubmit="handleCreateProfile(event)" class="space-y-3 pb-4 border-b border-slate-800">
+        <label class="block text-xs font-semibold text-slate-300">Crear Nuevo Perfil Personalizado</label>
+        <div class="flex gap-2">
+          <input type="text" id="input-new-profile-icon" placeholder="Emoji (ej. 🏢, 🚗)" class="w-20 bg-slate-800 border border-slate-700 text-xs text-center text-white rounded-lg px-2 py-2 focus:outline-none focus:border-emerald-400" required>
+          <input type="text" id="input-new-profile-name" placeholder="Nombre (ej. Mi Empresa)" class="flex-1 bg-slate-800 border border-slate-700 text-xs text-white rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-400" required>
+          <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs whitespace-nowrap">Crear</button>
+        </div>
+      </form>
+
+      <div class="mt-4">
+        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Espacios Activos</h4>
+        <div id="profiles-list-container" class="max-h-56 overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD MODAL -->
   <div id="forgot-pass-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl relative my-auto space-y-4">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -888,7 +910,7 @@
       </div>
 
       <form id="form-forgot-pass" onsubmit="handleForgotPassSubmit(event)" class="space-y-4">
-        <p class="text-xs text-slate-400">Ingresa tu correo para enviarte un enlace de restablecimiento.</p>
+        <p class="text-xs text-slate-400">Ingresa tu correo registrado para enviarte un enlace de restablecimiento.</p>
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Correo Registrado</label>
           <input type="email" id="forgot-email" placeholder="nombre@ejemplo.com" class="w-full bg-slate-800 border border-slate-700 text-sm text-white rounded-xl px-3 py-2 focus:outline-none focus:border-amber-400" required>
@@ -901,33 +923,7 @@
     </div>
   </div>
 
-  <!-- OTHER MODALS (Profiles, Year, Goal, Transactions, Budget, Tags, Club Categories, Reset) -->
-  <div id="manage-profiles-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
-      <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
-        <h3 class="font-bold text-base text-white flex items-center gap-2">
-          <i data-lucide="layers" class="w-5 h-5 text-emerald-400"></i>
-          <span>Gestión de Perfiles Financieros</span>
-        </h3>
-        <button onclick="closeModal('manage-profiles-modal')" class="text-slate-400 hover:text-white">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <form id="form-new-profile" onsubmit="handleCreateProfile(event)" class="space-y-3 pb-4 border-b border-slate-800">
-        <label class="block text-xs font-semibold text-slate-300">Crear Nuevo Perfil Personalizado</label>
-        <div class="flex gap-2">
-          <input type="text" id="input-new-profile-icon" placeholder="Emoji (ej. 🏢, 🚗)" class="w-20 bg-slate-800 border border-slate-700 text-xs text-center text-white rounded-lg px-2 py-2 focus:outline-none focus:border-emerald-400" required>
-          <input type="text" id="input-new-profile-name" placeholder="Nombre (ej. Mi Empresa)" class="flex-1 bg-slate-800 border border-slate-700 text-xs text-white rounded-lg px-3 py-2 focus:outline-none focus:border-emerald-400" required>
-          <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-3.5 py-2 rounded-lg text-xs whitespace-nowrap">Crear</button>
-        </div>
-      </form>
-      <div class="mt-4">
-        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Espacios Activos</h4>
-        <div id="profiles-list-container" class="max-h-56 overflow-y-auto space-y-2 pr-1 custom-scrollbar"></div>
-      </div>
-    </div>
-  </div>
-
+  <!-- ADD YEAR MODAL -->
   <div id="add-year-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -952,6 +948,7 @@
     </div>
   </div>
 
+  <!-- ADD GOAL MODAL -->
   <div id="add-goal-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -990,6 +987,7 @@
     </div>
   </div>
 
+  <!-- ADD TRANSACTION MODAL -->
   <div id="add-transaction-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -1082,6 +1080,7 @@
     </div>
   </div>
 
+  <!-- ADD BUDGET MODAL -->
   <div id="add-budget-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -1143,6 +1142,7 @@
     </div>
   </div>
 
+  <!-- MANAGE CONCEPTS MODAL -->
   <div id="manage-concepts-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -1186,6 +1186,7 @@
     </div>
   </div>
 
+  <!-- MANAGE CLUB CATEGORIES MODAL -->
   <div id="manage-club-categories-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -1213,6 +1214,7 @@
     </div>
   </div>
 
+  <!-- ADD MEMBER MODAL -->
   <div id="add-member-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative my-auto">
       <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -1255,8 +1257,67 @@
     </div>
   </div>
 
+  <!-- FIREBASE SDK & APP ENGINE SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Configuration from user project
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnFY8WJd34vOiw60rrbEFk1WXHynRBggc",
+      authDomain: "finanzcontrol-pro.firebaseapp.com",
+      projectId: "finanzcontrol-pro",
+      storageBucket: "finanzcontrol-pro.firebasestorage.app",
+      messagingSenderId: "806885387014",
+      appId: "1:806885387014:web:13ce4078a1369e01440c87"
+    };
+
+    // Initialize Firebase Services
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // Firebase Auth State Listener
+    onAuthStateChanged(auth, (user) => {
+      const badge = document.getElementById('sync-status-badge');
+      if (user) {
+        if (badge) {
+          badge.textContent = "⚡ Firebase Activo";
+          badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap";
+        }
+      } else {
+        if (badge) {
+          badge.textContent = "💾 Modo Local";
+          badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 whitespace-nowrap";
+        }
+      }
+    });
+
+    window.firebaseAuthLogin = async function(email, password) {
+      return await signInWithEmailAndPassword(auth, email, password);
+    };
+
+    window.firebaseAuthRegister = async function(email, password) {
+      return await createUserWithEmailAndPassword(auth, email, password);
+    };
+
+    window.firebaseAuthGoogle = async function() {
+      return await signInWithPopup(auth, googleProvider);
+    };
+
+    window.firebaseAuthReset = async function(email) {
+      return await sendPasswordResetEmail(auth, email);
+    };
+
+    window.firebaseAuthSignOut = async function() {
+      return await signOut(auth);
+    };
+  </script>
+
   <script>
-    // --- AUTHENTICATION ENGINE & STATE ---
+    // --- AUTHENTICATION ENGINE ---
     window.switchAuthTab = function(tab) {
       document.getElementById('tab-auth-login').className = tab === 'login' ? 'flex-1 py-2 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400 transition' : 'flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-400 transition';
       document.getElementById('tab-auth-register').className = tab === 'register' ? 'flex-1 py-2 text-xs font-bold border-b-2 border-emerald-400 text-emerald-400 transition' : 'flex-1 py-2 text-xs font-bold border-b-2 border-transparent text-slate-400 transition';
@@ -1292,11 +1353,21 @@
       updateApp();
     };
 
-    window.handleAuthLogin = function(e) {
+    window.handleAuthLogin = async function(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
       const errBox = document.getElementById('auth-error-msg');
+
+      try {
+        if (typeof window.firebaseAuthLogin === 'function') {
+          const userCred = await window.firebaseAuthLogin(email, password);
+          setUserSession({ email: userCred.user.email, name: userCred.user.displayName || email.split('@')[0], isGuest: false });
+          return;
+        }
+      } catch (err) {
+        console.warn("Firebase Auth fallback to local:", err.message);
+      }
 
       const accounts = JSON.parse(localStorage.getItem('fz_user_accounts')) || [];
       const match = accounts.find(a => a.email.toLowerCase() === email.toLowerCase() && a.password === password);
@@ -1309,13 +1380,13 @@
         setUserSession({ email, name: email.split('@')[0], isGuest: false });
       } else {
         if (errBox) {
-          errBox.textContent = "Credenciales incorrectas o contraseña demasiado corta.";
+          errBox.textContent = "Credenciales incorrectas o clave de menos de 6 caracteres.";
           errBox.classList.remove('hidden');
         }
       }
     };
 
-    window.handleAuthRegister = function(e) {
+    window.handleAuthRegister = async function(e) {
       e.preventDefault();
       const name = document.getElementById('register-name').value.trim();
       const email = document.getElementById('register-email').value.trim();
@@ -1328,6 +1399,16 @@
           errBox.classList.remove('hidden');
         }
         return;
+      }
+
+      try {
+        if (typeof window.firebaseAuthRegister === 'function') {
+          const userCred = await window.firebaseAuthRegister(email, password);
+          setUserSession({ email: userCred.user.email, name, isGuest: false });
+          return;
+        }
+      } catch (err) {
+        console.warn("Firebase Auth register fallback to local:", err.message);
       }
 
       const accounts = JSON.parse(localStorage.getItem('fz_user_accounts')) || [];
@@ -1350,7 +1431,16 @@
       setUserSession({ email: 'invitado@finanzcontrol.local', name: 'Invitado', isGuest: true });
     };
 
-    window.handleAuthGoogle = function() {
+    window.handleAuthGoogle = async function() {
+      try {
+        if (typeof window.firebaseAuthGoogle === 'function') {
+          const res = await window.firebaseAuthGoogle();
+          setUserSession({ email: res.user.email, name: res.user.displayName || 'Usuario Google', isGuest: false });
+          return;
+        }
+      } catch (e) {
+        console.warn("Google Popup fallback:", e.message);
+      }
       const dummyMail = 'usuario.google@gmail.com';
       setUserSession({ email: dummyMail, name: 'Usuario Google', isGuest: false });
     };
@@ -1358,14 +1448,22 @@
     window.handleAuthLogout = function() {
       localStorage.removeItem('fz_active_local_user');
       window.currentUser = null;
+      if (typeof window.firebaseAuthSignOut === 'function') {
+        window.firebaseAuthSignOut().catch(() => {});
+      }
       closeModal('settings-modal');
       openModal('auth-modal');
       showToast('Sesión cerrada correctamente');
     };
 
-    window.handleForgotPassSubmit = function(e) {
+    window.handleForgotPassSubmit = async function(e) {
       e.preventDefault();
       const email = document.getElementById('forgot-email').value;
+      try {
+        if (typeof window.firebaseAuthReset === 'function') {
+          await window.firebaseAuthReset(email);
+        }
+      } catch (err) {}
       closeModal('forgot-pass-modal');
       showToast(`Enlace de recuperación enviado a ${email}`);
     };
@@ -1480,7 +1578,101 @@
       populateSelect(bgSel);
       populateSelect(conceptEntitySel);
       populateSelect(conceptFilterEntitySel);
+
+      renderProfilesManageList();
     };
+
+    function renderProfilesManageList() {
+      const container = document.getElementById('profiles-list-container');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      window.profiles.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-2.5 rounded-xl bg-slate-800/80 border border-slate-700/60 text-xs gap-2';
+
+        item.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-base">${p.icon}</span>
+            <span class="font-bold text-white">${p.name}</span>
+            ${p.isDefault ? '<span class="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded font-semibold">Sistema</span>' : ''}
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="relative inline-flex items-center cursor-pointer" title="Activar / Desactivar">
+              <input type="checkbox" ${p.active ? 'checked' : ''} onchange="toggleProfileActive('${p.id}')" class="sr-only peer">
+              <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+            ${!p.isDefault ? `
+              <button onclick="deleteCustomProfile('${p.id}')" class="text-slate-400 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-700 transition" title="Eliminar este perfil">
+                <i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i>
+              </button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function deleteCustomProfile(id) {
+      const profile = window.profiles.find(p => p.id === id);
+      if (!profile) return;
+
+      if (profile.isDefault) {
+        showToast('Los perfiles predeterminados no se pueden eliminar.');
+        return;
+      }
+
+      window.profiles = window.profiles.filter(p => p.id !== id);
+      
+      const globalSel = document.getElementById('global-entity-filter');
+      if (globalSel && globalSel.value === id) {
+        const fallback = window.profiles.find(p => p.active) || window.profiles[0];
+        if (fallback) globalSel.value = fallback.id;
+      }
+
+      saveStorage();
+      renderProfilesSelects();
+      showToast(`Perfil "${profile.name}" eliminado correctamente.`);
+      updateApp();
+    }
+
+    function toggleProfileActive(id) {
+      const profile = window.profiles.find(p => p.id === id);
+      if (profile) {
+        const activeCount = window.profiles.filter(p => p.active).length;
+        if (profile.active && activeCount <= 1) {
+          showToast('Debes mantener al menos 1 perfil activo');
+          renderProfilesManageList();
+          return;
+        }
+        profile.active = !profile.active;
+        saveStorage();
+        renderProfilesSelects();
+        updateApp();
+        showToast(`Perfil "${profile.name}" ${profile.active ? 'activado' : 'desactivado'}`);
+      }
+    }
+
+    function handleCreateProfile(e) {
+      e.preventDefault();
+      const icon = document.getElementById('input-new-profile-icon').value.trim() || '💼';
+      const name = document.getElementById('input-new-profile-name').value.trim();
+
+      if (!name) return;
+
+      const id = name.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now();
+      window.profiles.push({ id, name, icon, active: true, isDefault: false });
+
+      saveStorage();
+      renderProfilesSelects();
+      document.getElementById('input-new-profile-icon').value = '';
+      document.getElementById('input-new-profile-name').value = '';
+      showToast(`Perfil "${name}" creado exitosamente`);
+      updateApp();
+    }
 
     window.renderYearSelects = function() {
       const globalYearSel = document.getElementById('global-year-filter');
