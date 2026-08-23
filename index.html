@@ -93,7 +93,7 @@
         newTx: "Nuevo",
         settings: "Ajustes",
         tags: "Etiquetas",
-        reset: "Cero"
+        reset: "Borrar Todo"
       },
       en: {
         appTitle: "FinanzControl",
@@ -105,7 +105,7 @@
         newTx: "New",
         settings: "Settings",
         tags: "Tags",
-        reset: "Reset"
+        reset: "Reset All"
       }
     };
 
@@ -970,6 +970,28 @@
     </div>
   </div>
 
+  <!-- RESET CONFIRMATION MODAL -->
+  <div id="reset-confirm-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative text-center my-auto space-y-4">
+      <div class="w-12 h-12 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-2xl flex items-center justify-center mx-auto">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <h3 class="font-bold text-lg text-white">¿Reiniciar todos los datos a $0?</h3>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Esta acción eliminará de forma permanente todas tus transacciones, presupuestos y metas registradas en la memoria del navegador.
+      </p>
+
+      <div class="flex justify-center gap-3 pt-2">
+        <button type="button" onclick="closeModal('reset-confirm-modal')" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition">
+          Cancelar
+        </button>
+        <button type="button" onclick="resetAllData()" class="px-4 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-rose-500/20">
+          Sí, Borrar Todo
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ADD YEAR MODAL -->
   <div id="add-year-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl relative my-auto">
@@ -1321,26 +1343,34 @@
     };
 
     // Initialize Firebase Services
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    let app, auth, db;
+    try {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    } catch (err) {
+      console.warn("Firebase Init fallback:", err.message);
+    }
+
     const googleProvider = new GoogleAuthProvider();
 
     // Firebase Auth State Listener
-    onAuthStateChanged(auth, (user) => {
-      const badge = document.getElementById('sync-status-badge');
-      if (user) {
-        if (badge) {
-          badge.textContent = "⚡ Firebase Activo";
-          badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap";
+    if (auth) {
+      onAuthStateChanged(auth, (user) => {
+        const badge = document.getElementById('sync-status-badge');
+        if (user) {
+          if (badge) {
+            badge.textContent = "⚡ Firebase Activo";
+            badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap";
+          }
+        } else {
+          if (badge) {
+            badge.textContent = "💾 Modo Local";
+            badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 whitespace-nowrap";
+          }
         }
-      } else {
-        if (badge) {
-          badge.textContent = "💾 Modo Local";
-          badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 whitespace-nowrap";
-        }
-      }
-    });
+      });
+    }
 
     window.firebaseAuthLogin = async function(email, password) {
       return await signInWithEmailAndPassword(auth, email, password);
@@ -1399,10 +1429,10 @@
       const editNameInput = document.getElementById('edit-user-name-input');
       const guestNotice = document.getElementById('guest-profile-notice');
 
-      const displayName = userObj.name || userObj.email.split('@')[0];
+      const displayName = userObj.name || (userObj.email ? userObj.email.split('@')[0] : 'Usuario');
       if (disp) disp.textContent = displayName;
       if (setName) setName.textContent = displayName;
-      if (setMail) setMail.textContent = userObj.email;
+      if (setMail) setMail.textContent = userObj.email || 'invitado@finanzcontrol.local';
 
       // Render Avatar Badge & Preview
       const initialLetter = (displayName || 'U').charAt(0).toUpperCase();
@@ -1466,9 +1496,8 @@
         window.tempPhotoURL = null;
       }
 
-      // Update in user accounts array if registered locally
       const accounts = JSON.parse(localStorage.getItem('fz_user_accounts')) || [];
-      const matchIdx = accounts.findIndex(a => a.email.toLowerCase() === window.currentUser.email.toLowerCase());
+      const matchIdx = accounts.findIndex(a => a.email && a.email.toLowerCase() === window.currentUser.email.toLowerCase());
       if (matchIdx >= 0) {
         accounts[matchIdx].name = newName;
         accounts[matchIdx].photoURL = window.currentUser.photoURL;
@@ -1641,6 +1670,7 @@
     let monthlyChartInstance = null;
     let categoryChartInstance = null;
     let interannualChartInstance = null;
+    let selectedCategoryFilter = 'ALL';
 
     function loadLocalStorage() {
       try {
@@ -1856,6 +1886,15 @@
       const currentYear = getSelectedYear();
       const currentMonth = getSelectedMonth();
 
+      const membersTabBtn = document.getElementById('tab-btn-members');
+      if (membersTabBtn) {
+        if (currentEntity === 'club') {
+          membersTabBtn.classList.remove('hidden');
+        } else {
+          membersTabBtn.classList.add('hidden');
+        }
+      }
+
       const filteredTx = window.transactions.filter(t => {
         const matchEntity = t.entity === currentEntity;
         const matchYear = currentYear === 'ALL' || t.year === currentYear;
@@ -1876,11 +1915,13 @@
 
       const totalBudgetedExpense = filteredBudgets.reduce((acc, curr) => acc + curr.amount, 0);
       const budgetExecution = totalBudgetedExpense > 0 ? Math.round((totalExpense / totalBudgetedExpense) * 100) : 0;
+      const savingsRate = totalIncome > 0 ? Math.max(0, Math.round((netBalance / totalIncome) * 100)) : 0;
 
       document.getElementById('kpi-income').textContent = formatCurrency(totalIncome);
       document.getElementById('kpi-expense').textContent = formatCurrency(totalExpense);
       document.getElementById('kpi-balance').textContent = formatCurrency(netBalance);
       document.getElementById('kpi-budget-percent').textContent = `${budgetExecution}%`;
+      document.getElementById('kpi-savings-rate').textContent = `Superávit / Ahorro: ${savingsRate}%`;
 
       const budgetBar = document.getElementById('kpi-budget-bar');
       if (budgetBar) budgetBar.style.width = `${Math.min(100, budgetExecution)}%`;
@@ -1890,7 +1931,7 @@
       renderTransactions();
       renderMembersRoster();
       renderSavingsGoals();
-      renderInfographic(totalIncome, totalExpense, netBalance, totalBudgetedExpense, budgetExecution, filteredTx);
+      renderInfographic(totalIncome, totalExpense, netBalance, totalBudgetedExpense, budgetExecution, savingsRate, filteredTx);
       renderCharts();
     };
 
@@ -2001,6 +2042,252 @@
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
+    function renderMembersRoster() {
+      const container = document.getElementById('members-roster-body');
+      const categoryPillsContainer = document.getElementById('member-category-pills');
+      const recollectionList = document.getElementById('category-recollection-list');
+      
+      if (!container) return;
+
+      const currentYear = getSelectedYear();
+      const currentMonth = getSelectedMonth();
+
+      if (categoryPillsContainer) {
+        const categories = ['ALL', ...window.clubCategories];
+        categoryPillsContainer.innerHTML = '';
+        categories.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.className = `px-3 py-1 rounded-full text-xs font-semibold transition ${selectedCategoryFilter === cat ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`;
+          btn.textContent = cat === 'ALL' ? 'Todas' : cat;
+          btn.onclick = () => {
+            selectedCategoryFilter = cat;
+            renderMembersRoster();
+          };
+          categoryPillsContainer.appendChild(btn);
+        });
+      }
+
+      let filteredMembers = window.clubMembers;
+      if (selectedCategoryFilter !== 'ALL') {
+        filteredMembers = window.clubMembers.filter(m => m.category === selectedCategoryFilter);
+      }
+
+      container.innerHTML = '';
+
+      if (filteredMembers.length === 0) {
+        container.innerHTML = `<tr><td colspan="5" class="px-4 py-8 text-center text-slate-500 italic">No hay jugadores registrados.</td></tr>`;
+      } else {
+        filteredMembers.forEach(m => {
+          const paidTx = window.transactions.find(t => 
+            t.entity === 'club' && 
+            t.memberId === m.id && 
+            t.conceptId === 'Cuotas_Socios' && 
+            (currentYear === 'ALL' || t.year === currentYear) && 
+            (currentMonth === 'ALL' || t.month === currentMonth)
+          );
+
+          const isPaid = !!paidTx;
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-800/40 transition';
+          tr.innerHTML = `
+            <td class="px-4 py-3 font-bold text-white flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs border border-amber-500/30 shrink-0">
+                ${m.name.charAt(0)}
+              </div>
+              <span class="truncate">${m.name}</span>
+            </td>
+            <td class="px-4 py-3 text-xs"><span class="px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-slate-700 font-semibold">${m.category}</span></td>
+            <td class="px-4 py-3 text-xs text-slate-300 truncate max-w-[140px]">${m.guardian || 'Sin tutor'}</td>
+            <td class="px-4 py-3 text-center">
+              ${isPaid 
+                ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">🟢 Pagado</span>' 
+                : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">🔴 Pendiente</span>'}
+            </td>
+            <td class="px-4 py-3 text-center">
+              <button onclick="quickRegisterFee('${m.id}')" class="px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 text-xs font-semibold transition border border-amber-500/30 whitespace-nowrap">
+                Cobrar
+              </button>
+            </td>
+          `;
+          container.appendChild(tr);
+        });
+      }
+
+      if (recollectionList) {
+        recollectionList.innerHTML = '';
+        if (window.clubCategories.length === 0) {
+          recollectionList.innerHTML = `<p class="text-slate-500 text-xs italic">Sin ramas registradas.</p>`;
+        } else {
+          window.clubCategories.forEach(cat => {
+            const catMembers = window.clubMembers.filter(m => m.category === cat);
+            const collected = window.transactions.filter(t => {
+              if (t.entity !== 'club' || !t.memberId) return false;
+              const member = window.clubMembers.find(m => m.id === t.memberId);
+              const matchCat = member && member.category === cat;
+              const matchYear = currentYear === 'ALL' || t.year === currentYear;
+              const matchMonth = currentMonth === 'ALL' || t.month === currentMonth;
+              return matchCat && matchYear && matchMonth;
+            }).reduce((a, c) => a + c.amount, 0);
+
+            recollectionList.innerHTML += `
+              <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs gap-2">
+                <div class="overflow-hidden">
+                  <div class="font-bold text-slate-200 truncate">${cat}</div>
+                  <div class="text-[10px] text-slate-400">${catMembers.length} integrantes</div>
+                </div>
+                <div class="font-bold text-emerald-400 text-xs sm:text-sm shrink-0">${formatCurrency(collected)}</div>
+              </div>
+            `;
+          });
+        }
+      }
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function renderSavingsGoals() {
+      const container = document.getElementById('goals-grid');
+      if (!container) return;
+
+      const currentEntity = getSelectedEntity();
+      const entityGoals = window.savingsGoals.filter(g => g.entity === currentEntity);
+
+      container.innerHTML = '';
+
+      if (entityGoals.length === 0) {
+        container.innerHTML = `<p class="text-slate-500 text-xs italic col-span-full py-4 text-center">No hay metas de ahorro configuradas para este perfil.</p>`;
+        return;
+      }
+
+      entityGoals.forEach(g => {
+        const pct = Math.min(100, Math.round((g.current / g.target) * 100));
+        const isCompleted = g.current >= g.target;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card p-4 sm:p-5 rounded-2xl border border-slate-800 space-y-4 relative';
+        card.innerHTML = `
+          <div class="flex justify-between items-start gap-2">
+            <div>
+              <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded font-bold">Meta</span>
+              <h3 class="font-bold text-sm sm:text-base text-white mt-1.5">${g.name}</h3>
+            </div>
+            <button onclick="deleteGoal('${g.id}')" class="text-slate-500 hover:text-rose-400 p-1 rounded transition" title="Eliminar">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <div class="flex justify-between items-baseline text-xs">
+            <span class="text-slate-400">Ahorrado: <strong class="text-emerald-400 text-sm">${formatCurrency(g.current)}</strong></span>
+            <span class="text-slate-500">Obj: ${formatCurrency(g.target)}</span>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-[11px] text-slate-400">
+              <span>Progreso</span>
+              <span class="${isCompleted ? 'text-emerald-400 font-bold' : 'text-slate-300'}">${pct}%</span>
+            </div>
+            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden">
+              <div class="${isCompleted ? 'bg-emerald-400' : 'bg-amber-400'} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs gap-2">
+            <span class="text-slate-400 truncate"><i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500 inline mr-1"></i>Plazo: ${g.deadline || 'Sin fecha'}</span>
+            <button onclick="addGoalAmount('${g.id}')" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 font-bold rounded-lg transition border border-amber-500/30 flex items-center gap-1 shrink-0">
+              <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Abonar
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function renderInfographic(totalInc, totalExp, netBal, totalBgExp, bgExec, savingsRate, filteredTx) {
+      const currentEntity = getSelectedEntity();
+      const currentYear = getSelectedYear();
+      const currentMonth = getSelectedMonth();
+
+      const entityBadgeEl = document.getElementById('info-entity-badge');
+      if (entityBadgeEl) {
+        const prof = window.profiles.find(p => p.id === currentEntity);
+        entityBadgeEl.textContent = prof ? `${prof.icon} ${prof.name}` : currentEntity;
+      }
+
+      const periodTextEl = document.getElementById('info-period-text');
+      if (periodTextEl) periodTextEl.textContent = `Período: ${currentMonth} ${currentYear}`;
+
+      const dateEl = document.getElementById('info-generated-date');
+      if (dateEl) dateEl.textContent = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      document.getElementById('info-kpi-income').textContent = formatCurrency(totalInc);
+      document.getElementById('info-kpi-expense').textContent = formatCurrency(totalExp);
+      document.getElementById('info-kpi-balance').textContent = formatCurrency(netBal);
+      document.getElementById('info-kpi-budget').textContent = `${bgExec}%`;
+
+      document.getElementById('info-savings-rate-badge').textContent = `${savingsRate}%`;
+      const barEl = document.getElementById('info-savings-rate-bar');
+      if (barEl) barEl.style.width = `${Math.min(100, savingsRate)}%`;
+
+      const highlightsList = document.getElementById('info-highlights-list');
+      if (highlightsList) {
+        highlightsList.innerHTML = '';
+        if (filteredTx.length === 0) {
+          highlightsList.innerHTML = `<li class="text-slate-400 italic">Sin transacciones registradas en este período.</li>`;
+        } else {
+          const topExp = [...filteredTx].filter(t => t.type === 'EGRESO').sort((a, b) => b.amount - a.amount)[0];
+          const topInc = [...filteredTx].filter(t => t.type === 'INGRESO').sort((a, b) => b.amount - a.amount)[0];
+
+          if (topInc) {
+            const concept = window.CONCEPTS.find(c => c.id === topInc.conceptId);
+            highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-emerald-400">▸</span><span><strong>Mayor Ingreso:</strong> ${concept ? concept.name : topInc.conceptId} con ${formatCurrency(topInc.amount)}.</span></li>`;
+          }
+          if (topExp) {
+            const concept = window.CONCEPTS.find(c => c.id === topExp.conceptId);
+            highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-rose-400">▸</span><span><strong>Mayor Egreso:</strong> ${concept ? concept.name : topExp.conceptId} con ${formatCurrency(topExp.amount)}.</span></li>`;
+          }
+          highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-sky-400">▸</span><span>Balance Neto: <strong>${formatCurrency(netBal)}</strong> (${savingsRate}% tasa de superávit).</span></li>`;
+        }
+      }
+    }
+
+    function renderClubCategoriesList() {
+      const container = document.getElementById('club-categories-list-container');
+      const selectMemberCategory = document.getElementById('input-member-category');
+
+      if (container) {
+        container.innerHTML = '';
+        if (window.clubCategories.length === 0) {
+          container.innerHTML = `<p class="text-slate-500 text-xs italic py-2">No hay categorías añadidas.</p>`;
+        } else {
+          window.clubCategories.forEach(cat => {
+            const item = document.createElement('div');
+            item.className = 'flex items-center justify-between p-2 rounded-lg bg-slate-800/80 border border-slate-700/60 text-xs';
+            item.innerHTML = `
+              <span class="font-semibold text-amber-300 flex items-center gap-1.5 truncate">
+                <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> ${cat}
+              </span>
+              <button onclick="deleteClubCategory('${cat}')" class="text-slate-500 hover:text-rose-400 p-1 rounded transition shrink-0" title="Eliminar">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            `;
+            container.appendChild(item);
+          });
+        }
+      }
+
+      if (selectMemberCategory) {
+        const currentVal = selectMemberCategory.value;
+        selectMemberCategory.innerHTML = '';
+        window.clubCategories.forEach(cat => {
+          selectMemberCategory.innerHTML += `<option value="${cat}" ${cat === currentVal ? 'selected' : ''}>${cat}</option>`;
+        });
+      }
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
     function handleSaveTransaction(e) {
       e.preventDefault();
       const entity = document.getElementById('input-tx-entity').value;
@@ -2029,6 +2316,60 @@
       window.transactions = window.transactions.filter(t => t.id !== id);
       saveStorage();
       showToast('Movimiento eliminado');
+      updateApp();
+    }
+
+    function resetAllData() {
+      window.transactions = [];
+      window.budgets = [];
+      window.clubMembers = [];
+      window.savingsGoals = [];
+      saveStorage();
+      closeModal('reset-confirm-modal');
+      showToast('Todos los datos fueron borrados y reiniciados a $0');
+      updateApp();
+    }
+
+    function quickRegisterFee(memberId) {
+      const member = window.clubMembers.find(m => m.id === memberId);
+      if (!member) return;
+
+      openModal('add-transaction-modal');
+      document.getElementById('input-tx-entity').value = 'club';
+      populateConceptSelects();
+      toggleMemberFieldInTx();
+      document.getElementById('input-tx-concept').value = 'Cuotas_Socios';
+      document.getElementById('input-tx-type').value = 'INGRESO';
+      document.getElementById('input-tx-amount').value = member.fee || 15000;
+      document.getElementById('input-tx-desc').value = `Cuota mensual - ${member.name}`;
+    }
+
+    function addGoalAmount(id) {
+      const goal = window.savingsGoals.find(g => g.id === id);
+      if (!goal) return;
+      const amountStr = prompt(`Ingrese el monto a abonar a la meta "${goal.name}":`, "10000");
+      if (!amountStr) return;
+      const amount = parseFloat(amountStr);
+      if (isNaN(amount) || amount <= 0) return;
+
+      goal.current += amount;
+      saveStorage();
+      showToast(`Abono de ${formatCurrency(amount)} registrado`);
+      updateApp();
+    }
+
+    function deleteGoal(id) {
+      window.savingsGoals = window.savingsGoals.filter(g => g.id !== id);
+      saveStorage();
+      showToast('Meta eliminada');
+      updateApp();
+    }
+
+    function deleteClubCategory(cat) {
+      window.clubCategories = window.clubCategories.filter(c => c !== cat);
+      saveStorage();
+      renderClubCategoriesList();
+      showToast('Categoría eliminada');
       updateApp();
     }
 
@@ -2184,11 +2525,6 @@
       }
     }
 
-    function renderMembersRoster() {}
-    function renderSavingsGoals() {}
-    function renderInfographic() {}
-    function renderClubCategoriesList() {}
-
     function populateConceptSelects() {
       const activeEntity = getSelectedEntity();
       const txConceptSelect = document.getElementById('input-tx-concept');
@@ -2199,6 +2535,8 @@
         });
       }
     }
+
+    function toggleMemberFieldInTx() {}
 
     function openModal(id) {
       populateConceptSelects();
@@ -2283,6 +2621,25 @@
         }
       };
       reader.readAsText(file);
+    }
+
+    function printInfographic() {
+      switchTab('infographic');
+      setTimeout(() => window.print(), 300);
+    }
+
+    function exportToCSV() {
+      let csv = "Fecha,Perfil,Concepto,Tipo,Monto\n";
+      window.transactions.forEach(t => {
+        csv += `"${t.date}","${t.entity}","${t.conceptId}","${t.type}",${t.amount}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `FinanzControl_Transacciones.csv`;
+      a.click();
+      showToast('Transacciones exportadas a CSV');
     }
   </script>
 </body>
