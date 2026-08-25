@@ -1383,7 +1383,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     // User project Firebase Configuration
     const firebaseConfig = {
@@ -1401,21 +1401,103 @@
       app = initializeApp(firebaseConfig);
       auth = getAuth(app);
       db = getFirestore(app);
+      window.db = db;
     } catch (err) {
       console.warn("Firebase Init fallback:", err.message);
     }
 
     const googleProvider = new GoogleAuthProvider();
 
+    // FIRESTORE REAL-TIME CLOUD SYNC HELPERS
+    window.saveCloudData = async function() {
+      if (!window.db || !window.currentUser || window.currentUser.isGuest) return;
+      try {
+        const uid = window.currentUser.uid;
+        const payload = {
+          profiles: window.profiles || [],
+          concepts: window.CONCEPTS || [],
+          members: window.clubMembers || [],
+          budgets: window.budgets || [],
+          transactions: window.transactions || [],
+          years: window.availableYears || [],
+          clubCategories: window.clubCategories || [],
+          savingsGoals: window.savingsGoals || [],
+          updatedAt: new Date().toISOString()
+        };
+        await setDoc(doc(window.db, "users", uid), payload, { merge: true });
+        const badge = document.getElementById('sync-status-badge');
+        if (badge) {
+          badge.textContent = "⚡ Nube Sincronizada";
+        }
+      } catch (err) {
+        console.error("Error guardando en Firestore:", err);
+      }
+    };
+
+    window.loadCloudData = async function(uid) {
+      if (!window.db || !uid) return;
+      try {
+        const docRef = doc(window.db, "users", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.profiles && data.profiles.length > 0) window.profiles = data.profiles;
+          if (data.concepts && data.concepts.length > 0) window.CONCEPTS = data.concepts;
+          if (data.members) window.clubMembers = data.members;
+          if (data.budgets) window.budgets = data.budgets;
+          if (data.transactions) window.transactions = data.transactions;
+          if (data.years && data.years.length > 0) window.availableYears = data.years;
+          if (data.clubCategories && data.clubCategories.length > 0) window.clubCategories = data.clubCategories;
+          if (data.savingsGoals) window.savingsGoals = data.savingsGoals;
+
+          // Save loaded cloud data to local storage as fallback
+          localStorage.setItem('fz_profiles', JSON.stringify(window.profiles));
+          localStorage.setItem('fz_concepts', JSON.stringify(window.CONCEPTS));
+          localStorage.setItem('fz_members', JSON.stringify(window.clubMembers));
+          localStorage.setItem('fz_budgets', JSON.stringify(window.budgets));
+          localStorage.setItem('fz_transactions', JSON.stringify(window.transactions));
+          localStorage.setItem('fz_years', JSON.stringify(window.availableYears));
+          localStorage.setItem('fz_club_categories', JSON.stringify(window.clubCategories));
+          localStorage.setItem('fz_savings_goals', JSON.stringify(window.savingsGoals));
+
+          if (typeof window.renderProfilesSelects === 'function') window.renderProfilesSelects();
+          if (typeof window.renderYearSelects === 'function') window.renderYearSelects();
+          if (typeof window.populateConceptSelects === 'function') window.populateConceptSelects();
+          if (typeof window.updateApp === 'function') window.updateApp();
+
+          if (typeof window.showToast === 'function') {
+            window.showToast("☁️ Datos sincronizados desde tu cuenta");
+          }
+        } else {
+          // Document doesn't exist yet in cloud, push current state to Firestore
+          await window.saveCloudData();
+        }
+      } catch (err) {
+        console.error("Error cargando de Firestore:", err);
+      }
+    };
+
     // Firebase Auth Listener
     if (auth) {
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         const badge = document.getElementById('sync-status-badge');
         if (user) {
           if (badge) {
             badge.textContent = "⚡ Firebase Activo";
             badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap";
           }
+          if (!window.currentUser || window.currentUser.uid !== user.uid) {
+            const userObj = {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName || user.email.split('@')[0],
+              photoURL: user.photoURL || null,
+              isGuest: false
+            };
+            window.currentUser = userObj;
+            localStorage.setItem('fz_active_local_user', JSON.stringify(userObj));
+          }
+          await window.loadCloudData(user.uid);
         } else {
           if (badge) {
             badge.textContent = "💾 Modo Local";
@@ -1479,6 +1561,9 @@
       } else {
         if (editProfileForm) editProfileForm.classList.remove('hidden');
         if (guestNotice) guestNotice.classList.add('hidden');
+        if (typeof window.loadCloudData === 'function') {
+          window.loadCloudData(userObj.uid);
+        }
       }
 
       closeModal('auth-modal');
@@ -1758,6 +1843,11 @@
       localStorage.setItem('fz_years', JSON.stringify(window.availableYears));
       localStorage.setItem('fz_club_categories', JSON.stringify(window.clubCategories));
       localStorage.setItem('fz_savings_goals', JSON.stringify(window.savingsGoals));
+
+      // Trigger real-time Firestore sync if online user is active
+      if (typeof window.saveCloudData === 'function') {
+        window.saveCloudData();
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
