@@ -258,12 +258,12 @@
   <!-- MAIN DASHBOARD CONTENT -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 space-y-6">
     
-    <!-- Top KPI Cards -->
+    <!-- Top KPI Cards with Carryover Balance Support -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 no-print">
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Ingresos Totales</p>
+            <p class="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Ingresos del Mes</p>
             <h3 id="kpi-income" class="text-xl sm:text-2xl font-bold text-emerald-400 mt-1">$0</h3>
           </div>
           <div class="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400">
@@ -278,7 +278,7 @@
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Egresos Totales</p>
+            <p class="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Egresos del Mes</p>
             <h3 id="kpi-expense" class="text-xl sm:text-2xl font-bold text-rose-400 mt-1">$0</h3>
           </div>
           <div class="p-2.5 bg-rose-500/10 rounded-xl text-rose-400">
@@ -290,10 +290,11 @@
         </div>
       </div>
 
+      <!-- Balance Card displaying Total Available & Carryover Balance from Previous Month -->
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
           <div>
-            <p class="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Balance Neto</p>
+            <p class="text-[11px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider">Disponible Total</p>
             <h3 id="kpi-balance" class="text-xl sm:text-2xl font-bold text-sky-400 mt-1">$0</h3>
           </div>
           <div class="p-2.5 bg-sky-500/10 rounded-xl text-sky-400">
@@ -301,7 +302,7 @@
           </div>
         </div>
         <div class="mt-3 flex items-center text-xs text-slate-400">
-          <span id="kpi-savings-rate" class="text-slate-300 font-medium">Superávit / Ahorro: 0%</span>
+          <span id="kpi-balance-sub" class="text-slate-300 font-medium truncate">Saldo Ant: $0 | Mes: $0</span>
         </div>
       </div>
 
@@ -472,22 +473,22 @@
             </div>
           </div>
           <div class="text-left sm:text-right text-xs text-slate-400 print-text-muted">
-            <p><strong>Generado el:</strong> <span id="info-generated-date">24 de Agosto, 2026</span></p>
+            <p><strong>Generado el:</strong> <span id="info-generated-date">27 de Agosto, 2026</span></p>
             <p><strong>Estado:</strong> <span id="info-status-stamp" class="text-emerald-400 font-bold">🟢 En Regla</span></p>
           </div>
         </div>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-2xl print-card">
-            <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider print-text-muted">Ingresos Totales</p>
+            <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider print-text-muted">Ingresos del Mes</p>
             <p id="info-kpi-income" class="text-lg sm:text-xl font-bold text-emerald-400 mt-1">$0</p>
           </div>
           <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-2xl print-card">
-            <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider print-text-muted">Egresos Totales</p>
+            <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider print-text-muted">Egresos del Mes</p>
             <p id="info-kpi-expense" class="text-lg sm:text-xl font-bold text-rose-400 mt-1">$0</p>
           </div>
           <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-2xl print-card">
-            <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider print-text-muted">Balance Neto</p>
+            <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider print-text-muted">Disponible Total</p>
             <p id="info-kpi-balance" class="text-lg sm:text-xl font-bold text-sky-400 mt-1">$0</p>
           </div>
           <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-4 rounded-2xl print-card">
@@ -564,15 +565,24 @@
           </div>
         </div>
 
-        <!-- Dynamic Salary vs Budget Coverage Banner -->
-        <div id="budget-summary-banner" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
+        <!-- Dynamic Salary + Carryover Balance Coverage Banner -->
+        <div id="budget-summary-banner" class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-6 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
           <div class="flex items-center gap-2.5">
             <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
               <i data-lucide="wallet" class="w-4 h-4"></i>
             </div>
             <div>
-              <span class="text-slate-400">Ingreso / Sueldo del Mes:</span>
+              <span class="text-slate-400">Sueldo / Ingresos Mes:</span>
               <p id="b-banner-income" class="text-sm font-bold text-emerald-400">$0</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400">
+              <i data-lucide="history" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <span class="text-slate-400">Saldo Ant. (Remanente):</span>
+              <p id="b-banner-carryover" class="text-sm font-bold text-indigo-400">$0</p>
             </div>
           </div>
           <div class="flex items-center gap-2.5">
@@ -738,7 +748,7 @@
         <div class="mt-6 bg-slate-950/80 border border-slate-800 rounded-xl p-4 sm:p-6 relative min-h-[220px]">
           <div id="ai-loading" class="hidden absolute inset-0 bg-slate-950/90 rounded-xl flex flex-col items-center justify-center space-y-3 z-10 p-4 text-center">
             <div class="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-            <p class="text-xs text-purple-300 font-medium animate-pulse">Gemini está evaluando tus patrones de consumo...</p>
+            <p class="text-xs text-purple-300 font-medium animate-pulse">Gemini está evaluando tus patrones de consumo y remanentes acumulados...</p>
           </div>
 
           <div id="ai-response-container" class="prose prose-invert max-w-none text-sm text-slate-300 leading-relaxed space-y-4">
@@ -750,6 +760,8 @@
 
   </main>
 
+  <!-- MODALS SECTION -->
+  
   <!-- AUTHENTICATION MODAL -->
   <div id="auth-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 no-print overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative my-auto space-y-6">
@@ -1196,11 +1208,11 @@
         </button>
       </div>
 
-      <!-- Live Income Indicator in Modal -->
+      <!-- Live Income + Carryover Balance Indicator in Modal -->
       <div class="p-3 rounded-xl bg-slate-950 border border-emerald-500/20 text-xs mb-4 flex justify-between items-center">
         <span class="text-slate-300 flex items-center gap-1.5 font-medium">
           <i data-lucide="coins" class="w-4 h-4 text-emerald-400"></i>
-          Sueldo/Ingreso registrado en este mes:
+          Ingreso + Remanente en este mes:
         </span>
         <strong id="modal-detected-income" class="text-emerald-400 font-bold text-sm">$0</strong>
       </div>
@@ -1528,7 +1540,9 @@
     };
   </script>
 
+  <!-- APPLICATION LOGIC & CARRYOVER BALANCE ENGINE -->
   <script>
+    
     // --- AUTHENTICATION & SESSION MANAGEMENT ---
     window.setUserSession = function(userObj) {
       window.currentUser = userObj;
@@ -1875,6 +1889,31 @@
       updateApp();
     });
 
+    // --- CARRYOVER BALANCE CALCULATION LOGIC ---
+    function calculateCarryoverBalance(entity, selectedYear, selectedMonth) {
+      if (selectedYear === 'ALL' || selectedMonth === 'ALL') return 0;
+      
+      const mIndex = MONTHS.indexOf(selectedMonth);
+      const yNum = parseInt(selectedYear);
+
+      if (mIndex < 0 || isNaN(yNum)) return 0;
+
+      return window.transactions.filter(t => {
+        if (t.entity !== entity) return false;
+        const tY = parseInt(t.year);
+        const tMIndex = MONTHS.indexOf(t.month);
+        
+        if (isNaN(tY) || tMIndex < 0) return false;
+
+        if (tY < yNum) return true;
+        if (tY === yNum && tMIndex < mIndex) return true;
+        return false;
+      }).reduce((acc, t) => {
+        return acc + (t.type === 'INGRESO' ? t.amount : -t.amount);
+      }, 0);
+    }
+    window.calculateCarryoverBalance = calculateCarryoverBalance;
+
     window.renderProfilesSelects = function() {
       const globalSel = document.getElementById('global-entity-filter');
       const txSel = document.getElementById('input-tx-entity');
@@ -2113,35 +2152,43 @@
         return matchEntity && matchYear && matchMonth;
       });
 
-      const totalIncome = filteredTx.filter(t => t.type === 'INGRESO').reduce((acc, curr) => acc + curr.amount, 0);
-      const totalExpense = filteredTx.filter(t => t.type === 'EGRESO').reduce((acc, curr) => acc + curr.amount, 0);
-      const netBalance = totalIncome - totalExpense;
+      const totalIncomeMonth = filteredTx.filter(t => t.type === 'INGRESO').reduce((acc, curr) => acc + curr.amount, 0);
+      const totalExpenseMonth = filteredTx.filter(t => t.type === 'EGRESO').reduce((acc, curr) => acc + curr.amount, 0);
+      
+      // Calculate Carryover Balance from previous months
+      const carryoverBalance = calculateCarryoverBalance(currentEntity, currentYear, currentMonth);
+      const totalAvailable = carryoverBalance + totalIncomeMonth - totalExpenseMonth;
 
       const totalBudgetedExpense = filteredBudgets.reduce((acc, curr) => acc + curr.amount, 0);
-      const budgetExecution = totalBudgetedExpense > 0 ? Math.round((totalExpense / totalBudgetedExpense) * 100) : 0;
-      const savingsRate = totalIncome > 0 ? Math.max(0, Math.round((netBalance / totalIncome) * 100)) : 0;
-
+      const budgetExecution = totalBudgetedExpense > 0 ? Math.round((totalExpenseMonth / totalBudgetedExpense) * 100) : 0;
+      
       const kpiInc = document.getElementById('kpi-income');
       const kpiExp = document.getElementById('kpi-expense');
       const kpiBal = document.getElementById('kpi-balance');
+      const kpiBalSub = document.getElementById('kpi-balance-sub');
       const kpiBgt = document.getElementById('kpi-budget-percent');
-      const kpiSav = document.getElementById('kpi-savings-rate');
 
-      if (kpiInc) kpiInc.textContent = formatCurrency(totalIncome);
-      if (kpiExp) kpiExp.textContent = formatCurrency(totalExpense);
-      if (kpiBal) kpiBal.textContent = formatCurrency(netBalance);
+      if (kpiInc) kpiInc.textContent = formatCurrency(totalIncomeMonth);
+      if (kpiExp) kpiExp.textContent = formatCurrency(totalExpenseMonth);
+      if (kpiBal) {
+        kpiBal.textContent = formatCurrency(totalAvailable);
+        kpiBal.className = totalAvailable >= 0 ? 'text-xl sm:text-2xl font-bold text-sky-400 mt-1' : 'text-xl sm:text-2xl font-bold text-rose-400 mt-1';
+      }
+      if (kpiBalSub) {
+        kpiBalSub.textContent = `Saldo Ant: ${formatCurrency(carryoverBalance)} | Mes: ${formatCurrency(totalIncomeMonth - totalExpenseMonth)}`;
+      }
+
       if (kpiBgt) kpiBgt.textContent = `${budgetExecution}%`;
-      if (kpiSav) kpiSav.textContent = `Superávit / Ahorro: ${savingsRate}%`;
 
       const budgetBar = document.getElementById('kpi-budget-bar');
       if (budgetBar) budgetBar.style.width = `${Math.min(100, budgetExecution)}%`;
 
       renderConceptCards(filteredTx, filteredBudgets);
-      renderBudgetMatrix();
+      renderBudgetMatrix(carryoverBalance, totalIncomeMonth);
       renderTransactions();
       renderMembersRoster();
       renderSavingsGoals();
-      renderInfographic(totalIncome, totalExpense, netBalance, totalBudgetedExpense, budgetExecution, savingsRate, filteredTx);
+      renderInfographic(totalIncomeMonth, totalExpenseMonth, totalAvailable, carryoverBalance, totalBudgetedExpense, budgetExecution, filteredTx);
       renderCharts();
     };
 
@@ -2182,7 +2229,7 @@
       });
     }
 
-    function renderBudgetMatrix() {
+    function renderBudgetMatrix(carryover, totalIncomeMonth) {
       const tbody = document.getElementById('budget-matrix-body');
       if (!tbody) return;
 
@@ -2190,11 +2237,6 @@
       const currentYear = getSelectedYear();
       const currentMonth = getSelectedMonth();
       tbody.innerHTML = '';
-
-      // Update Salary / Income vs Budget Banner
-      const totalIncomeMonth = window.transactions
-        .filter(t => t.entity === currentEntity && t.type === 'INGRESO' && (currentYear === 'ALL' || t.year === currentYear) && (currentMonth === 'ALL' || t.month === currentMonth))
-        .reduce((a, c) => a + c.amount, 0);
 
       const activeConcepts = window.CONCEPTS.filter(c => c.entity === currentEntity);
       let totalBudgetedMonth = 0;
@@ -2206,13 +2248,16 @@
         }
       });
 
-      const remainingIncome = totalIncomeMonth - totalBudgetedMonth;
+      const totalPoolAvailable = totalIncomeMonth + carryover;
+      const remainingIncome = totalPoolAvailable - totalBudgetedMonth;
 
       const bannerIncome = document.getElementById('b-banner-income');
+      const bannerCarryover = document.getElementById('b-banner-carryover');
       const bannerBudgeted = document.getElementById('b-banner-budgeted');
       const bannerRemaining = document.getElementById('b-banner-remaining');
 
       if (bannerIncome) bannerIncome.textContent = formatCurrency(totalIncomeMonth);
+      if (bannerCarryover) bannerCarryover.textContent = formatCurrency(carryover);
       if (bannerBudgeted) bannerBudgeted.textContent = formatCurrency(totalBudgetedMonth);
       if (bannerRemaining) {
         bannerRemaining.textContent = formatCurrency(remainingIncome);
@@ -2478,7 +2523,7 @@
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
-    function renderInfographic(totalInc, totalExp, netBal, totalBgExp, bgExec, savingsRate, filteredTx) {
+    function renderInfographic(totalInc, totalExp, totalAvail, carryover, totalBgExp, bgExec, filteredTx) {
       const currentEntity = getSelectedEntity();
       const currentYear = getSelectedYear();
       const currentMonth = getSelectedMonth();
@@ -2502,9 +2547,10 @@
 
       if (infoInc) infoInc.textContent = formatCurrency(totalInc);
       if (infoExp) infoExp.textContent = formatCurrency(totalExp);
-      if (infoBal) infoBal.textContent = formatCurrency(netBal);
+      if (infoBal) infoBal.textContent = formatCurrency(totalAvail);
       if (infoBgt) infoBgt.textContent = `${bgExec}%`;
 
+      const savingsRate = totalInc > 0 ? Math.max(0, Math.round(((totalInc - totalExp) / totalInc) * 100)) : 0;
       const savBadge = document.getElementById('info-savings-rate-badge');
       if (savBadge) savBadge.textContent = `${savingsRate}%`;
 
@@ -2528,7 +2574,10 @@
             const concept = window.CONCEPTS.find(c => c.id === topExp.conceptId);
             highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-rose-400">▸</span><span><strong>Mayor Egreso:</strong> ${concept ? concept.name : topExp.conceptId} con ${formatCurrency(topExp.amount)}.</span></li>`;
           }
-          highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-sky-400">▸</span><span>Balance Neto: <strong>${formatCurrency(netBal)}</strong> (${savingsRate}% tasa de superávit).</span></li>`;
+          if (carryover > 0) {
+            highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-indigo-400">▸</span><span><strong>Remanente Mes Anterior:</strong> Se transfirieron ${formatCurrency(carryover)} a la liquidez del período.</span></li>`;
+          }
+          highlightsList.innerHTML += `<li class="flex items-start gap-1.5"><span class="text-sky-400">▸</span><span>Disponible Total Acumulado: <strong>${formatCurrency(totalAvail)}</strong>.</span></li>`;
         }
       }
     }
@@ -2719,12 +2768,15 @@
       const year = document.getElementById('input-bg-year')?.value || getSelectedYear();
       const month = document.getElementById('input-bg-month')?.value || getSelectedMonth();
 
-      const totalInc = window.transactions
+      const totalIncMonth = window.transactions
         .filter(t => t.entity === entity && t.type === 'INGRESO' && (year === 'ALL' || t.year === year) && (month === 'ALL' || t.month === month))
         .reduce((a, c) => a + c.amount, 0);
 
+      const carryover = calculateCarryoverBalance(entity, year, month);
+      const pool = totalIncMonth + carryover;
+
       const displayEl = document.getElementById('modal-detected-income');
-      if (displayEl) displayEl.textContent = formatCurrency(totalInc);
+      if (displayEl) displayEl.textContent = `${formatCurrency(pool)} (${formatCurrency(totalIncMonth)} sueldo + ${formatCurrency(carryover)} remanente)`;
     }
     window.updateModalDetectedIncome = updateModalDetectedIncome;
 
@@ -3053,12 +3105,13 @@
 
       const inc = txs.filter(t => t.type === 'INGRESO').reduce((a,c) => a + c.amount, 0);
       const exp = txs.filter(t => t.type === 'EGRESO').reduce((a,c) => a + c.amount, 0);
-      const bal = inc - exp;
+      const carryover = calculateCarryoverBalance(currentEntity, currentYear, currentMonth);
+      const totalAvailable = carryover + inc - exp;
       const bgTotal = bgs.reduce((a,c) => a + c.amount, 0);
 
       const systemPrompt = "Eres un consultor y auditor financiero experto llamado Gemini Financial Advisor. Tu tono es profesional, alentador y ejecutivo. Analiza las cifras financieras proporcionadas del usuario y entrega un diagnóstico claro en HTML semántico formateado (usando <h3>, <p>, <ul>, <li>, <strong>, badges de color). Incluye: 1. Estado de Salud Financiera, 2. Análisis de Liquidez y Uso de Presupuesto, 3. Tres Consejos Estratégicos concretos de Ahorro y Eficiencia.";
 
-      const userPrompt = `Perfil/Espacio: ${currentEntity}. Período: ${currentMonth} ${currentYear}. Ingresos Totales: $${inc.toLocaleString('es-CL')}. Egresos Totales: $${exp.toLocaleString('es-CL')}. Balance Neto: $${bal.toLocaleString('es-CL')}. Presupuesto Asignado: $${bgTotal.toLocaleString('es-CL')}. Detalle de gastos: ${JSON.stringify(txs.map(t => ({concepto: t.conceptId, monto: t.amount, desc: t.desc})))}`;
+      const userPrompt = `Perfil/Espacio: ${currentEntity}. Período: ${currentMonth} ${currentYear}. Ingresos Totales del Mes: $${inc.toLocaleString('es-CL')}. Remanente de Meses Anteriores: $${carryover.toLocaleString('es-CL')}. Egresos Totales: $${exp.toLocaleString('es-CL')}. Disponible Total Acumulado: $${totalAvailable.toLocaleString('es-CL')}. Presupuesto Asignado: $${bgTotal.toLocaleString('es-CL')}. Detalle de gastos: ${JSON.stringify(txs.map(t => ({concepto: t.conceptId, monto: t.amount, desc: t.desc})))}`;
 
       try {
         const apiKey = "";
@@ -3084,8 +3137,8 @@
           responseContainer.innerHTML = `
             <div class="p-4 bg-purple-950/40 border border-purple-500/30 rounded-xl space-y-2">
               <h3 class="font-bold text-purple-300">📊 Diagnóstico Financiero Sintetizado</h3>
-              <p class="text-xs text-slate-300">Ingresos Registrados: <strong>$${inc.toLocaleString('es-CL')}</strong> | Egresos Registrados: <strong>$${exp.toLocaleString('es-CL')}</strong> | Balance Disponible: <strong>$${bal.toLocaleString('es-CL')}</strong></p>
-              <p class="text-xs text-slate-400">${bal >= 0 ? '🟢 Cuentas con superávit favorable. Recomendamos automatizar el traspaso del 15% de tu saldo disponible a tu Meta de Ahorro principal.' : '🔴 Los gastos superan los ingresos del período. Revisa la matriz de Presupuesto vs Real para ajustar rubros con desviaciones.'}</p>
+              <p class="text-xs text-slate-300">Ingresos Registrados: <strong>$${inc.toLocaleString('es-CL')}</strong> | Saldo Anterior: <strong>$${carryover.toLocaleString('es-CL')}</strong> | Egresos: <strong>$${exp.toLocaleString('es-CL')}</strong> | Total Disponible: <strong>$${totalAvailable.toLocaleString('es-CL')}</strong></p>
+              <p class="text-xs text-slate-400">${totalAvailable >= 0 ? '🟢 Cuentas con superávit favorable. Recomendamos automatizar el traspaso del 15% de tu saldo disponible a tu Meta de Ahorro principal.' : '🔴 Los gastos superan los recursos acumulados del período. Revisa la matriz de Presupuesto vs Real para ajustar rubros con desviaciones.'}</p>
             </div>
           `;
         }
