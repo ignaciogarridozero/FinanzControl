@@ -91,14 +91,13 @@
       onSnapshot(userDocRef, (snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.data();
-          // Preserve local data if cloud data is empty, avoid wiping local state
-          if (Array.isArray(data.transactions) && (data.transactions.length > 0 || window.transactions.length === 0)) window.transactions = data.transactions;
-          if (Array.isArray(data.budgets) && (data.budgets.length > 0 || window.budgets.length === 0)) window.budgets = data.budgets;
-          if (Array.isArray(data.entities) && (data.entities.length > 0 || window.entities.length === 0)) window.entities = data.entities;
-          if (Array.isArray(data.concepts) && (data.concepts.length > 0 || window.concepts.length === 0)) window.concepts = data.concepts;
-          if (Array.isArray(data.members) && (data.members.length > 0 || window.members.length === 0)) window.members = data.members;
-          if (Array.isArray(data.savingsGoals) && (data.savingsGoals.length > 0 || window.savingsGoals.length === 0)) window.savingsGoals = data.savingsGoals;
-          if (Array.isArray(data.paymentChecklist) && (data.paymentChecklist.length > 0 || window.paymentChecklist.length === 0)) window.paymentChecklist = data.paymentChecklist;
+          if (Array.isArray(data.transactions) && data.transactions.length > 0) window.transactions = data.transactions;
+          if (Array.isArray(data.budgets) && data.budgets.length > 0) window.budgets = data.budgets;
+          if (Array.isArray(data.entities) && data.entities.length > 0) window.entities = data.entities;
+          if (Array.isArray(data.concepts) && data.concepts.length > 0) window.concepts = data.concepts;
+          if (Array.isArray(data.members) && data.members.length > 0) window.members = data.members;
+          if (Array.isArray(data.savingsGoals) && data.savingsGoals.length > 0) window.savingsGoals = data.savingsGoals;
+          if (Array.isArray(data.paymentChecklist) && data.paymentChecklist.length > 0) window.paymentChecklist = data.paymentChecklist;
           
           if (typeof runDataMigrations === 'function') runDataMigrations();
           if (typeof saveAllDataLocally === 'function') saveAllDataLocally(false);
@@ -109,7 +108,6 @@
             badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap";
           }
         } else {
-          // If user doc doesn't exist yet on cloud, push local data to cloud immediately
           window.syncToCloud();
         }
       });
@@ -213,7 +211,8 @@
         const item = localStorage.getItem(key);
         if (!item) return fallback;
         const parsed = JSON.parse(item);
-        return Array.isArray(fallback) && !Array.isArray(parsed) ? fallback : parsed;
+        if (Array.isArray(fallback) && (!Array.isArray(parsed) || parsed.length === 0)) return fallback;
+        return parsed;
       } catch (e) {
         console.warn(`Error parsing ${key} from localStorage, using fallback.`, e);
         return fallback;
@@ -222,7 +221,7 @@
 
     window.currentUser = safeParseJSON('fz_active_local_user', null);
 
-    // Default Datasets
+    // Default Complete Datasets
     const defaultEntities = [
       { id: 'ent-1', name: 'Hogar', icon: '🏠', active: true, purpose: 'finance' },
       { id: 'ent-2', name: 'Personal', icon: '👤', active: true, purpose: 'finance' },
@@ -230,13 +229,30 @@
     ];
 
     const defaultConcepts = [
-      { id: 'c-1', entityId: 'ent-1', name: 'Sueldo / Ingreso', type: 'INCOME', isSalary: true },
-      { id: 'c-2', entityId: 'ent-1', name: 'Supermercado', type: 'EXPENSE', isSalary: false },
-      { id: 'c-3', entityId: 'ent-1', name: 'Servicios Básicos', type: 'EXPENSE', isSalary: false },
-      { id: 'c-4', entityId: 'ent-2', name: 'Sueldo Principal', type: 'INCOME', isSalary: true },
-      { id: 'c-5', entityId: 'ent-2', name: 'Entretenimiento', type: 'EXPENSE', isSalary: false },
-      { id: 'c-6', entityId: 'ent-3', name: 'Cuotas Sociales', type: 'INCOME', isSalary: false },
-      { id: 'c-7', entityId: 'ent-3', name: 'Arriendo Cancha', type: 'EXPENSE', isSalary: false }
+      { id: 'c-1', entityId: 'ent-1', name: 'Sueldo / Ingreso Principal', type: 'INCOME', isSalary: true },
+      { id: 'c-2', entityId: 'ent-1', name: 'Supermercado & Alimentación', type: 'EXPENSE', isSalary: false },
+      { id: 'c-3', entityId: 'ent-1', name: 'Servicios Básicos & Cuentas', type: 'EXPENSE', isSalary: false },
+      { id: 'c-4', entityId: 'ent-2', name: 'Sueldo / Honorarios', type: 'INCOME', isSalary: true },
+      { id: 'c-5', entityId: 'ent-2', name: 'Entretenimiento & Ocio', type: 'EXPENSE', isSalary: false },
+      { id: 'c-6', entityId: 'ent-3', name: 'Recaudación Cuotas Sociales', type: 'INCOME', isSalary: false },
+      { id: 'c-7', entityId: 'ent-3', name: 'Arriendo Canchas & Equipamiento', type: 'EXPENSE', isSalary: false }
+    ];
+
+    const defaultTransactions = [
+      { id: 'tx-101', entityId: 'ent-1', conceptId: 'c-1', type: 'INCOME', amount: 1250000, note: 'Sueldo Mensual Empresa - Agosto', date: '2026-08-01', year: '2026', month: 'Agosto' },
+      { id: 'tx-102', entityId: 'ent-1', conceptId: 'c-2', type: 'EXPENSE', amount: 185000, note: 'Supermercado Líder - Compras del Mes', date: '2026-08-04', year: '2026', month: 'Agosto' },
+      { id: 'tx-103', entityId: 'ent-1', conceptId: 'c-3', type: 'EXPENSE', amount: 35000, note: 'Pago Luz Enel', date: '2026-08-10', year: '2026', month: 'Agosto' },
+      { id: 'tx-104', entityId: 'ent-2', conceptId: 'c-4', type: 'INCOME', amount: 850000, note: 'Honorarios Consultoría Web', date: '2026-08-02', year: '2026', month: 'Agosto' },
+      { id: 'tx-105', entityId: 'ent-2', conceptId: 'c-5', type: 'EXPENSE', amount: 42000, note: 'Cine & Salida Fin de Semana', date: '2026-08-12', year: '2026', month: 'Agosto' },
+      { id: 'tx-106', entityId: 'ent-3', conceptId: 'c-6', type: 'INCOME', amount: 280000, note: 'Cuotas Mes M16 y Senior', date: '2026-08-08', year: '2026', month: 'Agosto' },
+      { id: 'tx-107', entityId: 'ent-3', conceptId: 'c-7', type: 'EXPENSE', amount: 120000, note: 'Arriendo Cancha Sintética', date: '2026-08-14', year: '2026', month: 'Agosto' }
+    ];
+
+    const defaultBudgets = [
+      { id: 'bg-101', conceptId: 'c-2', limit: 250000, year: '2026', month: 'Agosto' },
+      { id: 'bg-102', conceptId: 'c-3', limit: 60000, year: '2026', month: 'Agosto' },
+      { id: 'bg-103', conceptId: 'c-5', limit: 80000, year: '2026', month: 'Agosto' },
+      { id: 'bg-104', conceptId: 'c-7', limit: 150000, year: '2026', month: 'Agosto' }
     ];
 
     const defaultChecklist = [
@@ -253,13 +269,13 @@
 
     window.entities = safeParseJSON('fz_entities', defaultEntities);
     window.concepts = safeParseJSON('fz_concepts', defaultConcepts);
-    window.transactions = safeParseJSON('fz_transactions', []);
-    window.budgets = safeParseJSON('fz_budgets', []);
+    window.transactions = safeParseJSON('fz_transactions', defaultTransactions);
+    window.budgets = safeParseJSON('fz_budgets', defaultBudgets);
     window.members = safeParseJSON('fz_members', defaultMembers);
     window.savingsGoals = safeParseJSON('fz_goals', []);
     window.paymentChecklist = safeParseJSON('fz_checklist', defaultChecklist);
 
-    // Automatic Data Migration & Schema Integrity Handler
+    // Automatic Data Migration & Integrity Handler
     window.runDataMigrations = function() {
       const monthsList = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
@@ -285,49 +301,56 @@
         if (!c.type) c.type = 'EXPENSE';
       });
 
-      if (Array.isArray(window.transactions)) {
-        window.transactions.forEach(t => {
-          if (!t.entityId || !validEntityIds.includes(t.entityId)) t.entityId = defaultEntId;
-          if (!t.amount) t.amount = 0;
-          if (t.date) {
-            const d = new Date(t.date + 'T12:00:00');
-            if (!isNaN(d.getTime())) {
-              if (!t.year) t.year = d.getFullYear().toString();
-              if (!t.month) t.month = monthsList[d.getMonth()];
-            }
+      if (!Array.isArray(window.transactions) || window.transactions.length === 0) {
+        window.transactions = defaultTransactions;
+      }
+      window.transactions.forEach(t => {
+        if (!t.entityId || !validEntityIds.includes(t.entityId)) t.entityId = defaultEntId;
+        if (!t.amount) t.amount = 0;
+        if (t.date) {
+          const d = new Date(t.date + 'T12:00:00');
+          if (!isNaN(d.getTime())) {
+            if (!t.year) t.year = d.getFullYear().toString();
+            if (!t.month) t.month = monthsList[d.getMonth()];
           }
-          if (!t.year) t.year = new Date().getFullYear().toString();
-          if (!t.month) t.month = monthsList[new Date().getMonth()];
-        });
+        }
+        if (!t.year) t.year = new Date().getFullYear().toString();
+        if (!t.month) t.month = monthsList[new Date().getMonth()];
+      });
+
+      if (!Array.isArray(window.budgets) || window.budgets.length === 0) {
+        window.budgets = defaultBudgets;
       }
 
-      if (Array.isArray(window.paymentChecklist)) {
-        window.paymentChecklist.forEach(item => {
-          if (!item.entityId || !validEntityIds.includes(item.entityId)) item.entityId = defaultEntId;
-          if (!item.type) item.type = 'EXPENSE';
-          if (!item.amount) item.amount = 0;
-          if (item.dueDate) {
-            const d = new Date(item.dueDate + 'T12:00:00');
-            if (!isNaN(d.getTime())) {
-              if (!item.year) item.year = d.getFullYear().toString();
-              if (!item.month) item.month = monthsList[d.getMonth()];
-            }
-          }
-          if (!item.year) item.year = new Date().getFullYear().toString();
-          if (!item.month) item.month = monthsList[new Date().getMonth()];
-          if (item.status === 'PAGADO' && !item.paidDate) {
-            item.paidDate = new Date().toISOString().split('T')[0];
-          }
-        });
+      if (!Array.isArray(window.paymentChecklist) || window.paymentChecklist.length === 0) {
+        window.paymentChecklist = defaultChecklist;
       }
+      window.paymentChecklist.forEach(item => {
+        if (!item.entityId || !validEntityIds.includes(item.entityId)) item.entityId = defaultEntId;
+        if (!item.type) item.type = 'EXPENSE';
+        if (!item.amount) item.amount = 0;
+        if (item.dueDate) {
+          const d = new Date(item.dueDate + 'T12:00:00');
+          if (!isNaN(d.getTime())) {
+            if (!item.year) item.year = d.getFullYear().toString();
+            if (!item.month) item.month = monthsList[d.getMonth()];
+          }
+        }
+        if (!item.year) item.year = new Date().getFullYear().toString();
+        if (!item.month) item.month = monthsList[new Date().getMonth()];
+        if (item.status === 'PAGADO' && !item.paidDate) {
+          item.paidDate = new Date().toISOString().split('T')[0];
+        }
+      });
 
-      if (Array.isArray(window.members)) {
-        const rugbyEntity = window.entities.find(e => e.purpose === 'rugby') || window.entities[0];
-        window.members.forEach(m => {
-          if (!m.entityId || !validEntityIds.includes(m.entityId)) m.entityId = rugbyEntity ? rugbyEntity.id : defaultEntId;
-          if (!m.status) m.status = 'AL_DIA';
-        });
+      if (!Array.isArray(window.members) || window.members.length === 0) {
+        window.members = defaultMembers;
       }
+      const rugbyEntity = window.entities.find(e => e.purpose === 'rugby') || window.entities[0];
+      window.members.forEach(m => {
+        if (!m.entityId || !validEntityIds.includes(m.entityId)) m.entityId = rugbyEntity ? rugbyEntity.id : defaultEntId;
+        if (!m.status) m.status = 'AL_DIA';
+      });
     };
 
     window.saveAllDataLocally = function(shouldSyncCloud = true) {
@@ -377,6 +400,18 @@
       container.appendChild(toast);
       setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
       setTimeout(() => { toast.remove(); }, 3500);
+    };
+
+    window.restoreSampleData = function() {
+      window.entities = defaultEntities;
+      window.concepts = defaultConcepts;
+      window.transactions = defaultTransactions;
+      window.budgets = defaultBudgets;
+      window.members = defaultMembers;
+      window.paymentChecklist = defaultChecklist;
+      saveAllDataLocally();
+      renderApp();
+      showToast('¡Datos de ejemplo restaurados con éxito!', 'success');
     };
   </script>
 
@@ -582,7 +617,6 @@
       </button>
     </div>
 
-    <!-- Dashboard Content -->
     <div id="tab-dashboard" class="tab-content space-y-6">
       
       <!-- Quick AI Diagnostic Banner -->
@@ -869,7 +903,6 @@
       </div>
     </div>
 
-    <!-- Members Roster Content -->
     <div id="tab-members" class="tab-content hidden space-y-6">
       <div class="flex flex-wrap justify-between items-center gap-3">
         <div>
@@ -922,7 +955,6 @@
       </div>
     </div>
 
-    <!-- Infographic Printable Content -->
     <div id="tab-infographic" class="tab-content hidden space-y-6">
       <div class="flex justify-end no-print">
         <button onclick="window.print()" class="bg-sky-500 hover:bg-sky-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow">
@@ -1098,26 +1130,30 @@
         </div>
       </div>
 
-      <!-- Backup & Restore Data -->
+      <!-- Backup, Restore & Demo Reset -->
       <div class="space-y-3 bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
         <h4 class="text-xs font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
           <i data-lucide="database" class="w-3.5 h-3.5"></i>
           Respaldo y Copia de Seguridad
         </h4>
-        <div class="flex flex-wrap gap-2">
-          <button onclick="exportDataJSON()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1">
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="exportDataJSON()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1">
             <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
             Exportar JSON
           </button>
-          <button onclick="exportTransactionsCSV()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1">
+          <button onclick="exportTransactionsCSV()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1">
             <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-amber-400"></i>
             Exportar CSV
           </button>
-          <label class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer">
+          <label class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer">
             <i data-lucide="upload" class="w-3.5 h-3.5 text-sky-400"></i>
             Importar JSON
             <input type="file" id="import-json-file" accept=".json" class="hidden" onchange="importDataJSON(event)">
           </label>
+          <button onclick="restoreSampleData()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-amber-400"></i>
+            Cargar Demo
+          </button>
         </div>
       </div>
 
@@ -1350,7 +1386,6 @@
     let monthlyChart = null;
     let categoryChart = null;
     let interannualChart = null;
-    let aiChatHistory = [];
 
     // Helper: Call Gemini 3 Flash API
     async function callGemini3Flash(userQuery, systemPrompt = "", isStructuredJson = false, base64Image = null) {
@@ -1378,7 +1413,6 @@
         };
       }
 
-      // Exponential Backoff Fetch
       let attempts = 0;
       let delay = 1000;
       while (attempts < 3) {
@@ -1393,7 +1427,7 @@
             return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
           }
         } catch (err) {
-          // Retry
+          // Retry logic
         }
         attempts++;
         await new Promise(r => setTimeout(r, delay));
@@ -1458,7 +1492,7 @@
       reader.onload = async function(e) {
         const base64Data = e.target.result.split(',')[1];
         
-        const systemPrompt = "Eres un escáner óptico de recibos y boletas. Extrae los datos clave y responde estrictamente en formato JSON válido con las llaves: \"monto\" (número entero), \"concepto\" (cadena corta con el nombre del comercio o ítem), \"fecha\" (cadena YYYY-MM-DD o vacía si no es clara).";
+        const systemPrompt = "Eres un escáner óptico de recibos y boletas. Extrae los datos clave y responde strictly en formato JSON válido con las llaves: \"monto\" (número entero), \"concepto\" (cadena corta con el nombre del comercio o ítem), \"fecha\" (cadena YYYY-MM-DD o vacía si no es clara).";
         const query = "Extrae el monto total, nombre del comercio o concepto y la fecha de este recibo o boleta.";
 
         const resultJson = await callGemini3Flash(query, systemPrompt, true, base64Data);
