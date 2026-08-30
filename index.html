@@ -91,13 +91,15 @@
       onSnapshot(userDocRef, (snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.data();
-          if (data.transactions) window.transactions = data.transactions;
-          if (data.budgets) window.budgets = data.budgets;
-          if (data.entities) window.entities = data.entities;
-          if (data.concepts) window.concepts = data.concepts;
-          if (data.members) window.members = data.members;
-          if (data.savingsGoals) window.savingsGoals = data.savingsGoals;
-          if (data.paymentChecklist) window.paymentChecklist = data.paymentChecklist;
+          // Preserve local data if cloud data is empty, avoid wiping local state
+          if (Array.isArray(data.transactions) && (data.transactions.length > 0 || window.transactions.length === 0)) window.transactions = data.transactions;
+          if (Array.isArray(data.budgets) && (data.budgets.length > 0 || window.budgets.length === 0)) window.budgets = data.budgets;
+          if (Array.isArray(data.entities) && (data.entities.length > 0 || window.entities.length === 0)) window.entities = data.entities;
+          if (Array.isArray(data.concepts) && (data.concepts.length > 0 || window.concepts.length === 0)) window.concepts = data.concepts;
+          if (Array.isArray(data.members) && (data.members.length > 0 || window.members.length === 0)) window.members = data.members;
+          if (Array.isArray(data.savingsGoals) && (data.savingsGoals.length > 0 || window.savingsGoals.length === 0)) window.savingsGoals = data.savingsGoals;
+          if (Array.isArray(data.paymentChecklist) && (data.paymentChecklist.length > 0 || window.paymentChecklist.length === 0)) window.paymentChecklist = data.paymentChecklist;
+          
           if (typeof runDataMigrations === 'function') runDataMigrations();
           if (typeof saveAllDataLocally === 'function') saveAllDataLocally(false);
           if (typeof renderApp === 'function') renderApp();
@@ -106,6 +108,9 @@
             badge.textContent = "⚡ Nube Sincronizada";
             badge.className = "text-[9px] sm:text-[10px] ml-1.5 px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 whitespace-nowrap";
           }
+        } else {
+          // If user doc doesn't exist yet on cloud, push local data to cloud immediately
+          window.syncToCloud();
         }
       });
     }
@@ -254,17 +259,20 @@
     window.savingsGoals = safeParseJSON('fz_goals', []);
     window.paymentChecklist = safeParseJSON('fz_checklist', defaultChecklist);
 
-    // Automatic Data Migration & Schema Integrity Handler (Guarantees zero data loss on updates)
+    // Automatic Data Migration & Schema Integrity Handler
     window.runDataMigrations = function() {
       const monthsList = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      const defaultEntId = window.entities[0] ? window.entities[0].id : 'ent-1';
 
       if (!Array.isArray(window.entities) || window.entities.length === 0) {
         window.entities = defaultEntities;
       }
+      
+      const validEntityIds = window.entities.map(e => e.id);
+      const defaultEntId = validEntityIds[0] || 'ent-1';
+
       window.entities.forEach(e => {
         if (!e.purpose) {
-          e.purpose = (e.name.toLowerCase().includes('club') || e.name.toLowerCase().includes('rugby')) ? 'rugby' : 'finance';
+          e.purpose = (e.name && (e.name.toLowerCase().includes('club') || e.name.toLowerCase().includes('rugby'))) ? 'rugby' : 'finance';
         }
         if (e.active === undefined) e.active = true;
       });
@@ -273,13 +281,13 @@
         window.concepts = defaultConcepts;
       }
       window.concepts.forEach(c => {
-        if (!c.entityId) c.entityId = defaultEntId;
+        if (!c.entityId || !validEntityIds.includes(c.entityId)) c.entityId = defaultEntId;
         if (!c.type) c.type = 'EXPENSE';
       });
 
       if (Array.isArray(window.transactions)) {
         window.transactions.forEach(t => {
-          if (!t.entityId) t.entityId = defaultEntId;
+          if (!t.entityId || !validEntityIds.includes(t.entityId)) t.entityId = defaultEntId;
           if (!t.amount) t.amount = 0;
           if (t.date) {
             const d = new Date(t.date + 'T12:00:00');
@@ -295,7 +303,7 @@
 
       if (Array.isArray(window.paymentChecklist)) {
         window.paymentChecklist.forEach(item => {
-          if (!item.entityId) item.entityId = defaultEntId;
+          if (!item.entityId || !validEntityIds.includes(item.entityId)) item.entityId = defaultEntId;
           if (!item.type) item.type = 'EXPENSE';
           if (!item.amount) item.amount = 0;
           if (item.dueDate) {
@@ -316,13 +324,11 @@
       if (Array.isArray(window.members)) {
         const rugbyEntity = window.entities.find(e => e.purpose === 'rugby') || window.entities[0];
         window.members.forEach(m => {
-          if (!m.entityId) m.entityId = rugbyEntity ? rugbyEntity.id : 'ent-3';
+          if (!m.entityId || !validEntityIds.includes(m.entityId)) m.entityId = rugbyEntity ? rugbyEntity.id : defaultEntId;
           if (!m.status) m.status = 'AL_DIA';
         });
       }
     };
-
-    runDataMigrations();
 
     window.saveAllDataLocally = function(shouldSyncCloud = true) {
       try {
@@ -331,13 +337,31 @@
         localStorage.setItem('fz_transactions', JSON.stringify(window.transactions));
         localStorage.setItem('fz_budgets', JSON.stringify(window.budgets));
         localStorage.setItem('fz_members', JSON.stringify(window.members));
-        localStorage.setItem('fz_goals', JSON.stringify(window.savingsGoals));
         localStorage.setItem('fz_checklist', JSON.stringify(window.paymentChecklist));
-      } catch (err) {
-        console.error("Error guardando datos localmente:", err);
+        localStorage.setItem('fz_goals', JSON.stringify(window.savingsGoals || []));
+      } catch (e) {
+        console.error("Error guardando datos en localStorage:", e);
       }
-      if (shouldSyncCloud && typeof window.syncToCloud === 'function') window.syncToCloud();
+      if (shouldSyncCloud && typeof window.syncToCloud === 'function') {
+        window.syncToCloud();
+      }
     };
+
+    function setupInitialDateFilters() {
+      const yearSelect = document.getElementById('global-year-filter');
+      const monthSelect = document.getElementById('global-month-filter');
+      if (!yearSelect || !monthSelect) return;
+
+      const now = new Date();
+      const currentYear = now.getFullYear().toString();
+
+      const txYears = window.transactions.map(t => parseInt(t.year)).filter(y => !isNaN(y));
+      const allYears = Array.from(new Set([parseInt(currentYear), parseInt(currentYear) - 1, ...txYears])).sort((a,b) => b - a);
+
+      yearSelect.innerHTML = allYears.map(y => `<option value="${y}">${y}</option>`).join('');
+      yearSelect.value = currentYear;
+      monthSelect.value = 'ALL';
+    }
 
     window.formatMoney = function(amount) {
       const num = parseFloat(amount) || 0;
@@ -452,7 +476,6 @@
 
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 space-y-6">
     
-    <!-- Top KPI Summary Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 no-print">
       <div class="glass-card rounded-2xl p-4 sm:p-5 border border-slate-800 relative overflow-hidden">
         <div class="flex justify-between items-start">
@@ -620,7 +643,6 @@
       </div>
     </div>
 
-    <!-- TAB: Checklist de Pagos -->
     <div id="tab-checklist" class="tab-content hidden space-y-6">
       <div class="flex flex-wrap justify-between items-center gap-3">
         <div>
@@ -713,7 +735,6 @@
       </div>
     </div>
 
-    <!-- Budget Vs Real Content -->
     <div id="tab-budget-vs-real" class="tab-content hidden space-y-6">
       <div id="income-budget-coverage-card" class="glass-card rounded-2xl p-4 border border-emerald-500/30 bg-emerald-950/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
@@ -749,7 +770,6 @@
       </div>
     </div>
 
-    <!-- Transactions Content -->
     <div id="tab-transactions" class="tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-4 sm:p-6 border border-slate-800 overflow-x-auto">
         <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
@@ -783,7 +803,6 @@
       </div>
     </div>
 
-    <!-- TAB: AI Advisor Chatbot -->
     <div id="tab-ai-advisor" class="tab-content hidden space-y-6">
       <div class="glass-card rounded-3xl p-4 sm:p-6 border border-purple-500/30 bg-purple-950/10 space-y-4">
         
@@ -841,7 +860,6 @@
       </div>
     </div>
 
-    <!-- Comparative Content -->
     <div id="tab-comparative" class="tab-content hidden space-y-6">
       <div class="glass-card rounded-2xl p-4 sm:p-6 border border-slate-800">
         <h2 class="text-sm sm:text-base font-bold text-white mb-4">Evolución Anual y Proyección de Saldos</h2>
@@ -1572,25 +1590,6 @@
         `;
       }
     };
-
-    // Auto-selects real device year and month on startup
-    function setupInitialDateFilters() {
-      const yearSelect = document.getElementById('global-year-filter');
-      const monthSelect = document.getElementById('global-month-filter');
-      if (!yearSelect || !monthSelect) return;
-
-      const now = new Date();
-      const currentYear = now.getFullYear().toString();
-      const monthsList = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-      const currentMonth = monthsList[now.getMonth()];
-
-      const txYears = window.transactions.map(t => parseInt(t.year)).filter(y => !isNaN(y));
-      const allYears = Array.from(new Set([parseInt(currentYear), parseInt(currentYear) - 1, ...txYears])).sort((a,b) => b - a);
-
-      yearSelect.innerHTML = allYears.map(y => `<option value="${y}">${y}</option>`).join('');
-      yearSelect.value = currentYear;
-      monthSelect.value = currentMonth;
-    }
 
     window.switchTab = function(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => {
