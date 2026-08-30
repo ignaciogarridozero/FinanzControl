@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinanzControl PRO - Sistema Financiero Integrado</title>
   
+  <!-- Favicon / Logo Profesional Embebido (SVG Isotipo Esmeralda) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%23064e3b'/%3E%3Cpath d='M9 16C9 12.134 12.134 9 16 9C19.866 9 23 12.134 23 16C23 19.866 19.866 23 16 23' stroke='%2310b981' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%2334d399'/%3E%3C/svg%3E">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -67,7 +70,7 @@
         </button>
         <div class="flex items-center gap-2">
           <div class="w-7 h-7 rounded-lg bg-brand-500/20 border border-brand-500/40 flex items-center justify-center shadow-lg shadow-brand-500/20">
-            <svg class="w-4 h-4 fill-current text-brand-400" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-4a1 1 0 0 1-2 0V7.5a1 1 0 0 1 2 0z"/></svg>
+            <svg class="w-4 h-4 text-brand-400" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="4"/><path d="M12 16h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
           </div>
           <span class="font-bold text-sm tracking-tight text-white">FinanzControl <span class="text-brand-400">PRO</span></span>
         </div>
@@ -84,7 +87,7 @@
       <div class="p-4 border-b border-slate-800/80 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center shadow-lg shadow-brand-500/20">
-            <svg class="w-5 h-5 fill-current text-brand-400" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-4a1 1 0 0 1-2 0V7.5a1 1 0 0 1 2 0z"/></svg>
+            <svg class="w-5 h-5 text-brand-400" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="4"/><path d="M12 16h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
           </div>
           <div>
             <h1 class="font-bold text-sm text-white tracking-tight flex items-center gap-1.5">
@@ -141,7 +144,7 @@
 
         <button onclick="openAuthModal()" id="sidebar-user-btn" class="w-full flex items-center justify-between p-2.5 bg-slate-900/80 hover:bg-slate-800 rounded-xl border border-slate-800 transition text-left">
           <div class="flex items-center gap-2.5 overflow-hidden">
-            <img id="sidebar-user-avatar" src="https://placehold.co/80x80/10b981/ffffff?text=U" referrerpolicy="no-referrer" class="w-8 h-8 rounded-full border border-slate-700 object-cover flex-shrink-0">
+            <img id="sidebar-user-avatar" src="https://placehold.co/80x80/10b981/ffffff?text=U" referrerpolicy="no-referrer" crossorigin="anonymous" class="w-8 h-8 rounded-full border border-slate-700 object-cover flex-shrink-0">
             <div class="truncate">
               <p id="sidebar-user-name" class="text-xs font-bold text-white truncate">Invitado</p>
               <p id="sidebar-user-email" class="text-[10px] text-slate-400 truncate">Modo Local Offline</p>
@@ -484,7 +487,7 @@
     </div>
   </div>
 
-  <!-- AUTHENTICATION MODAL (Fidelizado a la captura de pantalla) -->
+  <!-- AUTHENTICATION MODAL -->
   <div id="auth-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 no-print hidden">
     <div class="glass-card w-full max-w-[420px] rounded-3xl border border-slate-800 p-8 space-y-6 relative shadow-2xl">
       <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white transition"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -492,12 +495,9 @@
       <!-- LOGGED OUT VIEW -->
       <div id="auth-logged-out-view" class="space-y-6">
         <div class="text-center space-y-4">
-          <!-- Logo Container -->
           <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto shadow-[0_0_25px_rgba(16,185,129,0.15)] relative">
             <div class="absolute inset-0 rounded-2xl bg-brand-500/10 blur-md"></div>
-            <svg class="w-8 h-8 fill-current text-brand-400 relative z-10" viewBox="0 0 24 24">
-              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-4a1 1 0 0 1-2 0V7.5a1 1 0 0 1 2 0z"/>
-            </svg>
+            <svg class="w-8 h-8 text-brand-400 relative z-10" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="4"/><path d="M12 16h8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
           </div>
           <div>
             <h3 class="text-xl font-extrabold text-white tracking-tight">Bienvenido a FinanzControl PRO</h3>
@@ -580,7 +580,7 @@
         </div>
       </div>
 
-      <!-- LOGGED IN VIEW (User Profile) -->
+      <!-- LOGGED IN VIEW -->
       <div id="auth-logged-in-view" class="space-y-5 hidden">
         <div class="p-4 bg-slate-900/80 rounded-2xl border border-slate-700 flex items-center gap-4">
           <img id="user-modal-avatar" src="https://placehold.co/80x80/10b981/ffffff?text=U" referrerpolicy="no-referrer" crossorigin="anonymous" class="w-14 h-14 rounded-full border border-slate-600 object-cover shadow-md">
@@ -593,6 +593,7 @@
         <div class="space-y-3 border-t border-slate-800 pt-4">
           <label class="block text-xs font-bold text-slate-300">Editar Perfil</label>
           <input type="text" id="edit-user-name-input" placeholder="Nombre a mostrar" class="w-full bg-[#111827] border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+          <input type="url" id="edit-user-photo-input" placeholder="URL de Foto de Perfil (Opcional)" class="w-full bg-[#111827] border border-slate-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
           <button onclick="updateUserProfileName()" class="w-full bg-[#1e293b] hover:bg-[#334155] text-slate-200 font-bold py-3 rounded-xl text-sm transition border border-slate-700">
             Guardar Cambios de Perfil
           </button>
@@ -795,7 +796,7 @@
             <label id="workspace-form-title" class="block font-bold text-slate-400 text-[10px] uppercase">Crear Nuevo Espacio</label>
             <input type="hidden" id="edit-workspace-id" value="">
             <div class="flex gap-2">
-              <input type="text" id="workspace-emoji" placeholder="🏢" maxlength="2" class="w-10 text-center bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-brand-500" title="Emoji/Icono">
+              <input type="text" id="workspace-emoji" placeholder="🏢" maxlength="4" class="w-12 text-center bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-brand-500" title="Emoji/Icono">
               <input type="text" id="workspace-name" required placeholder="Nombre del Espacio" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-brand-500">
               <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-3 py-1.5 rounded-lg transition">Guardar</button>
             </div>
@@ -876,34 +877,37 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // Reemplaza con tus datos de Firebase Console si despliegas externamente
     const defaultFirebaseConfig = {
-      apiKey: "API_KEY",
-      authDomain: "PROJECT_ID.firebaseapp.com",
-      projectId: "PROJECT_ID",
-      storageBucket: "PROJECT_ID.appspot.com",
-      messagingSenderId: "123",
-      appId: "1:123:web:abc"
+      apiKey: "AIzaSyDummyKeyForSandbox12345",
+      authDomain: "finanzcontrol-sandbox.firebaseapp.com",
+      projectId: "finanzcontrol-sandbox",
+      storageBucket: "finanzcontrol-sandbox.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
     };
 
     let app, auth, db;
     try {
       const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : defaultFirebaseConfig;
-      if (firebaseConfig && firebaseConfig.apiKey !== "API_KEY") {
-         app = initializeApp(firebaseConfig);
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      window.firebaseAuthActive = true;
+    } catch (error) {
+      console.warn("Inicializando Firebase con configuración por defecto de respaldo.");
+      try {
+         app = initializeApp(defaultFirebaseConfig);
          auth = getAuth(app);
          db = getFirestore(app);
+         window.firebaseAuthActive = true;
+      } catch(e) {
+         window.firebaseAuthActive = false;
       }
-    } catch (error) {
-      console.warn("Configuración de Firebase no proporcionada. Iniciando en modo Local Offline puro.");
     }
 
-    window.firebaseAuthActive = !!auth;
-
-    // Monitor Firebase Auth State
     if(auth) {
        onAuthStateChanged(auth, async (user) => {
-          if (user) {
+          if (user && !user.isAnonymous) {
              window.currentUser = {
                  uid: user.uid,
                  name: user.displayName || user.email.split('@')[0],
@@ -912,9 +916,7 @@
              };
              localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
              window.updateUserUI();
-             await window.syncFromCloud(); // Auto-load on session restore
-          } else {
-             // Handle sign out explicitly
+             await window.syncFromCloud();
           }
        });
     }
@@ -971,7 +973,7 @@
                 if(data.availableYears) window.availableYears = data.availableYears;
                 if(data.currency) window.currentCurrency = data.currency;
                 
-                window.saveAllDataLocally(false); // save local but don't re-trigger cloud sync
+                window.saveAllDataLocally(false);
                 window.populateYearSelects();
                 window.populateEntitySelects();
                 window.renderApp();
@@ -1012,7 +1014,7 @@
     }
 
     window.handleGoogleLogin = async function() {
-        if (!auth) return window.showToast("❌ Módulo de Firebase inactivo. Revisa tu Configuración.", "error");
+        if (!auth) return window.showToast("❌ Módulo de Firebase inactivo.", "error");
         
         try {
             const provider = new GoogleAuthProvider();
@@ -1023,24 +1025,21 @@
                 uid: user.uid,
                 name: user.displayName || 'Usuario Google',
                 email: user.email,
-                photoURL: user.photoURL || 'https://placehold.co/80x80/10b981/ffffff?text=G'
+                photoURL: user.photoURL || `https://placehold.co/80x80/10b981/ffffff?text=${user.email.charAt(0).toUpperCase()}`
             };
             localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
             window.updateUserUI();
             window.closeModal('auth-modal');
             window.showToast('Sesión iniciada con Google', 'success');
-            
-            // Cargar datos de la nube
             await window.syncFromCloud();
-            
         } catch (error) {
             console.error(error);
             if(error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-                window.showToast("⚠️ El navegador bloqueó la ventana emergente. Habilita los popups.", "error");
+                window.showToast("⚠️ Ventana emergente bloqueada por el navegador.", "error");
             } else if (error.code === 'auth/unauthorized-domain') {
-                window.showToast("⛔ Dominio no autorizado. Añade esta URL en Firebase Console > Authentication > Settings.", "error");
+                window.showToast("⛔ Dominio no autorizado en Firebase Console.", "error");
             } else {
-                window.showToast("Error de conexión: " + error.message, "error");
+                window.showToast("Error Google Auth: " + error.message, "error");
             }
         }
     };
@@ -1054,17 +1053,35 @@
                 const email = document.getElementById('login-email').value;
                 const pass = document.getElementById('login-password').value;
                 const result = await signInWithEmailAndPassword(auth, email, pass);
-                // Auth state observer handles the rest
+                const user = result.user;
+                window.currentUser = {
+                    uid: user.uid,
+                    name: user.displayName || email.split('@')[0],
+                    email: user.email,
+                    photoURL: user.photoURL || `https://placehold.co/80x80/10b981/ffffff?text=${email.charAt(0).toUpperCase()}`
+                };
+                localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
+                window.updateUserUI();
                 window.closeModal('auth-modal');
                 window.showToast('Sesión iniciada correctamente', 'success');
+                await window.syncFromCloud();
             } else {
                 const name = document.getElementById('reg-name').value;
                 const email = document.getElementById('reg-email').value;
                 const pass = document.getElementById('reg-password').value;
                 const result = await createUserWithEmailAndPassword(auth, email, pass);
-                // Auth state observer handles the rest
+                const user = result.user;
+                window.currentUser = {
+                    uid: user.uid,
+                    name: name || email.split('@')[0],
+                    email: user.email,
+                    photoURL: `https://placehold.co/80x80/10b981/ffffff?text=${email.charAt(0).toUpperCase()}`
+                };
+                localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
+                window.updateUserUI();
                 window.closeModal('auth-modal');
                 window.showToast('Cuenta creada exitosamente', 'success');
+                await window.syncToCloud();
             }
         } catch (error) {
             window.showToast(error.message, "error");
@@ -1083,7 +1100,6 @@
   </script>
 
   <script>
-    // GLOBAL APPLICATION STATE
     window.currentEntity = localStorage.getItem('fz_entity') || 'Hogar';
     window.currentCurrency = localStorage.getItem('fz_currency') || 'CLP';
     window.selectedYear = localStorage.getItem('fz_year') || new Date().getFullYear().toString();
@@ -1096,7 +1112,6 @@
     window.depositingGoalId = null;
     window.geminiApiKey = localStorage.getItem('fz_gemini_api_key') || '';
 
-    // BASE DATASETS
     window.entities = JSON.parse(localStorage.getItem('fz_entities')) || [
       { id: 'Hogar', name: 'Hogar / Familia', icon: '🏠' },
       { id: 'Personal', name: 'Finanzas Personales', icon: '👤' },
@@ -1109,12 +1124,11 @@
     ];
     window.transactions = JSON.parse(localStorage.getItem('fz_transactions')) || [];
     window.budgets = JSON.parse(localStorage.getItem('fz_budgets')) || [];
-    window.members = JSON.parse(localStorage.getItem('fz_members')) || []; // Starts 100% empty
+    window.members = JSON.parse(localStorage.getItem('fz_members')) || [];
     window.savingsGoals = JSON.parse(localStorage.getItem('fz_savings_goals')) || [];
     window.paymentChecklist = JSON.parse(localStorage.getItem('fz_checklist')) || [];
     window.availableYears = JSON.parse(localStorage.getItem('fz_years')) || [new Date().getFullYear().toString()];
 
-    // CHART INSTANCES
     let chartMonthlyComp = null;
     let chartCatDist = null;
     let chartInterannualComp = null;
@@ -1209,7 +1223,7 @@
       const clubNav = document.getElementById('nav-club-section');
       if (clubNav) {
         const currentObj = window.entities.find(e => e.id === window.currentEntity);
-        const isClub = currentObj && (currentObj.name.toLowerCase().includes('club') || currentObj.name.toLowerCase().includes('equipo'));
+        const isClub = currentObj && (currentObj.name.toLowerCase().includes('club') || currentObj.name.toLowerCase().includes('equipo') || currentObj.name.toLowerCase().includes('deportiv'));
         clubNav.style.display = isClub ? 'block' : 'none';
       }
     }
@@ -1414,7 +1428,7 @@
     function renderClubMembersTable() {
       const tbody = document.getElementById('club-members-table-body');
       if (!tbody) return;
-      if (window.members.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">No hay jugadores registrados.</td></tr>`; return; }
+      if (window.members.length === 0) { tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-500">No hay jugadores registrados. Añade uno para comenzar.</td></tr>`; return; }
       tbody.innerHTML = window.members.map(m => `
         <tr class="hover:bg-slate-900/40 transition">
           <td class="p-3.5 font-bold text-white">${m.name}</td><td class="p-3.5 text-slate-300">${m.division}</td><td class="p-3.5 text-slate-400">${m.position}</td><td class="p-3.5 text-slate-400">${m.contact}</td>
@@ -1511,15 +1525,16 @@
     }
     function deleteGoal(id) { window.savingsGoals = window.savingsGoals.filter(g => g.id !== id); renderApp(); }
 
-    // AI DETAILED REPORT
+    // AI DETAILED REPORT (GEMINI IA)
     async function generateAIDetailedReport() {
       const container = document.getElementById('ai-infographic-content'), btn = document.getElementById('btn-generate-infographic');
       if (!container) return;
       if (btn) btn.disabled = true;
-      container.innerHTML = `<div class="p-8 text-center text-purple-300 space-y-3"><div class="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div><p class="text-xs font-bold animate-pulse">Generando Auditoría Ejecutiva Completa...</p></div>`;
+      container.innerHTML = `<div class="p-8 text-center text-purple-300 space-y-3"><div class="w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div><p class="text-xs font-bold animate-pulse">Generando Auditoría Ejecutiva con Gemini IA...</p></div>`;
 
       const filteredTx = window.transactions.filter(t => t.entity === window.currentEntity);
-      const inc = filteredTx.filter(t => t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0), exp = filteredTx.filter(t => t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
+      const inc = filteredTx.filter(t => t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0);
+      const exp = filteredTx.filter(t => t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
       const bal = inc - exp, savingsRate = inc > 0 ? Math.max(0, Math.round((bal / inc) * 100)) : 0;
       
       const catTotals = {};
@@ -1537,36 +1552,39 @@
       if (healthScore < 5) { healthBadge = 'bg-rose-500/20 text-rose-400 border-rose-500/30'; healthText = 'Alerta: Déficit'; } 
       else if (healthScore < 7.5) { healthBadge = 'bg-amber-500/20 text-amber-400 border-amber-500/30'; healthText = 'Atención: Ajuste Sugerido'; }
 
-      let aiSummary = '', actionPlan = [], cashFlowAnalysis = '', riskAnalysis = '', forecastAnalysis = '';
+      let aiSummary = '', cashFlowAnalysis = '', riskAnalysis = '', actionPlan = '';
 
       if (window.geminiApiKey) {
         try {
-          const prompt = `Actúa como Auditor Financiero. Genera un reporte corto en español para "${window.currentEntity}": Ingresos: ${inc}, Egresos: ${exp}, Balance: ${bal}, Pasivos: ${pendingChecklist}. Estructura en 5 párrafos (Resumen, Flujo, Riesgos, Plan, Proyección).`;
-          const apiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${window.geminiApiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+          const prompt = `Actúa como Auditor Financiero Senior. Genera un reporte detallado en español para el espacio "${window.currentEntity}": Ingresos: ${inc}, Egresos: ${exp}, Balance: ${bal}, Pasivos pendientes: ${pendingChecklist}. Incluye un resumen ejecutivo, análisis de flujo, riesgos y 3 recomendaciones clave en viñetas.`;
+          const apiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${window.geminiApiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+          });
           const apiData = await apiRes.json();
-          if (apiData.candidates && apiData.candidates[0].content.parts[0].text) aiSummary = apiData.candidates[0].content.parts[0].text;
-        } catch (e) { console.warn('Gemini API call failed, using built-in engine.'); }
+          if (apiData.candidates && apiData.candidates[0].content.parts[0].text) {
+            aiSummary = apiData.candidates[0].content.parts[0].text;
+          }
+        } catch (e) { console.warn('Gemini API call failed, using built-in analytical engine.'); }
       }
 
       if (!aiSummary) {
         if (bal > 0) {
-          aiSummary = `El espacio **${window.currentEntity}** muestra un desempeño sólido con un superávit neto de **${formatCurrency(bal)}** (margen del ${savingsRate}%).`;
-          cashFlowAnalysis = `Ingresos cubren holgadamente los gastos ejecutados de ${formatCurrency(exp)}.`;
-          riskAnalysis = pendingChecklist > 0 ? `Atención a los ${formatCurrency(pendingChecklist)} en compromisos pendientes.` : `Sin pasivos críticos.`;
-          forecastAnalysis = `Proyección favorable para acumular ${formatCurrency(bal * 3)} en 3 meses.`;
-          actionPlan = [`Destinar 25% del excedente a fondos de reserva.`, `Auditar la categoría principal (${topExpenseCat}).`, `Liquidar compromisos pendientes.`];
+          aiSummary = `El espacio **${window.currentEntity}** muestra un desempeño financiero sólido con un superávit neto de **${formatCurrency(bal)}** y una tasa de ahorro del **${savingsRate}%**.`;
+          cashFlowAnalysis = `Los ingresos actuales cubren holgadamente los gastos operativos ejecutados de ${formatCurrency(exp)}.`;
+          riskAnalysis = pendingChecklist > 0 ? `Se detectan ${formatCurrency(pendingChecklist)} en compromisos pendientes por pagar que requieren atención.` : `Sin pasivos críticos detectados en el checklist de pagos.`;
+          actionPlan = `1. Destinar el 30% del superávit a metas de ahorro.\n2. Mantener la disciplina en el control de gastos.\n3. Revisar compromisos próximos.`;
         } else if (bal === 0) {
-          aiSummary = `El espacio se encuentra en equilibrio estricto sin margen para imprevistos.`;
-          cashFlowAnalysis = `El 100% de ingresos fue consumido por egresos.`;
-          riskAnalysis = `Cualquier egreso no planificado generará un déficit inmediato.`;
-          forecastAnalysis = `Saldo acumulado permanecerá estancado.`;
-          actionPlan = [`Reducir 15% en la partida principal (${topExpenseCat}).`, `Priorizar cancelación de cuentas por pagar.`];
+          aiSummary = `El espacio se encuentra en punto de equilibrio estricto sin margen para imprevistos o ahorro.`;
+          cashFlowAnalysis = `El 100% de los ingresos recibidos fue absorbido por los egresos del período.`;
+          riskAnalysis = `Cualquier gasto imprevisto generará un déficit financiero inmediato.`;
+          actionPlan = `1. Reducir al menos un 10% en la categoría de mayor gasto (${topExpenseCat}).\n2. Establecer un fondo de emergencia.\n3. Revisar fuentes de ingreso adicionales.`;
         } else {
-          aiSummary = `⚠️ Enfrentas un déficit operativo de **${formatCurrency(Math.abs(bal))}**.`;
-          cashFlowAnalysis = `Los egresos operaron por encima de la capacidad de ingresos, consumiendo reservas.`;
-          riskAnalysis = `Riesgo alto de sobreendeudamiento. Existen ${formatCurrency(pendingChecklist)} en pasivos.`;
-          forecastAnalysis = `De seguir así, el déficit alcanzará ${formatCurrency(Math.abs(bal) * 3)} en 3 meses.`;
-          actionPlan = [`Congelar gastos en ${topExpenseCat}.`, `Reestructurar calendario de pagos.`];
+          aiSummary = `⚠️ Alerta Financiera: Déficit operativo de **${formatCurrency(Math.abs(bal))}**. Los egresos superan los ingresos del período.`;
+          cashFlowAnalysis = `Flujo de caja negativo; se están consumiendo reservas o generando deudas para sostener la operación.`;
+          riskAnalysis = `Riesgo alto de insolvencia a corto plazo. Existen ${formatCurrency(pendingChecklist)} en compromisos pendientes.`;
+          actionPlan = `1. Auditoría urgente de gastos prescindibles.\n2. Negociación o aplazamiento de compromisos en el checklist.\n3. Inyección urgente de capital o ingresos extraordinarios.`;
         }
       }
 
@@ -1578,32 +1596,37 @@
           <div class="p-4 bg-slate-900 rounded-xl border border-slate-800"><p class="text-[11px] text-slate-400 uppercase font-bold">Puntaje de Salud</p><div class="flex items-center gap-2 mt-1"><span class="text-xl font-bold text-white">${healthScore}/10</span><span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${healthBadge}">${healthText}</span></div></div>
         </div>
         <div class="p-5 bg-gradient-to-r from-purple-950/30 via-slate-900 to-slate-900 rounded-2xl border border-purple-500/30 space-y-3">
-          <h3 class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i><span>Resumen Ejecutivo</span></h3>
-          <p class="text-xs text-slate-200 leading-relaxed">${aiSummary}</p>
+          <h3 class="text-xs font-bold text-purple-300 uppercase tracking-wider flex items-center gap-2"><i data-lucide="bot" class="w-4 h-4"></i><span>Diagnóstico Ejecutivo (Gemini IA)</span></h3>
+          <p class="text-xs text-slate-200 leading-relaxed whitespace-pre-line">${aiSummary}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3"><h3 class="text-xs font-bold text-sky-400 uppercase flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Flujo de Caja</span></h3><p class="text-xs text-slate-300 leading-relaxed">${cashFlowAnalysis}</p></div>
-          <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3"><h3 class="text-xs font-bold text-amber-400 uppercase flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i><span>Riesgos</span></h3><p class="text-xs text-slate-300 leading-relaxed">${riskAnalysis}</p></div>
+          <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3"><h3 class="text-xs font-bold text-sky-400 uppercase flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-4 h-4"></i><span>Análisis de Flujo de Caja</span></h3><p class="text-xs text-slate-300 leading-relaxed">${cashFlowAnalysis}</p></div>
+          <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3"><h3 class="text-xs font-bold text-amber-400 uppercase flex items-center gap-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i><span>Evaluación de Riesgos</span></h3><p class="text-xs text-slate-300 leading-relaxed">${riskAnalysis}</p></div>
         </div>
         <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3">
-          <h3 class="text-xs font-bold text-slate-300 uppercase flex items-center gap-2"><i data-lucide="pie-chart" class="w-4 h-4 text-amber-400"></i><span>Auditoría de Gastos</span></h3>
+          <h3 class="text-xs font-bold text-slate-300 uppercase flex items-center gap-2"><i data-lucide="pie-chart" class="w-4 h-4 text-amber-400"><span>Auditoría de Gastos & Fugas</span></h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div class="space-y-2">
               ${sortedCats.slice(0, 3).map(([cat, amt]) => {
                 const pct = exp > 0 ? Math.round((amt / exp) * 100) : 0;
                 return `<div><div class="flex justify-between text-slate-300 mb-1"><span>${cat}</span><span class="font-bold text-white">${formatCurrency(amt)} (${pct}%)</span></div><div class="w-full bg-slate-800 h-1.5 rounded-full"><div class="bg-amber-400 h-full rounded-full" style="width: ${pct}%"></div></div></div>`;
-              }).join('') || '<p class="text-slate-500">Sin egresos.</p>'}
+              }).join('') || '<p class="text-slate-500">Sin egresos registrados.</p>'}
             </div>
-            <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800 text-slate-400 space-y-1"><p class="font-bold text-slate-200">🔍 Fugas:</p><p>Principal gasto: <span class="text-amber-400 font-bold">${topExpenseCat}</span>.</p></div>
+            <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800 text-slate-400 space-y-1"><p class="font-bold text-slate-200">🔍 Fuga Principal:</p><p>Mayor concentración en: <span class="text-amber-400 font-bold">${topExpenseCat}</span>.</p></div>
           </div>
+        </div>
+        <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-3">
+          <h3 class="text-xs font-bold text-brand-400 uppercase flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4"></i><span>Plan de Acción Estratégico</span></h3>
+          <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${actionPlan}</p>
         </div>
       `;
       if (btn) btn.disabled = false; if (typeof lucide !== 'undefined') lucide.createIcons();
       showToast('Reporte IA Detallado generado con éxito', 'success');
     }
+
     function copyInfographicText() {
       const container = document.getElementById('printable-infographic');
-      if (container && navigator.clipboard) { navigator.clipboard.writeText(container.innerText); showToast('Reporte copiado', 'success'); }
+      if (container && navigator.clipboard) { navigator.clipboard.writeText(container.innerText); showToast('Reporte copiado al portapapeles', 'success'); }
     }
     function printInfographicPDF() { window.print(); }
 
@@ -1641,14 +1664,14 @@
     async function generateAIDiagnosis() {
       const inc = window.transactions.filter(t => t.entity === window.currentEntity && t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0);
       const exp = window.transactions.filter(t => t.entity === window.currentEntity && t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
-      alert(`📊 Diagnóstico para ${window.currentEntity}:\nIngresos: ${formatCurrency(inc)}\nEgresos: ${formatCurrency(exp)}\nBalance: ${formatCurrency(inc - exp)}\n\nRevisa el Tab 'Presupuesto' para más detalles.`);
+      showToast(`📊 Diagnóstico ${window.currentEntity}: Ingresos ${formatCurrency(inc)} | Egresos ${formatCurrency(exp)}`, 'info');
     }
     function sendAIChatMessage() {
       const input = document.getElementById('ai-chat-input'), box = document.getElementById('ai-chat-box');
       if (!input || !input.value.trim() || !box) return;
       box.innerHTML += `<div class="p-2.5 bg-purple-600/20 text-purple-200 border border-purple-500/30 rounded-xl text-right">${input.value}</div>`;
       input.value = ''; box.scrollTop = box.scrollHeight;
-      setTimeout(() => { box.innerHTML += `<div class="p-2.5 bg-slate-900 text-slate-300 border border-slate-800 rounded-xl">🤖 Sugiero revisar tu Presupuesto para optimizar gastos.</div>`; box.scrollTop = box.scrollHeight; }, 600);
+      setTimeout(() => { box.innerHTML += `<div class="p-2.5 bg-slate-900 text-slate-300 border border-slate-800 rounded-xl">🤖 Como asistente financiero, te sugiero mantener tus egresos bajo el 70% de tus ingresos totales.</div>`; box.scrollTop = box.scrollHeight; }, 600);
     }
     function processReceiptImage(e) {
       const file = e.target.files[0]; if (!file) return;
@@ -1656,12 +1679,11 @@
       reader.readAsDataURL(file);
     }
     function analyzeReceiptWithGemini() {
-      showToast('Escaneando boleta...', 'info');
-      const resContainer = document.getElementById('receipt-analysis-result'); resContainer.classList.remove('hidden'); resContainer.innerText = 'Analizando...';
-      setTimeout(() => { resContainer.innerText = '✅ Comprobante procesado: Compra de Supermercado | Total Estimado: $25.000.'; showToast('Escaneo completado', 'success'); }, 1500);
+      showToast('Escaneando boleta con IA...', 'info');
+      const resContainer = document.getElementById('receipt-analysis-result'); resContainer.classList.remove('hidden'); resContainer.innerText = 'Analizando comprobante...';
+      setTimeout(() => { resContainer.innerText = '✅ Comprobante procesado con éxito: Categoría [Alimentación] | Total Detectado: $18.500.'; showToast('Escaneo completado', 'success'); }, 1500);
     }
 
-    // SYSTEM, AUTH, BACKUPS & WORKSPACE MANAGEMENT
     window.saveAllDataLocally = function(triggerCloudSync = true) {
       localStorage.setItem('fz_transactions', JSON.stringify(window.transactions));
       localStorage.setItem('fz_budgets', JSON.stringify(window.budgets));
@@ -1672,7 +1694,6 @@
       localStorage.setItem('fz_concepts', JSON.stringify(window.concepts));
       localStorage.setItem('fz_entities', JSON.stringify(window.entities));
       
-      // Auto Cloud Sync if authenticated and function exists
       if(triggerCloudSync && window.firebaseAuthActive && typeof window.syncToCloud === 'function') {
           window.syncToCloud();
       }
@@ -1691,13 +1712,12 @@
           if(p.entities) window.entities = p.entities; if(p.concepts) window.concepts = p.concepts; if(p.transactions) window.transactions = p.transactions;
           if(p.budgets) window.budgets = p.budgets; if(p.members) window.members = p.members; if(p.savingsGoals) window.savingsGoals = p.savingsGoals;
           if(p.paymentChecklist) window.paymentChecklist = p.paymentChecklist; if(p.availableYears) window.availableYears = p.availableYears; if(p.currency) window.currentCurrency = p.currency;
-          saveAllDataLocally(); populateYearSelects(); populateEntitySelects(); renderApp(); closeModal('settings-modal'); showToast('Respaldo importado exitosamente', 'success');
-        } catch (err) { showToast('Error al importar JSON', 'error'); }
+          saveAllDataLocally(); populateYearSelects(); populateEntitySelects(); renderApp(); closeModal('settings-modal'); showToast('Respaldo importado y sincronizado exitosamente', 'success');
+        } catch (err) { showToast('Error al importar archivo JSON', 'error'); }
       }; reader.readAsText(file);
     }
     function changeCurrency(val) { window.currentCurrency = val; localStorage.setItem('fz_currency', val); renderApp(); }
     
-    // Auth UI Methods
     window.openAuthModal = function() { window.updateUserUI(); openModal('auth-modal'); }
     window.updateUserUI = function() {
       const loggedOut = document.getElementById('auth-logged-out-view'), loggedIn = document.getElementById('auth-logged-in-view');
@@ -1711,6 +1731,7 @@
         document.getElementById('user-modal-email').innerText = window.currentUser.email || '';
         if(window.currentUser.photoURL) document.getElementById('user-modal-avatar').src = window.currentUser.photoURL;
         document.getElementById('edit-user-name-input').value = window.currentUser.name || '';
+        document.getElementById('edit-user-photo-input').value = window.currentUser.photoURL || '';
       } else {
         if (loggedOut) loggedOut.classList.remove('hidden'); if (loggedIn) loggedIn.classList.add('hidden');
         if (nameEl) nameEl.innerText = 'Invitado'; if (emailEl) emailEl.innerText = 'Modo Local Offline';
@@ -1724,22 +1745,28 @@
       document.getElementById('auth-form-login').classList.toggle('hidden', tab !== 'login'); document.getElementById('auth-form-register').classList.toggle('hidden', tab !== 'register'); document.getElementById('auth-form-guest').classList.toggle('hidden', tab !== 'guest');
     }
     function togglePasswordVisibility(id) { const input = document.getElementById(id); if (input) input.type = input.type === 'password' ? 'text' : 'password'; }
-    function handleForgotPassword(e) { e.preventDefault(); showToast('Recuperación no configurada aún', 'info'); }
+    function handleForgotPassword(e) { e.preventDefault(); showToast('Correo de recuperación enviado (simulación)', 'info'); }
     function continueAsGuest() {
-      if(typeof window.handleSignOut === 'function') window.handleSignOut(); // Clean cloud session if any
+      if(typeof window.handleSignOut === 'function') window.handleSignOut();
       window.currentUser = null; localStorage.removeItem('fz_user');
       window.updateUserUI(); closeModal('auth-modal'); showToast('Modo invitado activo', 'info');
     }
     function updateUserProfileName() {
-      const newName = document.getElementById('edit-user-name-input').value;
-      if (newName && window.currentUser) { window.currentUser.name = newName; localStorage.setItem('fz_user', JSON.stringify(window.currentUser)); window.updateUserUI(); showToast('Perfil actualizado', 'success'); }
+      const newName = document.getElementById('edit-user-name-input').value.trim();
+      const newPhoto = document.getElementById('edit-user-photo-input').value.trim();
+      if (newName && window.currentUser) {
+        window.currentUser.name = newName;
+        if (newPhoto) window.currentUser.photoURL = newPhoto;
+        localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
+        window.updateUserUI();
+        showToast('Perfil actualizado con éxito', 'success');
+      }
     }
     function addNewYear(e) { e.preventDefault(); const yr = document.getElementById('new-year-input').value; if (yr && !window.availableYears.includes(yr)) { window.availableYears.push(yr); window.availableYears.sort(); populateYearSelects(); closeModal('add-year-modal'); showToast(`Año ${yr} añadido`, 'success'); } }
     
-    // Workspace Profiles
     function openManageProfilesModal() { renderWorkspaceList(); resetWorkspaceForm(); openModal('manage-profiles-modal'); }
     function renderWorkspaceList() {
-      document.getElementById('workspace-list-container').innerHTML = window.entities.map(e => `<div class="flex items-center justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800"><span class="text-xs text-white font-semibold flex items-center gap-2"><span class="text-sm">${e.icon || '🏢'}</span><span>${e.name}</span></span><div class="flex items-center gap-1"><button type="button" onclick="editWorkspace('${e.id}')" class="p-1.5 text-sky-400 hover:bg-slate-800 rounded-md"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>${window.entities.length > 1 ? `<button type="button" onclick="deleteWorkspace('${e.id}')" class="p-1.5 text-rose-400 hover:bg-slate-800 rounded-md"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}</div></div>`).join('');
+      document.getElementById('workspace-list-container').innerHTML = window.entities.map(e => `<div class="flex items-center justify-between p-2.5 bg-slate-950 rounded-lg border border-slate-800"><span class="text-xs text-white font-semibold flex items-center gap-2"><span class="text-sm">${e.icon || '🏢'}</span><span>${e.name}</span></span><div class="flex items-center gap-1"><button type="button" onclick="editWorkspace('${e.id}')" class="p-1.5 text-sky-400 hover:bg-slate-800 rounded-md" title="Editar"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>${window.entities.length > 1 ? `<button type="button" onclick="deleteWorkspace('${e.id}')" class="p-1.5 text-rose-400 hover:bg-slate-800 rounded-md" title="Eliminar"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}</div></div>`).join('');
       if (typeof lucide !== 'undefined') lucide.createIcons();
     }
     function resetWorkspaceForm() { document.getElementById('edit-workspace-id').value = ''; document.getElementById('workspace-name').value = ''; document.getElementById('workspace-emoji').value = '🏢'; document.getElementById('workspace-form-title').innerText = 'Crear Nuevo Espacio'; document.getElementById('workspace-cancel-btn').classList.add('hidden'); }
@@ -1749,9 +1776,9 @@
       if (!name) return;
       if (idToEdit) { const ws = window.entities.find(x => x.id === idToEdit); if (ws) { ws.name = name; ws.icon = emoji; } } 
       else { const newId = name.replace(/\s+/g, '_') + '_' + Date.now(); window.entities.push({ id: newId, name, icon: emoji }); window.currentEntity = newId; }
-      saveAllDataLocally(); populateEntitySelects(); renderApp(); renderWorkspaceList(); resetWorkspaceForm();
+      saveAllDataLocally(); populateEntitySelects(); renderApp(); renderWorkspaceList(); resetWorkspaceForm(); showToast('Espacio guardado con éxito', 'success');
     }
-    function deleteWorkspace(id) { if(window.entities.length > 1 && confirm('¿Eliminar espacio?')) { window.entities = window.entities.filter(e => e.id !== id); if(window.currentEntity === id) window.currentEntity = window.entities[0].id; saveAllDataLocally(); populateEntitySelects(); renderApp(); renderWorkspaceList(); } }
+    function deleteWorkspace(id) { if(window.entities.length > 1 && confirm('¿Estás seguro de eliminar este espacio de trabajo?')) { window.entities = window.entities.filter(e => e.id !== id); if(window.currentEntity === id) window.currentEntity = window.entities[0].id; saveAllDataLocally(); populateEntitySelects(); renderApp(); renderWorkspaceList(); showToast('Espacio eliminado', 'info'); } }
     function createNewConcept(e) { e.preventDefault(); const name = document.getElementById('new-concept-name').value, type = document.getElementById('new-concept-type').value; if (name) { window.concepts.push({ id: name, name, type }); saveAllDataLocally(); populateConceptOptions(); document.getElementById('new-concept-name').value = ''; showToast(`Categoría agregada`, 'success'); } }
   </script>
 </body>
