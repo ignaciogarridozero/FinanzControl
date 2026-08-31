@@ -80,14 +80,14 @@
               <path d="M24 28V10C24 8.89543 24.8954 8 26 8H27C28.1046 8 29 8.89543 29 10V28" fill="url(#m-fg1)"/>
               <path d="M9 23C13 19 18 17 29 10" stroke="url(#m-fg2)" stroke-width="3" stroke-linecap="round"/>
               <circle cx="29" cy="10" r="2.5" fill="#6ee7b7"/>
-            </svg>
-          </div>
-          <span class="font-bold text-sm tracking-tight text-white">FinanzControl <span class="text-brand-400">PRO</span></span>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="openModal('add-transaction-modal')" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold p-2 rounded-lg text-xs flex items-center gap-1">
-          <i data-lucide="plus" class="w-4 h-4"></i>
+        <button onclick="handleGoogleLogin()" id="btn-google-login" class="w-full bg-[#1e293b] hover:bg-[#334155] border border-slate-700 text-white font-bold py-3.5 rounded-xl text-sm transition flex items-center justify-center gap-3">
+          <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Google</span>
         </button>
       </div>
     </div>
@@ -869,6 +869,10 @@
           <div class="flex items-center justify-between"><label class="block font-bold text-purple-300">Clave API de Gemini (Opcional)</label><span class="text-[10px] text-slate-400">Gemini 2.5 Flash</span></div>
           <input type="password" id="gemini-api-key-input" placeholder="AIzaSy..." onchange="saveGeminiApiKey(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
         </div>
+        <div class="p-3.5 bg-slate-900 rounded-xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between"><label class="block font-bold text-emerald-300">Configuración Firebase (Opcional)</label><span class="text-[10px] text-slate-400">Nube / Auth Real</span></div>
+          <textarea id="firebase-config-input" placeholder='{"apiKey": "AIzaSy...", "authDomain": "..."}' onchange="saveCustomFirebaseConfig(this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-[11px] font-mono text-white focus:outline-none focus:border-emerald-500 h-16 resize-none"></textarea>
+        </div>
         <div class="p-3.5 bg-slate-900 rounded-xl border border-slate-800 space-y-3">
           <label class="block font-bold text-slate-300">Respaldo Local (JSON Offline)</label>
           <div class="grid grid-cols-2 gap-2 pt-1">
@@ -907,24 +911,26 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+    // Configuración oficial proporcionada por el usuario
     const defaultFirebaseConfig = {
-      apiKey: "AIzaSyDummyKeyForSandbox12345",
-      authDomain: "finanzcontrol-sandbox.firebaseapp.com",
-      projectId: "finanzcontrol-sandbox",
-      storageBucket: "finanzcontrol-sandbox.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
+      apiKey: "AIzaSyBnFY8WJd34vOiw60rrbEFk1WXHynRBggc",
+      authDomain: "finanzcontrol-pro.firebaseapp.com",
+      projectId: "finanzcontrol-pro",
+      storageBucket: "finanzcontrol-pro.firebasestorage.app",
+      messagingSenderId: "806885387014",
+      appId: "1:806885387014:web:13ce4078a1369e01440c87"
     };
 
     let app, auth, db;
     try {
-      const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : defaultFirebaseConfig;
+      const customConfigStr = localStorage.getItem('fz_custom_firebase_config');
+      const firebaseConfig = customConfigStr ? JSON.parse(customConfigStr) : defaultFirebaseConfig;
       app = initializeApp(firebaseConfig);
       auth = getAuth(app);
       db = getFirestore(app);
       window.firebaseAuthActive = true;
     } catch (error) {
-      console.warn("Inicializando Firebase con configuración por defecto de respaldo.");
+      console.warn("Inicializando Firebase con configuración por defecto de respaldo.", error);
       try {
          app = initializeApp(defaultFirebaseConfig);
          auth = getAuth(app);
@@ -935,113 +941,119 @@
       }
     }
 
-    if(auth) {
-       onAuthStateChanged(auth, async (user) => {
-          if (user && !user.isAnonymous) {
-             window.currentUser = {
-                 uid: user.uid,
-                 name: user.displayName || user.email.split('@')[0],
-                 email: user.email,
-                 photoURL: user.photoURL || `https://placehold.co/80x80/10b981/ffffff?text=${user.email.charAt(0).toUpperCase()}`
-             };
-             localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
-             window.updateUserUI();
-             await window.syncFromCloud();
-          }
-       });
-    }
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        window.currentUser = {
+          uid: user.uid,
+          name: user.displayName || user.email?.split('@')[0] || 'Usuario',
+          email: user.email || 'Google User',
+          photoURL: user.photoURL || `https://placehold.co/80x80/10b981/ffffff?text=${(user.email || 'U').charAt(0).toUpperCase()}`
+        };
+        localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
+        window.updateUserUI();
+        await window.syncFromCloud();
+      } else {
+        if (!localStorage.getItem('fz_user')) {
+          window.currentUser = null;
+          window.updateUserUI();
+        }
+      }
+    });
 
     window.syncToCloud = async function() {
-        if(!auth || !db || !window.currentUser || !window.currentUser.uid) {
-           updateSyncBadge('local');
-           return;
-        }
-        
-        updateSyncBadge('syncing');
-        try {
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanzcontrol';
-            const docRef = doc(db, 'artifacts', appId, 'users', window.currentUser.uid, 'data', 'backup');
-            
-            const backupPayload = {
-                entities: window.entities,
-                concepts: window.concepts,
-                transactions: window.transactions,
-                budgets: window.budgets,
-                members: window.members,
-                savingsGoals: window.savingsGoals,
-                paymentChecklist: window.paymentChecklist,
-                availableYears: window.availableYears,
-                currency: window.currentCurrency,
-                lastSync: new Date().toISOString()
-            };
-            
-            await setDoc(docRef, backupPayload, { merge: true });
-            updateSyncBadge('synced');
-        } catch(e) {
-            console.error("Error al sincronizar con Firebase:", e);
-            updateSyncBadge('error');
-        }
+      if (!auth || !auth.currentUser || !db) return;
+      updateSyncBadge('syncing');
+      try {
+        const userId = auth.currentUser.uid;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanzcontrol-pro';
+        const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'data', 'user_data');
+        const payload = {
+          transactions: window.transactions || [],
+          budgets: window.budgets || [],
+          members: window.members || [],
+          savingsGoals: window.savingsGoals || [],
+          paymentChecklist: window.paymentChecklist || [],
+          availableYears: window.availableYears || [],
+          concepts: window.concepts || [],
+          entities: window.entities || [],
+          currency: window.currentCurrency || 'CLP',
+          updatedAt: new Date().toISOString()
+        };
+        await setDoc(userDocRef, payload, { merge: true });
+        updateSyncBadge('cloud');
+      } catch (e) {
+        console.error("Error sincronizando a la nube:", e);
+        updateSyncBadge('local');
+      }
     };
 
     window.syncFromCloud = async function() {
-        if(!auth || !db || !window.currentUser || !window.currentUser.uid) return;
-        
-        try {
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanzcontrol';
-            const docRef = doc(db, 'artifacts', appId, 'users', window.currentUser.uid, 'data', 'backup');
-            const docSnap = await getDoc(docRef);
-            
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                if(data.entities) window.entities = data.entities;
-                if(data.concepts) window.concepts = data.concepts;
-                if(data.transactions) window.transactions = data.transactions;
-                if(data.budgets) window.budgets = data.budgets;
-                if(data.members) window.members = data.members;
-                if(data.savingsGoals) window.savingsGoals = data.savingsGoals;
-                if(data.paymentChecklist) window.paymentChecklist = data.paymentChecklist;
-                if(data.availableYears) window.availableYears = data.availableYears;
-                if(data.currency) window.currentCurrency = data.currency;
-                
-                window.saveAllDataLocally(false);
-                window.populateYearSelects();
-                window.populateEntitySelects();
-                window.renderApp();
-                window.showToast("☁️ Datos sincronizados desde la nube", "success");
-            }
-        } catch(e) {
-            console.error("Error descargando desde Firebase:", e);
+      if (!auth || !auth.currentUser || !db) return;
+      updateSyncBadge('syncing');
+      try {
+        const userId = auth.currentUser.uid;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanzcontrol-pro';
+        const userDocRef = doc(db, 'artifacts', appId, 'users', userId, 'data', 'user_data');
+        const docSnap = await getDoc(userDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.transactions) window.transactions = data.transactions;
+          if (data.budgets) window.budgets = data.budgets;
+          if (data.members) window.members = data.members;
+          if (data.savingsGoals) window.savingsGoals = data.savingsGoals;
+          if (data.paymentChecklist) window.paymentChecklist = data.paymentChecklist;
+          if (data.availableYears) window.availableYears = data.availableYears;
+          if (data.concepts) window.concepts = data.concepts;
+          if (data.entities) window.entities = data.entities;
+          if (data.currency) window.currentCurrency = data.currency;
+
+          window.saveAllDataLocally(false);
+          if (typeof window.populateYearSelects === 'function') window.populateYearSelects();
+          if (typeof window.populateEntitySelects === 'function') window.populateEntitySelects();
+          if (typeof window.renderApp === 'function') window.renderApp();
+          window.showToast("⚡ Datos sincronizados desde la nube", "success");
         }
+        updateSyncBadge('cloud');
+      } catch (e) {
+        console.error("Error descargando de la nube:", e);
+        updateSyncBadge('local');
+      }
     };
 
     function updateSyncBadge(status) {
-       const textEl = document.getElementById('sync-status-text');
-       const dotEl = document.getElementById('sync-dot');
-       const iconEl = document.getElementById('sync-icon');
-       if(!textEl || !dotEl || !iconEl) return;
-       
-       if(status === 'synced') {
-           textEl.innerText = "Nube Sincronizada";
-           textEl.className = "text-emerald-400";
-           dotEl.className = "w-2 h-2 rounded-full bg-emerald-400";
-           iconEl.className = "w-3.5 h-3.5 text-emerald-400";
-       } else if (status === 'syncing') {
-           textEl.innerText = "Sincronizando...";
-           textEl.className = "text-amber-400";
-           dotEl.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse";
-           iconEl.className = "w-3.5 h-3.5 text-amber-400";
-       } else if (status === 'error') {
-           textEl.innerText = "Error Sincro Nube";
-           textEl.className = "text-rose-400";
-           dotEl.className = "w-2 h-2 rounded-full bg-rose-400";
-           iconEl.className = "w-3.5 h-3.5 text-rose-400";
-       } else {
-           textEl.innerText = "Guardado Local";
-           textEl.className = "text-slate-400";
-           dotEl.className = "w-2 h-2 rounded-full bg-slate-500";
-           iconEl.className = "w-3.5 h-3.5 text-slate-500";
-       }
+      const dot = document.getElementById('sync-dot');
+      const text = document.getElementById('sync-status-text');
+      const icon = document.getElementById('sync-icon');
+      if (!dot || !text) return;
+      if (status === 'cloud') {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        text.innerText = 'Sincronizado (Nube)';
+        if (icon) icon.className = 'w-3.5 h-3.5 text-emerald-400';
+      } else if (status === 'syncing') {
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping';
+        text.innerText = 'Guardando Nube...';
+        if (icon) icon.className = 'w-3.5 h-3.5 text-amber-400';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-slate-500';
+        text.innerText = 'Guardado Local';
+        if (icon) icon.className = 'w-3.5 h-3.5 text-slate-500';
+      }
     }
+
+    window.saveCustomFirebaseConfig = function(val) {
+      if (!val.trim()) {
+        localStorage.removeItem('fz_custom_firebase_config');
+        window.showToast("Configuración personalizada eliminada", "info");
+        return;
+      }
+      try {
+        JSON.parse(val);
+        localStorage.setItem('fz_custom_firebase_config', val.trim());
+        window.showToast("🔑 Configuración de Firebase guardada. Recarga para aplicar.", "success");
+      } catch(e) {
+        window.showToast("❌ Formato JSON no válido.", "error");
+      }
+    };
 
     window.handleGoogleLogin = async function() {
         if (!auth) return window.showToast("❌ Módulo de Firebase inactivo.", "error");
@@ -1064,10 +1076,10 @@
             await window.syncFromCloud();
         } catch (error) {
             console.error(error);
-            if(error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-                window.showToast("⚠️ Ventana emergente bloqueada por el navegador.", "error");
-            } else if (error.code === 'auth/unauthorized-domain') {
-                window.showToast("⛔ Dominio no autorizado en Firebase Console.", "error");
+            if (error.code === 'auth/unauthorized-domain') {
+                window.showToast("⛔ Dominio no autorizado. Añádelo en Firebase Console > Auth > Settings > Authorized domains.", "error");
+            } else if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+                window.showToast("⚠️ Ventana emergente cerrada o bloqueada.", "error");
             } else {
                 window.showToast("Error Google Auth: " + error.message, "error");
             }
@@ -1174,6 +1186,8 @@
       
       const apiKeyEl = document.getElementById('gemini-api-key-input');
       if (apiKeyEl) apiKeyEl.value = window.geminiApiKey;
+      const fbConfigEl = document.getElementById('firebase-config-input');
+      if (fbConfigEl) fbConfigEl.value = localStorage.getItem('fz_custom_firebase_config') || '';
       const currSelect = document.getElementById('settings-currency-select');
       if (currSelect) currSelect.value = window.currentCurrency;
       
