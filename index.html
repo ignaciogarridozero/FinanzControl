@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FinanzControl PRO - Sistema Financiero Integrado</title>
   
-  <!-- Logo / Favicon Oficial Embebido Vectorial (SVG Isotipo Esmeralda & Cian) -->
+  <!-- Logo / Favicon Oficial Vectorial (SVG Isotipo Esmeralda & Cian) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none'%3E%3Cdefs%3E%3ClinearGradient id='f1' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2334d399'/%3E%3Cstop offset='50%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%23059669'/%3E%3C/linearGradient%3E%3ClinearGradient id='f2' x1='0%25' y1='100%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%2334d399'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='%23064e3b' fill-opacity='0.5' stroke='%2310b981' stroke-opacity='0.4' stroke-width='1.5'/%3E%3Cpath d='M10 28V20C10 18.8954 10.8954 18 12 18H13C14.1046 18 15 18.8954 15 20V28' fill='url(%23f1)' opacity='0.7'/%3E%3Cpath d='M17 28V15C17 13.8954 17.8954 13 19 13H20C21.1046 13 22 13.8954 22 15V28' fill='url(%23f1)' opacity='0.9'/%3E%3Cpath d='M24 28V10C24 8.89543 24.8954 8 26 8H27C28.1046 8 29 8.89543 29 10V28' fill='url(%23f1)'/%3E%3Cpath d='M9 23C13 19 18 17 29 10' stroke='url(%23f2)' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='29' cy='10' r='2.5' fill='%236ee7b7'/%3E%3C/svg%3E">
 
   <!-- Tailwind CSS -->
@@ -80,15 +80,12 @@
               <path d="M24 28V10C24 8.89543 24.8954 8 26 8H27C28.1046 8 29 8.89543 29 10V28" fill="url(#m-fg1)"/>
               <path d="M9 23C13 19 18 17 29 10" stroke="url(#m-fg2)" stroke-width="3" stroke-linecap="round"/>
               <circle cx="29" cy="10" r="2.5" fill="#6ee7b7"/>
-        <button onclick="handleGoogleLogin()" id="btn-google-login" class="w-full bg-[#1e293b] hover:bg-[#334155] border border-slate-700 text-white font-bold py-3.5 rounded-xl text-sm transition flex items-center justify-center gap-3">
-          <svg class="w-5 h-5" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          <span>Google</span>
-        </button>
+            </svg>
+          </div>
+          <span class="font-bold text-xs text-white tracking-tight flex items-center gap-1">
+            FinanzControl <span class="text-[9px] px-1 py-0.5 bg-brand-500/20 text-brand-400 rounded border border-brand-500/30 font-bold">PRO</span>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -941,24 +938,26 @@
       }
     }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        window.currentUser = {
-          uid: user.uid,
-          name: user.displayName || user.email?.split('@')[0] || 'Usuario',
-          email: user.email || 'Google User',
-          photoURL: user.photoURL || `https://placehold.co/80x80/10b981/ffffff?text=${(user.email || 'U').charAt(0).toUpperCase()}`
-        };
-        localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
-        window.updateUserUI();
-        await window.syncFromCloud();
-      } else {
-        if (!localStorage.getItem('fz_user')) {
-          window.currentUser = null;
+    if (auth) {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          window.currentUser = {
+            uid: user.uid,
+            name: user.displayName || user.email?.split('@')[0] || 'Usuario',
+            email: user.email || 'Google User',
+            photoURL: user.photoURL || `https://placehold.co/80x80/10b981/ffffff?text=${(user.email || 'U').charAt(0).toUpperCase()}`
+          };
+          localStorage.setItem('fz_user', JSON.stringify(window.currentUser));
           window.updateUserUI();
+          await window.syncFromCloud();
+        } else {
+          if (!localStorage.getItem('fz_user')) {
+            window.currentUser = null;
+            window.updateUserUI();
+          }
         }
-      }
-    });
+      });
+    }
 
     window.syncToCloud = async function() {
       if (!auth || !auth.currentUser || !db) return;
@@ -1330,7 +1329,6 @@
       if (bSelect) bSelect.innerHTML = window.concepts.filter(c => c.type === 'EXPENSE').map(c => `<option value="${c.id}">${c.name}</option>`).join('');
     }
 
-    // CHECKLIST LOGIC
     function renderChecklistTable() {
       const tbody = document.getElementById('checklist-table-body');
       if (!tbody) return;
@@ -1409,7 +1407,6 @@
       closeModal('add-checklist-modal'); renderApp(); showToast('Compromiso agregado', 'success');
     }
 
-    // BUDGET LOGIC
     function renderBudgetVsRealTable(filteredTx) {
       const tbody = document.getElementById('budget-table-body');
       if (!tbody) return;
@@ -1443,7 +1440,6 @@
     }
     function deleteBudget(id) { window.budgets = window.budgets.filter(b => b.id !== id); renderApp(); }
 
-    // TRANSACTIONS LOGIC
     function renderTransactionsTable(txList) {
       const tbody = document.getElementById('transactions-table-body');
       if (!tbody) return;
@@ -1468,7 +1464,6 @@
     }
     function deleteTransaction(id) { window.transactions = window.transactions.filter(t => t.id !== id); renderApp(); }
 
-    // CLUB MEMBERS LOGIC
     function renderClubMembersTable() {
       const tbody = document.getElementById('club-members-table-body');
       if (!tbody) return;
@@ -1534,7 +1529,6 @@
     function updatePlayerNotes(val) { const m = window.members.find(x => x.id === window.inspectingPlayerId); if (m) { m.notes = val; saveAllDataLocally(); } }
     function deleteMember(id) { if (confirm("¿Eliminar jugador?")) { window.members = window.members.filter(m => m.id !== id); renderApp(); } }
 
-    // GOALS LOGIC
     function renderSavingsGoals() {
       const container = document.getElementById('goals-container');
       if (!container) return;
@@ -1569,7 +1563,6 @@
     }
     function deleteGoal(id) { window.savingsGoals = window.savingsGoals.filter(g => g.id !== id); renderApp(); }
 
-    // AI DETAILED REPORT (GEMINI IA)
     async function generateAIDetailedReport() {
       const container = document.getElementById('ai-infographic-content'), btn = document.getElementById('btn-generate-infographic');
       if (!container) return;
@@ -1674,7 +1667,6 @@
     }
     function printInfographicPDF() { window.print(); }
 
-    // CHARTS
     function renderCharts(filteredTx) {
       if (window.innerWidth < 768) return;
       const ctxComp = document.getElementById('chart-monthly-comparison'), ctxCat = document.getElementById('chart-category-distribution'), ctxInter = document.getElementById('chart-interannual');
@@ -1704,7 +1696,6 @@
       }
     }
 
-    // AI ASSISTANT CHAT
     async function generateAIDiagnosis() {
       const inc = window.transactions.filter(t => t.entity === window.currentEntity && t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0);
       const exp = window.transactions.filter(t => t.entity === window.currentEntity && t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
