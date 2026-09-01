@@ -810,19 +810,50 @@
       <h3 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5 text-brand-400"></i><span>Nuevo Movimiento</span></h3>
       <form onsubmit="addNewTransaction(event)" class="space-y-3">
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs text-slate-400 mb-1">Tipo</label><select id="tx-type" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"><option value="EXPENSE">Egreso (Gasto)</option><option value="INCOME">Ingreso</option></select></div>
-          <div><label class="block text-xs text-slate-400 mb-1">Monto ($)</label><input type="number" id="tx-amount" required min="1" step="any" placeholder="10000" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Tipo de Movimiento</label>
+            <select id="tx-type" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+              <option value="EXPENSE">Egreso (Gasto)</option>
+              <option value="INCOME">Ingreso</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Monto ($)</label>
+            <input type="number" id="tx-amount" required min="1" placeholder="10000" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs text-slate-400 mb-1">Categoría</label><select id="tx-concept" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></select></div>
-          <div><label class="block text-xs text-slate-400 mb-1">Grupo de Pago</label><select id="tx-group" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></select></div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Estado del Pago</label>
+            <select id="tx-status" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+              <option value="PAID">🟢 Pagado</option>
+              <option value="PENDING">🔴 Pendiente</option>
+              <option value="UPCOMING">🟡 Por Pagar</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Fecha</label>
+            <input type="date" id="tx-date" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+          </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs text-slate-400 mb-1">Estado del Pago</label><select id="tx-status" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"><option value="PAID">🟢 Pagado</option><option value="PENDING">🔴 Pendiente</option></select></div>
-          <div><label class="block text-xs text-slate-400 mb-1">Fecha</label><input type="date" id="tx-date" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoría</label>
+            <select id="tx-concept" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Grupo de Pago</label>
+            <select id="tx-group" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></select>
+          </div>
         </div>
-        <div><label class="block text-xs text-slate-400 mb-1">Descripción</label><input type="text" id="tx-desc" required placeholder="Ej: Pago de Luz / Sueldo" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500"></div>
-        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('add-transaction-modal')" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white">Cancelar</button><button type="submit" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition">Guardar Movimiento</button></div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Descripción</label>
+          <input type="text" id="tx-desc" required placeholder="Ej: Pago de Luz / Sueldo" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-500">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal('add-transaction-modal')" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white">Cancelar</button>
+          <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition">Guardar Movimiento</button>
+        </div>
       </form>
     </div>
   </div>
@@ -1326,11 +1357,13 @@
       const date = document.getElementById('tx-date');
       const status = document.getElementById('tx-status');
       const group = document.getElementById('tx-group');
+      const type = document.getElementById('tx-type');
       if (desc) desc.value = '';
       if (amount) amount.value = '';
       if (date) date.value = new Date().toISOString().split('T')[0];
       if (status) status.value = 'PAID';
       if (group) group.value = 'NONE';
+      if (type) type.value = 'EXPENSE';
     };
 
     window.resetBudgetForm = function() {
@@ -1449,8 +1482,10 @@
         return true;
       });
 
-      const totalIncome = filteredTx.filter(t => t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0);
-      const totalExpense = filteredTx.filter(t => t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
+      const effectiveTx = filteredTx.filter(t => t.status !== 'UPCOMING');
+
+      const totalIncome = effectiveTx.filter(t => t.type === 'INCOME').reduce((s, t) => s + Number(t.amount), 0);
+      const totalExpense = effectiveTx.filter(t => t.type === 'EXPENSE').reduce((s, t) => s + Number(t.amount), 0);
       const balance = totalIncome - totalExpense;
 
       const incEl = document.getElementById('stat-income');
@@ -1508,9 +1543,11 @@
 
       container.innerHTML = window.paymentGroups.map(g => {
         const groupTxs = allTxForSpace.filter(t => t.group === g.id);
-        const totalAmount = groupTxs.reduce((s, t) => s + Number(t.amount), 0);
+        const effectiveGroupTxs = groupTxs.filter(t => t.status !== 'UPCOMING');
+        const totalAmount = effectiveGroupTxs.reduce((s, t) => s + Number(t.amount), 0);
         const paidAmount = groupTxs.filter(t => t.status === 'PAID').reduce((s, t) => s + Number(t.amount), 0);
         const pendingAmount = groupTxs.filter(t => t.status === 'PENDING').reduce((s, t) => s + Number(t.amount), 0);
+        const upcomingAmount = groupTxs.filter(t => t.status === 'UPCOMING').reduce((s, t) => s + Number(t.amount), 0);
         const count = groupTxs.length;
 
         return `
@@ -1520,19 +1557,15 @@
               <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded-md font-semibold border border-slate-800">${count} mov.</span>
             </div>
             <p class="text-lg font-bold text-amber-400">${formatCurrency(totalAmount)}</p>
-            <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-800/80">
-              <span class="text-brand-400 font-medium">Pagado: ${formatCurrency(paidAmount)}</span>
-              <span class="text-rose-400 font-medium">Pend: ${formatCurrency(pendingAmount)}</span>
+            <div class="grid grid-cols-3 gap-1 text-[10px] pt-1 border-t border-slate-800/80">
+              <span class="text-brand-400 font-medium truncate">Pag: ${formatCurrency(paidAmount)}</span>
+              <span class="text-rose-400 font-medium truncate">Pen: ${formatCurrency(pendingAmount)}</span>
+              <span class="text-amber-400 font-medium truncate">PorPag: ${formatCurrency(upcomingAmount)}</span>
             </div>
           </div>
         `;
       }).join('');
     }
-
-    window.setPaymentGroupFilter = function(groupId) {
-      window.selectedPaymentGroupFilter = groupId;
-      renderApp();
-    };
 
     function renderTransactionsTable(txList) {
       const tbody = document.getElementById('transactions-table-body');
@@ -1542,19 +1575,29 @@
       tbody.innerHTML = txList.map(t => {
         const groupObj = (window.paymentGroups || []).find(g => g.id === t.group);
         const groupBadge = groupObj ? `<span class="text-[10px] bg-slate-900 text-amber-300 font-semibold px-2 py-0.5 rounded-md border border-amber-500/20 ml-1">${groupObj.icon || '📁'} ${groupObj.name}</span>` : '';
-        const isPaid = t.status === 'PAID';
+        
+        let statusBadgeClass = 'bg-brand-500/20 text-brand-400 border-brand-500/30 hover:bg-brand-500/30';
+        let statusText = '🟢 PAGADO';
+
+        if (t.status === 'PENDING') {
+          statusBadgeClass = 'bg-rose-500/20 text-rose-400 border-rose-500/30 hover:bg-rose-500/30';
+          statusText = '🔴 PENDIENTE';
+        } else if (t.status === 'UPCOMING') {
+          statusBadgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/30';
+          statusText = '🟡 POR PAGAR';
+        }
 
         return `
-          <tr class="hover:bg-slate-900/40 transition">
+          <tr class="hover:bg-slate-900/40 transition ${t.status === 'UPCOMING' ? 'opacity-70' : ''}">
             <td class="p-3.5">
-              <button onclick="toggleTxStatus('${t.id}')" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition ${isPaid ? 'bg-brand-500/20 text-brand-400 border border-brand-500/30 hover:bg-brand-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:bg-rose-500/30'}">
-                ${isPaid ? '🟢 PAGADO' : '🔴 PENDIENTE'}
+              <button onclick="toggleTxStatus('${t.id}')" class="px-2.5 py-1 rounded-full text-[10px] font-bold border transition ${statusBadgeClass}" title="Haga clic para cambiar estado">
+                ${statusText}
               </button>
             </td>
             <td class="p-3.5 text-slate-400 whitespace-nowrap">${t.date}</td>
             <td class="p-3.5 font-bold ${t.type === 'INCOME' ? 'text-brand-400' : 'text-rose-400'}">${t.type === 'INCOME' ? 'Ingreso' : 'Egreso'}</td>
             <td class="p-3.5 text-slate-300 font-medium">${t.concept} ${groupBadge}</td>
-            <td class="p-3.5 font-bold text-white">${t.description}</td>
+            <td class="p-3.5 font-bold text-white">${t.description} ${t.status === 'UPCOMING' ? '<span class="text-[10px] text-amber-400 font-normal">(No contabilizado)</span>' : ''}</td>
             <td class="p-3.5 text-right font-bold whitespace-nowrap ${t.type === 'INCOME' ? 'text-brand-400' : 'text-rose-400'}">${formatCurrency(t.amount)}</td>
             <td class="p-3.5 text-center space-x-1 whitespace-nowrap">
               <button onclick="deferTransactionToNextMonth('${t.id}')" class="p-1.5 text-sky-400 hover:bg-slate-800 rounded-lg transition" title="Duplicar/Pasar al Próximo Mes"><i data-lucide="calendar-forward" class="w-4 h-4"></i></button>
@@ -1568,9 +1611,13 @@
     window.toggleTxStatus = function(id) {
       const t = window.transactions.find(x => x.id === id);
       if (t) {
-        t.status = t.status === 'PAID' ? 'PENDING' : 'PAID';
+        if (t.status === 'PAID') t.status = 'PENDING';
+        else if (t.status === 'PENDING') t.status = 'UPCOMING';
+        else t.status = 'PAID';
+
         renderApp();
-        showToast(`Estado actualizado: ${t.status === 'PAID' ? '🟢 Pagado' : '🔴 Pendiente'}`, 'success');
+        const labels = { PAID: '🟢 Pagado (Contabilizado)', PENDING: '🔴 Pendiente (Contabilizado)', UPCOMING: '🟡 Por Pagar (Planificado - No Contabilizado)' };
+        showToast(`Estado: ${labels[t.status]}`, 'info');
       }
     };
 
@@ -1606,16 +1653,26 @@
 
     window.addNewTransaction = function(e) {
       e.preventDefault();
+      const typeEl = document.getElementById('tx-type');
+      const amountEl = document.getElementById('tx-amount');
+      const conceptEl = document.getElementById('tx-concept');
+      const descEl = document.getElementById('tx-desc');
+      const dateEl = document.getElementById('tx-date');
+      const statusEl = document.getElementById('tx-status');
+      const groupEl = document.getElementById('tx-group');
+
+      if (!typeEl || !amountEl || !conceptEl || !descEl || !dateEl) return;
+
       window.transactions.push({
         id: 'tx_' + Date.now(),
         entity: window.currentEntity,
-        type: document.getElementById('tx-type').value,
-        amount: Number(document.getElementById('tx-amount').value),
-        concept: document.getElementById('tx-concept').value,
-        description: document.getElementById('tx-desc').value,
-        date: document.getElementById('tx-date').value,
-        status: document.getElementById('tx-status').value || 'PAID',
-        group: document.getElementById('tx-group').value || 'NONE'
+        type: typeEl.value,
+        amount: Number(amountEl.value),
+        concept: conceptEl.value,
+        description: descEl.value,
+        date: dateEl.value,
+        status: statusEl ? statusEl.value : 'PAID',
+        group: groupEl ? groupEl.value : 'NONE'
       });
       closeModal('add-transaction-modal');
       resetTransactionForm();
@@ -1634,7 +1691,7 @@
       }
 
       tbody.innerHTML = spaceBudgets.map(b => {
-        const conceptTxs = filteredTx.filter(t => t.type === 'EXPENSE' && t.concept === b.concept);
+        const conceptTxs = filteredTx.filter(t => t.type === 'EXPENSE' && t.concept === b.concept && t.status !== 'UPCOMING');
         const real = conceptTxs.reduce((s, t) => s + Number(t.amount), 0);
         const diff = b.amount - real;
         const pct = Math.min(Math.round((real / b.amount) * 100), 100);
@@ -1884,14 +1941,132 @@
     };
 
     window.deleteWorkspace = function(id) {
-      if (confirm('¿Eliminar este espacio de trabajo?')) {
-        window.entities = window.entities.filter(e => e.id !== id);
-        if (window.currentEntity === id) window.currentEntity = window.entities[0].id;
-        populateEntitySelects();
-        renderWorkspaceList();
+      window.entities = window.entities.filter(e => e.id !== id);
+      if (window.currentEntity === id) window.currentEntity = window.entities[0].id;
+      populateEntitySelects();
+      renderWorkspaceList();
+      renderApp();
+      showToast('Espacio de trabajo eliminado', 'info');
+    };
+
+    window.createNewConcept = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-concept-name').value.trim();
+      const type = document.getElementById('new-concept-type').value;
+      if (name) {
+        window.concepts.push({ id: name, name, type });
+        document.getElementById('new-concept-name').value = '';
         renderApp();
-        showToast('Espacio eliminado', 'info');
+        showToast(`Categoría '${name}' creada`, 'success');
       }
+    };
+
+    window.savePaymentGroupConfig = function(e) {
+      e.preventDefault();
+      const editId = document.getElementById('edit-group-id').value;
+      const name = document.getElementById('new-group-name').value.trim();
+      const icon = document.getElementById('new-group-icon').value.trim() || '📁';
+      if (!name) return;
+
+      if (editId) {
+        const item = window.paymentGroups.find(x => x.id === editId);
+        if (item) {
+          item.name = name;
+          item.icon = icon;
+          showToast(`Grupo '${name}' modificado`, 'success');
+        }
+      } else {
+        const newId = 'grp_' + Date.now();
+        window.paymentGroups.push({ id: newId, name, icon });
+        showToast(`Grupo '${name}' creado`, 'success');
+      }
+
+      resetPaymentGroupForm();
+      saveAllDataLocally();
+      populateConceptOptions();
+      renderPaymentGroupsAdminList();
+      renderApp();
+    };
+
+    window.editPaymentGroup = function(id) {
+      const item = window.paymentGroups.find(x => x.id === id);
+      if (item) {
+        document.getElementById('edit-group-id').value = item.id;
+        document.getElementById('new-group-name').value = item.name;
+        document.getElementById('new-group-icon').value = item.icon || '📁';
+        document.getElementById('btn-save-group').innerText = 'Modificar';
+        document.getElementById('group-cancel-btn').classList.remove('hidden');
+      }
+    };
+
+    window.resetPaymentGroupForm = function() {
+      document.getElementById('edit-group-id').value = '';
+      document.getElementById('new-group-name').value = '';
+      document.getElementById('new-group-icon').value = '';
+      document.getElementById('btn-save-group').innerText = 'Guardar';
+      document.getElementById('group-cancel-btn').classList.add('hidden');
+    };
+
+    function renderPaymentGroupsAdminList() {
+      const container = document.getElementById('payment-groups-list');
+      if (!container) return;
+      if (!window.paymentGroups || window.paymentGroups.length === 0) {
+        container.innerHTML = `<p class="text-slate-500 italic text-[11px]">No hay grupos creados.</p>`;
+        return;
+      }
+      container.innerHTML = window.paymentGroups.map(g => `
+        <div class="flex items-center justify-between p-2 bg-slate-950 rounded-lg border border-slate-800">
+          <span class="text-white font-medium flex items-center gap-1.5"><span>${g.icon || '📁'}</span><span>${g.name}</span></span>
+          <div class="flex items-center gap-1">
+            <button type="button" onclick="editPaymentGroup('${g.id}')" class="p-1 text-amber-400 hover:bg-slate-800 rounded transition" title="Modificar"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+            <button type="button" onclick="deletePaymentGroup('${g.id}')" class="p-1 text-rose-400 hover:bg-slate-800 rounded transition" title="Eliminar"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          </div>
+        </div>
+      `).join('');
+      if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+    }
+
+    window.deletePaymentGroup = function(id) {
+      window.paymentGroups = window.paymentGroups.filter(g => g.id !== id);
+      if (window.selectedPaymentGroupFilter === id) window.selectedPaymentGroupFilter = 'ALL';
+      saveAllDataLocally();
+      populateConceptOptions();
+      renderPaymentGroupsAdminList();
+      renderApp();
+      showToast('Grupo de pago eliminado', 'info');
+    };
+
+    window.addNewYear = function(e) {
+      e.preventDefault();
+      const y = document.getElementById('new-year-input').value.trim();
+      if (y && !window.availableYears.includes(y)) {
+        window.availableYears.push(y);
+        window.selectedYear = y;
+        closeModal('add-year-modal');
+        populateYearSelects();
+        renderApp();
+        showToast(`Año ${y} agregado`, 'success');
+      }
+    };
+
+    window.generateAIDiagnosis = function() {
+      const spaceTxs = window.transactions.filter(t => t.entity === window.currentEntity);
+      const income = spaceTxs.filter(t => t.type === 'INCOME' && t.status !== 'UPCOMING').reduce((s, t) => s + Number(t.amount), 0);
+      const expense = spaceTxs.filter(t => t.type === 'EXPENSE' && t.status !== 'UPCOMING').reduce((s, t) => s + Number(t.amount), 0);
+      const balance = income - expense;
+
+      let msg = "";
+      if (spaceTxs.length === 0) {
+        msg = "💡 No se registran transacciones suficientes para analizar. Comienza agregando ingresos y gastos.";
+      } else if (balance > 0) {
+        msg = `🎉 ¡Excelente gestión! Cuentas con un superávit de ${formatCurrency(balance)}. Te sugerimos destinar un porcentaje a tus Metas de Ahorro.`;
+      } else if (balance === 0) {
+        msg = `⚖️ El espacio está en punto de equilibrio exacto. Intenta reducir gastos prescindibles para generar margen de ahorro.`;
+      } else {
+        msg = `⚠️ Atención: Los egresos superan los ingresos en ${formatCurrency(Math.abs(balance))}. Revisa tus compromisos pendientes.`;
+      }
+
+      showToast(msg, "info");
     };
 
     window.createNewConcept = function(e) {
@@ -2167,7 +2342,7 @@
       const monthlyIncome = new Array(12).fill(0);
       const monthlyExpense = new Array(12).fill(0);
 
-      window.transactions.filter(t => t.entity === window.currentEntity && new Date(t.date).getFullYear().toString() === window.selectedYear).forEach(t => {
+      window.transactions.filter(t => t.entity === window.currentEntity && new Date(t.date).getFullYear().toString() === window.selectedYear && t.status !== 'UPCOMING').forEach(t => {
         const m = new Date(t.date).getMonth();
         if (t.type === 'INCOME') monthlyIncome[m] += Number(t.amount);
         else monthlyExpense[m] += Number(t.amount);
@@ -2188,7 +2363,7 @@
       }
 
       const catMap = {};
-      filteredTx.filter(t => t.type === 'EXPENSE').forEach(t => {
+      filteredTx.filter(t => t.type === 'EXPENSE' && t.status !== 'UPCOMING').forEach(t => {
         catMap[t.concept] = (catMap[t.concept] || 0) + Number(t.amount);
       });
 
@@ -2321,7 +2496,7 @@
 
     window.handleForgotPassword = function(e) {
       e.preventDefault();
-      alert('Se enviaría una solicitud de restablecimiento a tu correo electrónico.');
+      showToast('Se envió una solicitud de restablecimiento a tu correo.', 'info');
     };
 
     window.exportBackupJSON = function() {
