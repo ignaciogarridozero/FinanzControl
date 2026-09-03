@@ -544,20 +544,20 @@
     </div>
   </div>
 
-
   <!-- MODAL: FICHA DEPORTIVA Y FINANCIERA FENAX DEL JUGADOR -->
   <div id="player-detail-modal" onclick="if(event.target === this) closeModal('player-detail-modal')" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-5 no-print">
     <div class="glass-card w-full max-w-4xl rounded-3xl border border-emerald-500/30 p-5 space-y-5 relative max-h-[94vh] flex flex-col shadow-2xl bg-slate-950/95 overflow-hidden">
       
       <!-- Top Header Profile -->
       <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800/90 relative">
-        <button onclick="closeModal('player-detail-modal')" class="absolute top-0 right-0 p-1 text-slate-400 hover:text-white transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
 
         <div class="flex items-center gap-4">
-          <div class="relative">
-            <img id="pdetail-avatar" src="https://placehold.co/120x120/064e3b/10b981?text=R" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-emerald-500/40 object-cover shadow-lg shadow-emerald-500/10">
+          <div class="relative group cursor-pointer" onclick="document.getElementById('pdetail-avatar-file-input').click()" title="Haz clic para subir o cambiar la foto desde tu dispositivo">
+            <img id="pdetail-avatar" src="https://placehold.co/120x120/064e3b/10b981?text=R" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-emerald-500/40 object-cover shadow-lg shadow-emerald-500/10 transition group-hover:opacity-75">
+            <div class="absolute inset-0 bg-slate-950/60 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+              <i data-lucide="camera" class="w-6 h-6 text-emerald-400"></i>
+            </div>
+            <input type="file" id="pdetail-avatar-file-input" accept="image/*" class="hidden" onchange="handlePlayerAvatarUpload(event)">
             <span id="pdetail-status-dot" class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-slate-950 bg-emerald-500 flex items-center justify-center text-[9px] font-bold text-slate-950" title="Estado Físico">✓</span>
           </div>
 
@@ -827,7 +827,7 @@
                 <span class="font-bold text-xs text-white">Cuota Social Mensual</span>
                 <span id="pfin-badge-cuota" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Al Día</span>
               </div>
-              <input type="number" id="pfin-amt-cuota" value="0" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
+              <input type="number" id="pfin-amt-cuota" value="0" oninput="updateFinancialBadgesUI()" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
             </div>
 
             <div class="glass-card p-3.5 rounded-2xl border border-slate-800 space-y-2">
@@ -835,7 +835,7 @@
                 <span class="font-bold text-xs text-white">Rifas / Sorteos</span>
                 <span id="pfin-badge-rifa" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">Pendiente</span>
               </div>
-              <input type="number" id="pfin-amt-rifa" value="0" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
+              <input type="number" id="pfin-amt-rifa" value="0" oninput="updateFinancialBadgesUI()" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
             </div>
 
             <div class="glass-card p-3.5 rounded-2xl border border-slate-800 space-y-2">
@@ -843,7 +843,7 @@
                 <span class="font-bold text-xs text-white">Eventos & Tours</span>
                 <span id="pfin-badge-evento" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Al Día</span>
               </div>
-              <input type="number" id="pfin-amt-evento" value="0" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
+              <input type="number" id="pfin-amt-evento" value="0" oninput="updateFinancialBadgesUI()" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
             </div>
 
             <div class="glass-card p-3.5 rounded-2xl border border-slate-800 space-y-2">
@@ -851,7 +851,7 @@
                 <span class="font-bold text-xs text-white">Partidos / Cancha</span>
                 <span id="pfin-badge-partido" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Al Día</span>
               </div>
-              <input type="number" id="pfin-amt-partido" value="0" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
+              <input type="number" id="pfin-amt-partido" value="0" oninput="updateFinancialBadgesUI()" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
             </div>
 
             <div class="glass-card p-3.5 rounded-2xl border border-slate-800 space-y-2">
@@ -859,7 +859,7 @@
                 <span class="font-bold text-xs text-white">Tercer Tiempo</span>
                 <span id="pfin-badge-tercer" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Al Día</span>
               </div>
-              <input type="number" id="pfin-amt-tercer" value="0" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
+              <input type="number" id="pfin-amt-tercer" value="0" oninput="updateFinancialBadgesUI()" placeholder="Monto Deuda $" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white">
             </div>
           </div>
 
@@ -1616,7 +1616,6 @@
           savingsGoals: window.savingsGoals || [],
           availableYears: window.availableYears || [],
           concepts: window.concepts || [],
-          entities: window.entities || [],
           paymentGroups: window.paymentGroups || [],
           currency: window.currentCurrency || 'CLP',
           theme: window.currentTheme || 'dark',
@@ -1782,6 +1781,12 @@
       if (activeBtn) {
         activeBtn.classList.remove('text-slate-400');
         activeBtn.classList.add('text-brand-400', 'bg-brand-500/10', 'border', 'border-brand-500/20');
+      }
+
+      // Close mobile drawer on selection
+      const sb = document.getElementById('main-sidebar');
+      if (sb && !sb.classList.contains('-translate-x-full') && window.innerWidth < 768) {
+        sb.classList.add('-translate-x-full');
       }
 
       window.renderApp();
@@ -2600,13 +2605,18 @@
         const totalDebt = cuotaDebt + otherDebt;
         
         const finStatus = totalDebt > 0 ? `🔴 Deuda: ${window.formatCurrency(totalDebt)}` : m.isExempt ? '🟡 Exento Cuota' : '🟢 Al Día';
+        const avatarSrc = m.avatar || m.photoURL;
 
         return `
           <tr onclick="openPlayerDetailModal('${m.id}')" class="hover:bg-slate-900/80 cursor-pointer transition border-b border-slate-800/40">
             <td class="p-3.5 font-bold text-white flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center font-bold text-emerald-400">
-                ${m.name.charAt(0)}
-              </div>
+              ${avatarSrc ? `
+                <img src="${avatarSrc}" class="w-8 h-8 rounded-xl border border-slate-800 object-cover flex-shrink-0">
+              ` : `
+                <div class="w-8 h-8 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center font-bold text-emerald-400 flex-shrink-0">
+                  ${m.name.charAt(0)}
+                </div>
+              `}
               <div>
                 <p class="font-bold text-white">${m.name}</p>
                 <p class="text-[10px] text-slate-400">${m.age || 18} años • ${m.sport || 'Rugby XV'}</p>
@@ -2760,6 +2770,12 @@
       document.getElementById('pcnt-parent-name').value = cnt.parentName || '';
       document.getElementById('pcnt-parent-phone').value = cnt.parentPhone || '';
 
+      // Avatar
+      const avatarImg = document.getElementById('pdetail-avatar');
+      if (avatarImg) {
+        avatarImg.src = m.avatar || m.photoURL || `https://placehold.co/120x120/064e3b/10b981?text=${encodeURIComponent(m.name.charAt(0))}`;
+      }
+
       // Finances
       const c = m.commitments || {};
       document.getElementById('pfin-amt-cuota').value = c.cuota || 0;
@@ -2769,6 +2785,7 @@
       document.getElementById('pfin-amt-tercer').value = c.tercer || 0;
       document.getElementById('pfin-exempt-check').checked = !!m.isExempt;
       window.togglePlayerExemptionUI();
+      window.updateFinancialBadgesUI();
       window.renderPlayerPaymentHistory(m.paymentHistory || []);
 
       window.switchPlayerModalTab('eval');
@@ -2840,14 +2857,42 @@
             cuotaBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
             cuotaBadge.innerText = "Exento";
           }
-        } else {
-          if (cuotaBadge) {
-            const val = Number(cuotaInput.value || 0);
-            cuotaBadge.className = val > 0 ? "px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30" : "px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-            cuotaBadge.innerText = val > 0 ? "Pendiente" : "Al Día";
-          }
         }
       }
+      window.updateFinancialBadgesUI();
+    };
+
+    window.updateFinancialBadgesUI = function() {
+      const isExempt = document.getElementById('pfin-exempt-check').checked;
+      
+      const concepts = [
+        { key: 'cuota', badgeId: 'pfin-badge-cuota', inputId: 'pfin-amt-cuota' },
+        { key: 'rifa', badgeId: 'pfin-badge-rifa', inputId: 'pfin-amt-rifa' },
+        { key: 'evento', badgeId: 'pfin-badge-evento', inputId: 'pfin-amt-evento' },
+        { key: 'partido', badgeId: 'pfin-badge-partido', inputId: 'pfin-amt-partido' },
+        { key: 'tercer', badgeId: 'pfin-badge-tercer', inputId: 'pfin-amt-tercer' }
+      ];
+
+      concepts.forEach(c => {
+        const badge = document.getElementById(c.badgeId);
+        const input = document.getElementById(c.inputId);
+        if (!badge || !input) return;
+
+        if (c.key === 'cuota' && isExempt) {
+          badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+          badge.innerText = "Exento";
+          return;
+        }
+
+        const amt = Number(input.value || 0);
+        if (amt > 0) {
+          badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30";
+          badge.innerText = "Pendiente";
+        } else {
+          badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+          badge.innerText = "Al Día";
+        }
+      });
     };
 
     window.registerDirectPlayerAbono = function() {
@@ -2882,6 +2927,7 @@
       if (amtInput) amtInput.value = m.commitments[concept];
 
       document.getElementById('pfin-abono-amount').value = '';
+      window.updateFinancialBadgesUI();
       window.renderPlayerPaymentHistory(m.paymentHistory);
       window.saveAllDataLocally();
       window.renderClubMembersTable();
@@ -3021,10 +3067,41 @@
         parentPhone: document.getElementById('pcnt-parent-phone').value
       };
 
+      const avatarImg = document.getElementById('pdetail-avatar');
+      if (avatarImg && avatarImg.src) {
+        m.avatar = avatarImg.src;
+      }
+
       window.saveAllDataLocally();
       window.renderClubMembersTable();
       window.closeModal('player-detail-modal');
       window.showToast('Ficha FENAX guardada exitosamente', 'success');
+    };
+
+    window.handlePlayerAvatarUpload = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (file.size > 3 * 1024 * 1024) {
+        window.showToast('La imagen supera los 3MB. Elige una imagen más pequeña.', 'warning');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        const avatarImg = document.getElementById('pdetail-avatar');
+        if (avatarImg) avatarImg.src = dataUrl;
+
+        const m = window.members.find(x => x.id === window.activePlayerDetailId);
+        if (m) {
+          m.avatar = dataUrl;
+          window.saveAllDataLocally();
+          window.renderClubMembersTable();
+        }
+        window.showToast('Foto cargada exitosamente', 'success');
+      };
+      reader.readAsDataURL(file);
     };
 
     window.exportPlayerFichaPDF = function() {
