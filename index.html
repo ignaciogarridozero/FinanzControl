@@ -262,6 +262,10 @@
               <option value="10">Noviembre</option>
               <option value="11">Diciembre</option>
             </select>
+            <button onclick="openModal('changelog-modal')" class="p-2 bg-slate-900 hover:bg-slate-800 text-purple-400 border border-purple-500/30 rounded-xl transition flex items-center gap-1.5" title="Ver Registro de Novedades & Actualizaciones">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span class="text-xs font-semibold hidden lg:inline">Novedades</span>
+            </button>
             <button onclick="openAddTransactionModal()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-lg shadow-brand-500/10">
               <i data-lucide="plus-circle" class="w-4 h-4"></i><span>+ Nuevo Movimiento</span>
             </button>
@@ -1383,6 +1387,71 @@
     </div>
   </div>
 
+  <!-- MODAL NOVEDADES Y REGISTRO DE ACTUALIZACIONES -->
+  <div id="changelog-modal" onclick="if(event.target === this) closeModal('changelog-modal')" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="glass-card w-full max-w-lg rounded-3xl border border-purple-500/30 p-6 space-y-4 relative max-h-[90vh] flex flex-col shadow-2xl bg-slate-950/95">
+      <button onclick="closeModal('changelog-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+        <div class="p-2.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/30">
+          <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">Novedades & Actualizaciones</h3>
+          <p class="text-xs text-slate-400">Últimas mejoras implementadas en la plataforma</p>
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto space-y-3 pr-1 text-xs custom-scrollbar">
+        <div class="p-3.5 bg-slate-900/90 rounded-2xl border border-purple-500/20 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-purple-400 flex items-center gap-1.5"><i data-lucide="check-circle" class="w-4 h-4"></i> Ficha Deportiva & FENAX del Jugador</span>
+            <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full font-bold">Nuevo</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed text-[11px]">
+            Haz clic en cualquier jugador para abrir su ficha completa: evaluaciones técnicas FENAX, asistencia, estado físico (Activo/Recuperación/Lesionado), ficha médica y datos de contacto del apoderado.
+          </p>
+        </div>
+
+        <div class="p-3.5 bg-slate-900/90 rounded-2xl border border-amber-500/20 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-amber-400 flex items-center gap-1.5"><i data-lucide="shield" class="w-4 h-4"></i> Rugby: Modalidad & 3 Posiciones</span>
+            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold">Nuevo</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed text-[11px]">
+            Soporte para Rugby XV, 7s, 10s y Tag, además de definir 1ra Posición Principal, 2da Posición Secundaria y 3ra Posición de Emergencia.
+          </p>
+        </div>
+
+        <div class="p-3.5 bg-slate-900/90 rounded-2xl border border-emerald-500/20 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-emerald-400 flex items-center gap-1.5"><i data-lucide="dollar-sign" class="w-4 h-4"></i> Control Financiero Independiente</span>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold">Mejora</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed text-[11px]">
+            La exención de cuotas aplica únicamente a la Mensualidad. Profesores o categorías infantiles pueden estar exentos de cuota pero seguir cobrando rifas, tercer tiempo, partidos o eventos.
+          </p>
+        </div>
+
+        <div class="p-3.5 bg-slate-900/90 rounded-2xl border border-sky-500/20 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-sky-400 flex items-center gap-1.5"><i data-lucide="mouse-pointer-click" class="w-4 h-4"></i> Clic Directo en Estado & Posponer Mes</span>
+            <span class="text-[10px] bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded-full font-bold">Restaurado</span>
+          </div>
+          <p class="text-slate-300 leading-relaxed text-[11px]">
+            Cambia el estado de cualquier movimiento haciendo clic directo sobre "Pagado / Pendiente / Por Pagar" o usa el botón <i data-lucide="calendar-plus" class="w-3 h-3 inline text-sky-400"></i> para posponerlo un mes hacia adelante.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeModal('changelog-modal')" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2 rounded-xl text-xs transition">Entendido</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none no-print"></div>
 
   <script type="module">
@@ -1944,6 +2013,39 @@
       window.showToast(ws.isClub ? '🛡️ Modo Club Deportivo activado (Jugadores Habilitados)' : '💼 Modo Club desactivado', 'info');
     };
 
+    window.toggleNewWorkspaceForm = function() {
+      const container = document.getElementById('new-workspace-form-container');
+      if (container) container.classList.toggle('hidden');
+    };
+
+    window.editWorkspace = function(wsId) {
+      if (!window.requireActiveSession()) return;
+      const ws = window.entities.find(e => e.id === wsId);
+      if (!ws) return;
+      const inputVal = prompt('Nuevo nombre del espacio de trabajo:', ws.name);
+      if (inputVal && inputVal.trim()) {
+        ws.name = inputVal.trim();
+        window.saveAllDataLocally();
+        window.renderManageProfilesModalContent();
+        window.renderApp();
+        window.showToast('Espacio de trabajo actualizado', 'success');
+      }
+    };
+
+    window.deleteWorkspace = function(wsId) {
+      if (!window.requireActiveSession()) return;
+      if (window.entities.length <= 1) {
+        window.showToast('Debe haber al menos un espacio de trabajo', 'warning');
+        return;
+      }
+      window.entities = window.entities.filter(e => e.id !== wsId);
+      if (window.currentEntity === wsId) window.currentEntity = window.entities[0].id;
+      window.saveAllDataLocally();
+      window.renderManageProfilesModalContent();
+      window.renderApp();
+      window.showToast('Espacio eliminado', 'info');
+    };
+
     window.saveWorkspaceConfig = function(e) {
       e.preventDefault();
       if (!window.requireActiveSession()) return;
@@ -2182,6 +2284,39 @@
       window.showToast('Transacción eliminada', 'info');
     };
 
+    window.cycleTxStatus = function(id) {
+      if (!window.requireActiveSession()) return;
+      const tx = window.transactions.find(t => t.id === id);
+      if (!tx) return;
+      const states = ['PAID', 'PENDING', 'UPCOMING'];
+      const currentIdx = states.indexOf(tx.status);
+      const nextIdx = (currentIdx + 1) % states.length;
+      tx.status = states[nextIdx];
+      window.saveAllDataLocally();
+      window.renderApp();
+      const labels = { PAID: 'Pagado', PENDING: 'Pendiente', UPCOMING: 'Por Pagar' };
+      window.showToast(`Estado cambiado a: ${labels[tx.status]}`, 'info');
+    };
+
+    window.moveToNextMonth = function(id) {
+      if (!window.requireActiveSession()) return;
+      const tx = window.transactions.find(t => t.id === id);
+      if (!tx) return;
+      const d = new Date(tx.date + 'T00:00:00');
+      d.setMonth(d.getMonth() + 1);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      tx.date = `${year}-${month}-${day}`;
+      if (!window.availableYears.includes(year)) {
+        window.availableYears.push(year);
+        window.availableYears.sort();
+      }
+      window.saveAllDataLocally();
+      window.renderApp();
+      window.showToast(`Movimiento pospuesto al mes ${month}/${year}`, 'success');
+    };
+
     window.renderTransactionsTable = function() {
       const tbody = document.getElementById('transactions-table-body');
       if (!tbody) return;
@@ -2205,9 +2340,9 @@
       tbody.innerHTML = list.map(t => `
         <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
           <td class="py-2.5 px-3 text-center">
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${t.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-400' : t.status === 'PENDING' ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'}">
-              ${t.status === 'PAID' ? 'Pagado' : t.status === 'PENDING' ? 'Pendiente' : 'Por Pagar'}
-            </span>
+            <button onclick="cycleTxStatus('${t.id}')" title="Hacer clic para cambiar estado (Pagado / Pendiente / Por Pagar)" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition transform hover:scale-105 cursor-pointer ${t.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : t.status === 'PENDING' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
+              ${t.status === 'PAID' ? '🟢 Pagado' : t.status === 'PENDING' ? '🔴 Pendiente' : '🟡 Por Pagar'}
+            </button>
           </td>
           <td class="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">${t.date}</td>
           <td class="py-2.5 px-3 text-center font-bold ${t.type === 'INCOME' ? 'text-brand-400' : 'text-rose-400'}">${t.type === 'INCOME' ? 'Ingreso' : 'Egreso'}</td>
@@ -2216,8 +2351,9 @@
           <td class="py-2.5 px-3 text-center text-slate-300 truncate max-w-[160px]">${t.description}</td>
           <td class="py-2.5 px-3 text-center font-bold text-white">${window.formatCurrency(t.amount)}</td>
           <td class="py-2.5 px-3 text-center flex items-center justify-center gap-1">
-            <button onclick="editTransaction('${t.id}')" class="text-slate-500 hover:text-amber-400 p-1"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
-            <button onclick="deleteTransaction('${t.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            <button onclick="moveToNextMonth('${t.id}')" title="Mover al siguiente mes (+1 mes)" class="text-slate-500 hover:text-sky-400 p-1 transition"><i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i></button>
+            <button onclick="editTransaction('${t.id}')" title="Editar movimiento" class="text-slate-500 hover:text-amber-400 p-1 transition"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+            <button onclick="deleteTransaction('${t.id}')" title="Eliminar movimiento" class="text-slate-500 hover:text-rose-400 p-1 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </td>
         </tr>
       `).join('');
@@ -2893,6 +3029,51 @@
 
     window.exportPlayerFichaPDF = function() {
       window.print();
+    };
+
+    // AI Features & Receipt Scanner
+    window.generateAIDetailedReport = function() {
+      const container = document.getElementById('ai-infographic-content');
+      if (!container) return;
+
+      const inc = window.transactions.filter(t => t.entity === window.currentEntity && t.type === 'INCOME' && t.status === 'PAID').reduce((a, b) => a + Number(b.amount), 0);
+      const exp = window.transactions.filter(t => t.entity === window.currentEntity && t.type === 'EXPENSE' && t.status === 'PAID').reduce((a, b) => a + Number(b.amount), 0);
+      const bal = inc - exp;
+
+      container.innerHTML = `
+        <div class="space-y-6">
+          <div class="p-6 bg-purple-950/30 border border-purple-500/30 rounded-2xl space-y-3">
+            <h3 class="text-lg font-black text-white flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i> Auditoría IA para ${window.currentEntity}</h3>
+            <p class="text-xs text-slate-300">Resumen generado a partir de transacciones reales registradas en el año ${window.currentYear}.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400 uppercase font-bold">Ingresos Reales</span><p class="text-lg font-bold text-brand-400">${window.formatCurrency(inc)}</p></div>
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400 uppercase font-bold">Egresos Reales</span><p class="text-lg font-bold text-rose-400">${window.formatCurrency(exp)}</p></div>
+              <div class="p-3 bg-slate-900 rounded-xl border border-slate-800"><span class="text-[10px] text-slate-400 uppercase font-bold">Balance Neto</span><p class="text-lg font-bold text-sky-400">${window.formatCurrency(bal)}</p></div>
+            </div>
+          </div>
+          <div class="p-5 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-2">
+            <h4 class="font-bold text-xs text-amber-400 uppercase tracking-wider">💡 Recomendaciones Estratégicas</h4>
+            <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+              <li>El margen de operabilidad es de <strong>${inc > 0 ? Math.round((bal / inc) * 100) : 0}%</strong> respecto a los ingresos pagados.</li>
+              <li>Revisar los compromisos pendientes de cobranza en la rama de jugadores para mejorar la liquidez.</li>
+              <li>Sugerencia: Mantener una reserva de caja equivalente a 2 meses de egresos promedio.</li>
+            </ul>
+          </div>
+        </div>
+      `;
+      if (window.lucide) lucide.createIcons();
+      window.showToast('Reporte generado exitosamente', 'success');
+    };
+
+    window.processReceiptImage = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('receipt-preview-img').src = evt.target.result;
+        document.getElementById('receipt-preview-container').classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
     };
 
     window.analyzeReceiptWithGemini = function() {
