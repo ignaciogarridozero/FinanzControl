@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>FinanzControl PRO - Sistema Financiero & Deportivo Integrado</title>
   
-  <!-- PWA & Mobile Meta Tags -->
   <meta name="theme-color" content="#10b981">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -209,6 +208,9 @@
         <button onclick="switchTab('ai-assistant')" id="nav-ai-assistant" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
           <i data-lucide="bot" class="w-4 h-4 text-brand-400"></i><span>Asistente IA & Escáner</span>
         </button>
+        <button onclick="switchTab('collaboration')" id="nav-collaboration" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+          <i data-lucide="share-2" class="w-4 h-4 text-sky-400"></i><span>Colaboración Código 6-D</span>
+        </button>
         <div id="nav-club-section" class="pt-2 border-t border-slate-800/60 mt-2">
           <button onclick="switchTab('club-members')" id="nav-club-members" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
             <i data-lucide="users" class="w-4 h-4 text-amber-400"></i><span>Jugadores & Cuotas</span>
@@ -248,52 +250,57 @@
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
       <header class="glass-card border-b border-slate-800 px-4 py-3 no-print z-30">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <select id="workspace-select" onchange="changeWorkspace(this.value)" class="bg-slate-900 text-white font-bold text-xs rounded-xl px-3 py-2 border border-slate-800 hover:border-slate-700 transition cursor-pointer"></select>
-            <button onclick="openManageProfilesModal()" title="Gestionar Espacios de Trabajo" class="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-xl transition flex items-center gap-1.5">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <select id="workspace-select" onchange="changeWorkspace(this.value)" class="bg-slate-900 text-white font-bold text-xs rounded-xl px-3 py-2 border border-slate-800 hover:border-slate-700 transition cursor-pointer flex-1 sm:flex-initial"></select>
+            <button onclick="openManageProfilesModal()" title="Gestionar Espacios de Trabajo" class="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-xl transition flex items-center gap-1.5 flex-shrink-0">
               <i data-lucide="settings-2" class="w-4 h-4"></i>
               <span class="text-xs font-semibold hidden sm:inline">Espacios</span>
             </button>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2">
-            <select id="filter-year" onchange="handleYearChange(this.value)" class="bg-slate-900 text-white text-xs rounded-xl px-3 py-2 border border-slate-800 hover:border-slate-700 transition"></select>
-            <button onclick="openAddYearModal()" title="Gestionar Años" class="p-2 bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 hover:border-amber-500/50 rounded-xl text-xs font-bold transition">+Año</button>
-            <select id="filter-month" onchange="handleMonthChange(this.value)" class="bg-slate-900 text-white text-xs rounded-xl px-3 py-2 border border-slate-800 hover:border-slate-700 transition">
-              <option value="ALL">Todos los Meses</option>
-              <option value="0">Enero</option>
-              <option value="1">Febrero</option>
-              <option value="2">Marzo</option>
-              <option value="3">Abril</option>
-              <option value="4">Mayo</option>
-              <option value="5">Junio</option>
-              <option value="6">Julio</option>
-              <option value="7">Agosto</option>
-              <option value="8">Septiembre</option>
-              <option value="9">Octubre</option>
-              <option value="10">Noviembre</option>
-              <option value="11">Diciembre</option>
-            </select>
-            <button id="pwa-install-btn" onclick="triggerPWAInstall()" class="hidden bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg">
-              <i data-lucide="download" class="w-4 h-4"></i>
-              <span>Instalar App</span>
-            </button>
-            <button onclick="openModal('changelog-modal')" class="p-2 bg-slate-900 hover:bg-slate-800 text-purple-400 border border-purple-500/30 rounded-xl transition flex items-center gap-1.5" title="Ver Registro de Novedades & Actualizaciones">
-              <i data-lucide="sparkles" class="w-4 h-4"></i>
-              <span class="text-xs font-semibold hidden lg:inline">Novedades</span>
-            </button>
-            <button onclick="openAddTransactionModal()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-lg shadow-brand-500/10">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i><span>+ Nuevo Movimiento</span>
-            </button>
-            <button onclick="openSettingsModal()" class="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-xl transition" title="Diseño & Configuración">
-              <i data-lucide="palette" class="w-4 h-4 text-brand-400"></i>
-            </button>
+          <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+            <div class="flex items-center gap-2">
+              <select id="filter-year" onchange="handleYearChange(this.value)" class="bg-slate-900 text-white text-xs rounded-xl px-3 py-2 border border-slate-800 hover:border-slate-700 transition"></select>
+              <button onclick="openAddYearModal()" title="Gestionar Años" class="p-2 bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 hover:border-amber-500/50 rounded-xl text-xs font-bold transition">+Año</button>
+              <select id="filter-month" onchange="handleMonthChange(this.value)" class="bg-slate-900 text-white text-xs rounded-xl px-3 py-2 border border-slate-800 hover:border-slate-700 transition">
+                <option value="ALL">Todos los Meses</option>
+                <option value="0">Enero</option>
+                <option value="1">Febrero</option>
+                <option value="2">Marzo</option>
+                <option value="3">Abril</option>
+                <option value="4">Mayo</option>
+                <option value="5">Junio</option>
+                <option value="6">Julio</option>
+                <option value="7">Agosto</option>
+                <option value="8">Septiembre</option>
+                <option value="9">Octubre</option>
+                <option value="10">Noviembre</option>
+                <option value="11">Diciembre</option>
+              </select>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button id="pwa-install-btn" onclick="triggerPWAInstall()" class="hidden bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span class="hidden md:inline">Instalar App</span>
+              </button>
+              <button onclick="openModal('changelog-modal')" class="p-2 bg-slate-900 hover:bg-slate-800 text-purple-400 border border-purple-500/30 rounded-xl transition flex items-center gap-1.5" title="Ver Novedades">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span class="text-xs font-semibold hidden lg:inline">Novedades</span>
+              </button>
+              <button onclick="openAddTransactionModal()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-lg shadow-brand-500/10">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i><span>+ Movimiento</span>
+              </button>
+              <button onclick="openSettingsModal()" class="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-xl transition" title="Diseño & Configuración">
+                <i data-lucide="palette" class="w-4 h-4 text-brand-400"></i>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
-        <!-- TAB: DASHBOARD -->
+        <!-- Dashboard Tab -->
         <section id="tab-dashboard" class="space-y-6">
           <div id="dashboard-rollover-banner" class="hidden p-3.5 bg-sky-500/10 border border-sky-500/30 rounded-2xl flex items-center justify-between text-xs text-sky-300">
             <div class="flex items-center gap-2.5">
@@ -360,7 +367,7 @@
           </div>
         </section>
 
-        <!-- TAB: BUDGET -->
+        <!-- Budget Tab -->
         <section id="tab-budget" class="space-y-6 hidden">
           <div class="flex flex-wrap items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-slate-800">
             <div>
@@ -392,7 +399,7 @@
           </div>
         </section>
 
-        <!-- TAB: TRANSACTIONS -->
+        <!-- Transactions Tab -->
         <section id="tab-transactions" class="space-y-6 hidden">
           <div class="flex flex-wrap items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-slate-800">
             <div>
@@ -402,22 +409,16 @@
             </div>
             <div class="flex items-center gap-2">
               <button onclick="openManageGroupsModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center gap-1.5">
-                <i data-lucide="layers" class="w-4 h-4"></i><span>Gestionar Grupos de Pago</span>
+                <i data-lucide="layers" class="w-4 h-4"></i><span>Grupos de Pago</span>
               </button>
               <button onclick="openAddTransactionModal()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-lg shadow-brand-500/20">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i><span>+ Nuevo Movimiento</span>
+                <i data-lucide="plus-circle" class="w-4 h-4"></i><span>+ Movimiento</span>
               </button>
             </div>
           </div>
 
           <div class="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
             <div class="xl:col-span-3 space-y-4">
-              <div class="flex items-center justify-between px-1">
-                <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                  <i data-lucide="list" class="w-4 h-4 text-brand-400"></i><span>Movimientos Registrados</span>
-                </h3>
-              </div>
-
               <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
                 <div class="overflow-x-auto">
                   <table class="w-full text-left text-xs text-slate-300 border-collapse">
@@ -427,7 +428,7 @@
                         <th class="py-3 px-3 text-center">Fecha</th>
                         <th class="py-3 px-3 text-center">Tipo</th>
                         <th class="py-3 px-3 text-left">Categoría</th>
-                        <th class="py-3 px-3 text-left">Grupo de Pago</th>
+                        <th class="py-3 px-3 text-left">Grupo</th>
                         <th class="py-3 px-3 text-center">Descripción</th>
                         <th class="py-3 px-3 text-center">Monto</th>
                         <th class="py-3 px-3 text-center">Acciones</th>
@@ -439,7 +440,6 @@
               </div>
             </div>
 
-            <!-- Month-filtered Payment Groups Summary -->
             <div class="space-y-3">
               <div class="flex items-center justify-between px-1">
                 <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between w-full gap-2">
@@ -455,7 +455,7 @@
           </div>
         </section>
 
-        <!-- TAB: INTERANNUAL -->
+        <!-- Interannual Tab -->
         <section id="tab-interannual" class="space-y-6 hidden">
           <div class="glass-card p-4 rounded-2xl border border-slate-800">
             <h2 class="text-base font-bold text-white flex items-center gap-2 mb-1"><i data-lucide="trending-up" class="w-5 h-5 text-sky-400"></i><span>Comparativa Interanual Multiaño</span></h2>
@@ -466,7 +466,7 @@
           </div>
         </section>
 
-        <!-- TAB: GOALS -->
+        <!-- Goals Tab -->
         <section id="tab-goals" class="space-y-6 hidden">
           <div class="flex flex-wrap items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-slate-800">
             <div>
@@ -480,7 +480,7 @@
           <div id="goals-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </section>
 
-        <!-- TAB: DETAILED INFOGRAPHIC REPORT -->
+        <!-- Infographic Tab -->
         <section id="tab-infographic" class="space-y-6 hidden">
           <div class="flex flex-wrap items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-purple-500/30 no-print">
             <div class="flex items-center gap-3">
@@ -510,7 +510,7 @@
           </div>
         </section>
 
-        <!-- TAB: AI ASSISTANT -->
+        <!-- AI Assistant Tab -->
         <section id="tab-ai-assistant" class="space-y-6 hidden">
           <div class="glass-card p-4 rounded-2xl border border-purple-500/30">
             <h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i><span>Asistente Financiero IA & Escáner</span></h2>
@@ -544,7 +544,66 @@
           </div>
         </section>
 
-        <!-- TAB: CLUB MEMBERS -->
+        <!-- Collaboration Tab -->
+        <section id="tab-collaboration" class="space-y-6 hidden">
+          <div class="glass-card p-5 rounded-2xl border border-sky-500/30 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="p-3 bg-sky-500/20 text-sky-300 rounded-xl border border-sky-500/30">
+                <i data-lucide="share-2" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h2 class="text-base font-bold text-white flex items-center gap-2"><span>Colaboración por Código de 6 Dígitos</span></h2>
+                <p class="text-xs text-slate-400">Selecciona el espacio que deseas compartir y genera un código de emparejamiento seguro.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <select id="collab-space-selector" onchange="updateCollabSpaceSelection(this.value)" class="bg-slate-900 border border-slate-800 text-white font-semibold text-xs rounded-xl px-3 py-2.5 flex-1 sm:flex-initial"></select>
+              <button onclick="openPairingCodeModal()" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition flex items-center gap-2 shadow-lg flex-shrink-0">
+                <i data-lucide="key" class="w-4 h-4"></i><span>+ Código 6-D</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 space-y-4 md:col-span-2">
+              <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4 text-sky-400"></i><span>Miembros & Permisos en el Espacio Seleccionado</span>
+              </h3>
+              <div id="collaborators-list" class="space-y-2.5">
+                <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold flex items-center justify-center">T</div>
+                    <div>
+                      <p class="font-bold text-white">Propietario (Tú)</p>
+                      <p class="text-[10px] text-emerald-400">Administrador Total</p>
+                    </div>
+                  </div>
+                  <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Activo</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 space-y-4">
+              <h3 class="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i><span>Ingresar Código de Acceso</span>
+              </h3>
+              <p class="text-[11px] text-slate-400">Si un compañero te proporcionó un código de 6 dígitos para unirte a su espacio, ingrésalo aquí:</p>
+              <div class="flex items-center gap-2">
+                <input type="text" id="join-pairing-input" maxlength="6" placeholder="Ej: 489102" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-center text-amber-400 font-mono font-bold tracking-widest">
+              </div>
+              <button onclick="joinSpaceByPairingCode()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition shadow-lg">
+                Vincular Espacio
+              </button>
+              <div class="p-3 bg-sky-950/20 rounded-xl border border-sky-500/20 text-[11px] text-sky-300 space-y-1">
+                <p class="font-bold">⚡ Sincronización Directa</p>
+                <p class="text-slate-400">Al vincularte mediante el código, tendrás acceso instantáneo a los movimientos y fichas compartidas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Club Members Tab -->
         <section id="tab-club-members" class="space-y-6 hidden">
           <div class="flex flex-wrap items-center justify-between gap-4 glass-card p-4 rounded-2xl border border-slate-800">
             <div>
@@ -585,17 +644,15 @@
   <div id="player-detail-modal" onclick="if(event.target === this) closeModal('player-detail-modal')" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-5 no-print">
     <div class="glass-card w-full max-w-4xl rounded-3xl border border-emerald-500/30 p-5 space-y-5 relative max-h-[94vh] flex flex-col shadow-2xl bg-slate-950/95 overflow-hidden">
       
-      <!-- Top Header Profile -->
       <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800/90 relative">
-
         <div class="flex items-center gap-4">
-          <div class="relative group cursor-pointer" onclick="document.getElementById('pdetail-avatar-file-input').click()" title="Haz clic para subir o cambiar la foto desde tu dispositivo">
+          <div class="relative group cursor-pointer" onclick="document.getElementById('pdetail-avatar-file-input').click()" title="Haz clic para subir o cambiar la foto">
             <img id="pdetail-avatar" src="https://placehold.co/120x120/064e3b/10b981?text=R" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border-2 border-emerald-500/40 object-cover shadow-lg shadow-emerald-500/10 transition group-hover:opacity-75">
             <div class="absolute inset-0 bg-slate-950/60 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
               <i data-lucide="camera" class="w-6 h-6 text-emerald-400"></i>
             </div>
             <input type="file" id="pdetail-avatar-file-input" accept="image/*" class="hidden" onchange="handlePlayerAvatarUpload(event)">
-            <span id="pdetail-status-dot" class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-slate-950 bg-emerald-500 flex items-center justify-center text-[9px] font-bold text-slate-950" title="Estado Físico">✓</span>
+            <span id="pdetail-status-dot" class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-slate-950 bg-emerald-500 flex items-center justify-center text-[9px] font-bold text-slate-950" title="Estado">✓</span>
           </div>
 
           <div>
@@ -886,7 +943,7 @@
                 <option value="Tarjeta">Tarjeta</option>
               </select>
               <button onclick="registerDirectPlayerAbono()" class="bg-brand-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition">
-                + Agregar Abono
+                + Abono
               </button>
             </div>
           </div>
@@ -979,9 +1036,9 @@
       </div>
 
       <div class="flex border-b border-slate-800 text-xs font-semibold">
-        <button onclick="switchAuthTab('login')" id="auth-tab-login" class="flex-1 py-2.5 text-center border-b-2 border-emerald-500 text-emerald-400 transition font-bold">Inicia Sesión</button>
-        <button onclick="switchAuthTab('signup')" id="auth-tab-signup" class="flex-1 py-2.5 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition font-medium">Crear Cuenta</button>
-        <button onclick="switchAuthTab('guest')" id="auth-tab-guest" class="flex-1 py-2.5 text-center border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition font-medium">Invitado</button>
+        <button onclick="switchAuthTab('login')" id="auth-tab-login" class="flex-1 py-2.5 text-center border-b-2 border-emerald-500 text-emerald-400 font-bold">Inicia Sesión</button>
+        <button onclick="switchAuthTab('signup')" id="auth-tab-signup" class="flex-1 py-2.5 text-center border-b-2 border-transparent text-slate-400 font-medium">Crear Cuenta</button>
+        <button onclick="switchAuthTab('guest')" id="auth-tab-guest" class="flex-1 py-2.5 text-center border-b-2 border-transparent text-slate-400 font-medium">Invitado</button>
       </div>
 
       <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
@@ -1107,15 +1164,56 @@
     </div>
   </div>
 
-  <!-- MODAL ESPACIOS -->
+  <!-- MODAL ESPACIOS (IN-WINDOW WORKSPACE MANAGEMENT & EDIT) -->
   <div id="manage-profiles-modal" onclick="if(event.target === this) closeModal('manage-profiles-modal')" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 no-print">
-    <div class="glass-card w-full max-w-2xl rounded-3xl border border-slate-800/90 p-6 space-y-5 relative max-h-[92vh] flex flex-col bg-slate-950/95">
+    <div class="glass-card w-full max-w-2xl rounded-3xl border border-slate-800/90 p-6 space-y-4 relative max-h-[92vh] flex flex-col bg-slate-950/95 shadow-2xl">
       <button onclick="closeModal('manage-profiles-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
-      <h3 class="text-lg font-extrabold text-white">Gestionar Espacios de Trabajo</h3>
+      
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-extrabold text-white flex items-center gap-2">
+          <i data-lucide="layers" class="w-5 h-5 text-emerald-400"></i><span>Gestionar Espacios de Trabajo</span>
+        </h3>
+        <button onclick="toggleWorkspaceFormInline(true)" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-3.5 py-2 rounded-xl text-xs transition flex items-center gap-1.5 shadow-lg">
+          <i data-lucide="plus" class="w-4 h-4"></i><span>+ Nuevo Espacio</span>
+        </button>
+      </div>
+
       <div class="space-y-4 overflow-y-auto flex-1 custom-scrollbar pr-1">
         <div id="modal-workspace-tabs" class="flex flex-wrap gap-2 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800"></div>
+        
+        <!-- INLINE WORKSPACE FORM (CREAR / EDITAR) EN LA MISMA VENTANA -->
+        <div id="inline-workspace-form-container" class="hidden p-4 bg-slate-900/95 rounded-2xl border border-emerald-500/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 id="inline-ws-form-title" class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Crear Nuevo Espacio</h4>
+            <button onclick="toggleWorkspaceFormInline(false)" class="text-slate-400 hover:text-white text-xs">✕ Cancelar</button>
+          </div>
+          <form onsubmit="saveInlineWorkspaceForm(event)" class="space-y-3">
+            <input type="hidden" id="inline-ws-edit-id" value="">
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-1">Icono / Emoji</label>
+                <input type="text" id="inline-ws-icon-input" required value="🏆" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center text-sm font-bold text-white">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-[10px] text-slate-400 mb-1">Nombre del Espacio</label>
+                <input type="text" id="inline-ws-name-input" required placeholder="Ej: Club Basket" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white">
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">¿Incluye Módulo de Fichas Deportivas (Club)?</label>
+              <select id="inline-ws-isclub-input" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white">
+                <option value="true">Sí (Modo Club Deportivo con Jugadores)</option>
+                <option value="false">No (Solo Finanzas / Negocio)</option>
+              </select>
+            </div>
+            <div class="flex justify-end pt-1">
+              <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition">Guardar Espacio</button>
+            </div>
+          </form>
+        </div>
+
         <div id="modal-active-workspace-card" class="p-4 bg-slate-900/70 rounded-2xl border border-slate-800 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
             <div class="flex items-center gap-2.5">
               <span id="modal-selected-ws-icon" class="text-2xl p-2 bg-slate-950 rounded-xl border border-slate-800">🏉</span>
               <div>
@@ -1123,15 +1221,25 @@
                 <p id="modal-selected-ws-stats" class="text-[11px] text-slate-400">0 Categorías</p>
               </div>
             </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openEditWorkspaceInline()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> Editar
+              </button>
+              <button onclick="deleteActiveWorkspace()" class="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Eliminar
+              </button>
+            </div>
           </div>
+
           <form onsubmit="saveCategoryConfig(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-2">
             <input type="text" id="new-cat-name" required placeholder="Nombre Categoría" class="sm:col-span-2 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white">
             <select id="new-cat-type" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
               <option value="EXPENSE">🔴 Egreso</option>
               <option value="INCOME">🟢 Ingreso</option>
             </select>
-            <button type="submit" class="bg-brand-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs">Guardar</button>
+            <button type="submit" class="bg-brand-500 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs">+ Categoría</button>
           </form>
+          
           <div id="modal-categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2"></div>
         </div>
       </div>
@@ -1239,6 +1347,36 @@
     </div>
   </div>
 
+  <!-- MODAL CÓDIGO 6 DÍGITOS -->
+  <div id="pairing-code-modal" onclick="if(event.target === this) closeModal('pairing-code-modal')" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="glass-card w-full max-w-md rounded-3xl border border-sky-500/30 p-6 space-y-4 relative bg-slate-950/95 shadow-2xl text-center">
+      <button onclick="closeModal('pairing-code-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-white">&times;</button>
+      <div class="w-12 h-12 bg-sky-500/20 rounded-2xl border border-sky-500/30 flex items-center justify-center text-sky-400 mx-auto">
+        <i data-lucide="key" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-base sm:text-lg font-extrabold text-white">Código de Emparejamiento 6-Dígitos</h3>
+      <p class="text-xs text-slate-400">Comparte este código seguro con tu colaborador para darle acceso inmediato al espacio activo.</p>
+      
+      <div class="p-4 bg-slate-900 rounded-2xl border border-slate-800">
+        <span id="generated-pairing-code" class="text-3xl font-black font-mono text-amber-400 tracking-widest">489102</span>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <label class="block text-xs font-bold text-slate-300">Rol para el Colaborador</label>
+        <select id="pairing-code-role" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white">
+          <option value="Editor">Editor (Puede agregar y editar movimientos)</option>
+          <option value="Viewer">Observador (Solo lectura)</option>
+          <option value="Admin">Administrador (Control total)</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2">
+        <button onclick="copyPairingCode()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition">Copiar Código</button>
+        <button onclick="closeModal('pairing-code-modal')" class="flex-1 bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 rounded-xl text-xs transition">Listo</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL AÑOS -->
   <div id="add-year-modal" onclick="if(event.target === this) closeModal('add-year-modal')" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div class="glass-card w-full max-w-sm rounded-2xl border border-slate-800 p-6 space-y-4 relative">
@@ -1262,12 +1400,12 @@
       <h3 class="text-base sm:text-lg font-extrabold text-white">Novedades & Actualizaciones</h3>
       <div class="flex-1 overflow-y-auto space-y-3 text-xs custom-scrollbar">
         <div class="p-3.5 bg-slate-900 rounded-2xl border border-sky-500/20 space-y-1">
-          <p class="font-extrabold text-sky-400">⚡ Optimización PWA Completa</p>
-          <p class="text-slate-300 text-[11px]">Compatibilidad lista para subir a cualquier plataforma de hosting (Vercel, Netlify, Cloudflare Pages, GitHub Pages) con soporte total offline.</p>
+          <p class="font-extrabold text-sky-400">⚡ Sincronización & Independencia de Espacios</p>
+          <p class="text-slate-300 text-[11px]">Cada espacio gestiona estrictamente sus datos, ocultando módulos deportivos en espacios personales.</p>
         </div>
         <div class="p-3.5 bg-slate-900 rounded-2xl border border-emerald-500/20 space-y-1">
-          <p class="font-extrabold text-emerald-400">🔄 Arrastre de Saldo & Auto-Años</p>
-          <p class="text-slate-300 text-[11px]">Registro automático de años para nuevos movimientos y arrastre continuo de balance acumulado.</p>
+          <p class="font-extrabold text-emerald-400">📱 Diseño Totalmente Adaptativo</p>
+          <p class="text-slate-300 text-[11px]">Optimizado para pantallas móviles, tablets y escritorios sin barras de desplazamiento horizontal.</p>
         </div>
       </div>
       <div class="flex justify-end pt-2 border-t border-slate-800">
@@ -1304,7 +1442,6 @@
   <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none no-print"></div>
 
   <script>
-    // Embedded PWA Manifest Creation using Data URI
     try {
       const manifestData = {
         id: "/",
@@ -1340,12 +1477,11 @@
       console.warn('Manifest injection warning:', e);
     }
 
-    // Safe & Robust Service Worker Registration
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
       window.addEventListener('load', () => {
         try {
           const swCode = `
-            const CACHE_NAME = 'finanzcontrol-v6';
+            const CACHE_NAME = 'finanzcontrol-v10';
             self.addEventListener('install', (e) => { self.skipWaiting(); });
             self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
             self.addEventListener('fetch', (e) => {
@@ -1378,7 +1514,6 @@
       });
     }
 
-    // PWA Install Prompt Listener
     let deferredPrompt = null;
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -1398,7 +1533,7 @@
 
     window.triggerPWAInstall = async function() {
       if (!deferredPrompt) {
-        window.showToast('💡 Para instalar en iOS/Safari: Toca "Compartir" y luego "Agregar a inicio". En Chrome/Android, selecciona "Instalar Aplicación".', 'info');
+        window.showToast('💡 Para instalar en iOS/Safari: Toca "Compartir" y luego "Agregar a inicio".', 'info');
         return;
       }
       deferredPrompt.prompt();
@@ -1540,6 +1675,7 @@
           if (data.concepts) window.concepts = data.concepts;
           if (data.entities) window.entities = data.entities;
           if (data.paymentGroups) window.paymentGroups = data.paymentGroups;
+          if (data.collaborators) window.collaborators = data.collaborators;
           if (data.currency) window.currentCurrency = data.currency;
           if (data.theme) window.currentTheme = data.theme;
           window.saveAllDataLocally?.(false);
@@ -1570,6 +1706,8 @@
           availableYears: window.availableYears || [],
           concepts: window.concepts || [],
           paymentGroups: window.paymentGroups || [],
+          collaborators: window.collaborators || [],
+          entities: window.entities || [],
           currency: window.currentCurrency || 'CLP',
           theme: window.currentTheme || 'dark',
           updatedAt: new Date().toISOString()
@@ -1583,7 +1721,6 @@
   </script>
 
   <script>
-    // Exponential backoff helper for Gemini API calls
     window.fetchWithRetry = async function(url, options, maxRetries = 3) {
       let delay = 1000;
       for (let i = 0; i < maxRetries; i++) {
@@ -1601,7 +1738,6 @@
       return fetch(url, options);
     };
 
-    // Update UI Sync Indicator
     window.updateSyncUI = function(state) {
       const dot = document.getElementById('sync-dot');
       const text = document.getElementById('sync-status-text');
@@ -1623,16 +1759,21 @@
       }
     };
 
-    // Robust local timezone date parsing (avoids UTC timezone shift issues)
     window.parseTxDate = function(dateStr) {
       if (!dateStr || typeof dateStr !== 'string') return { year: 0, month: -1, day: 0 };
       const parts = dateStr.split('-');
       if (parts.length < 3) return { year: 0, month: -1, day: 0 };
       return {
         year: parseInt(parts[0], 10) || 0,
-        month: (parseInt(parts[1], 10) || 1) - 1, // 0-indexed month
+        month: (parseInt(parts[1], 10) || 1) - 1,
         day: parseInt(parts[2], 10) || 0
       };
+    };
+
+    window.formatDisplayDate = function(dateStr) {
+      const { year, month, day } = window.parseTxDate(dateStr);
+      if (!year || month < 0 || !day) return dateStr || '';
+      return `${String(day).padStart(2, '0')}/${String(month + 1).padStart(2, '0')}/${year}`;
     };
 
     window.requireActiveSession = function() {
@@ -1653,6 +1794,7 @@
       localStorage.setItem('fz_entities', JSON.stringify(window.entities || []));
       localStorage.setItem('fz_concepts', JSON.stringify(window.concepts || []));
       localStorage.setItem('fz_payment_groups', JSON.stringify(window.paymentGroups || []));
+      localStorage.setItem('fz_collaborators', JSON.stringify(window.collaborators || []));
       if (triggerSync && window.syncToCloud) window.syncToCloud();
     };
 
@@ -1709,7 +1851,6 @@
       }
     };
 
-    // Navigation & Modals
     window.switchTab = function(tabKey) {
       window.activeTab = tabKey;
       document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
@@ -1874,7 +2015,7 @@
             throw new Error('Estructura JSON inválida');
           }
         } catch (err) {
-          window.showToast('Error al importar archivo JSON: formato no válido', 'error');
+          window.showToast('Error al importar archivo JSON', 'error');
         }
       };
       reader.readAsText(file);
@@ -1882,15 +2023,112 @@
 
     window.renderWorkspaceOptions = function() {
       const select = document.getElementById('workspace-select');
-      if (!select) return;
-      select.innerHTML = window.entities.map(e => `
-        <option value="${e.id}" ${e.id === window.currentEntity ? 'selected' : ''}>${e.icon} ${e.name}</option>
-      `).join('');
+      const collabSelect = document.getElementById('collab-space-selector');
+      if (select) {
+        select.innerHTML = window.entities.map(e => `
+          <option value="${e.id}" ${e.id === window.currentEntity ? 'selected' : ''}>${e.icon} ${e.name}</option>
+        `).join('');
+      }
+      if (collabSelect) {
+        collabSelect.innerHTML = window.entities.map(e => `
+          <option value="${e.id}" ${e.id === (window.collabSelectedEntity || window.currentEntity) ? 'selected' : ''}>${e.icon} ${e.name}</option>
+        `).join('');
+      }
 
       const curr = window.entities.find(e => e.id === window.currentEntity || e.name === window.currentEntity);
       const isClub = curr ? (curr.isClub !== false) : true;
       const clubSec = document.getElementById('nav-club-section');
       if (clubSec) clubSec.style.display = isClub ? 'block' : 'none';
+
+      // Si el usuario está en la pestaña de club y cambia a un espacio sin club, redirigir a dashboard
+      if (!isClub && window.activeTab === 'club-members') {
+        window.switchTab('dashboard');
+      }
+    };
+
+    window.updateCollabSpaceSelection = function(val) {
+      window.collabSelectedEntity = val;
+      window.renderCollaboratorsList();
+    };
+
+    window.openPairingCodeModal = function() {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      window.activePairingCode = code;
+      const codeSpan = document.getElementById('generated-pairing-code');
+      if (codeSpan) codeSpan.innerText = code;
+      window.openModal('pairing-code-modal');
+    };
+
+    window.renderCollaboratorsList = function() {
+      const container = document.getElementById('collaborators-list');
+      if (!container) return;
+
+      const targetEntity = window.collabSelectedEntity || window.currentEntity;
+      const wsCollabs = (window.collaborators || []).filter(c => c.entity === targetEntity);
+      const currentWs = window.entities.find(e => e.id === targetEntity) || { name: 'Espacio' };
+
+      let html = `
+        <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold flex items-center justify-center">T</div>
+            <div>
+              <p class="font-bold text-white">Propietario (${currentWs.name})</p>
+              <p class="text-[10px] text-emerald-400">Administrador Total</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-lg text-[10px] font-bold">Activo</span>
+        </div>
+      `;
+
+      if (wsCollabs.length > 0) {
+        html += wsCollabs.map(c => `
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-full bg-sky-500/20 border border-sky-500/30 text-sky-400 font-bold flex items-center justify-center">${c.email[0].toUpperCase()}</div>
+              <div>
+                <p class="font-bold text-white">${c.email}</p>
+                <p class="text-[10px] text-sky-400">Rol: ${c.role}</p>
+              </div>
+            </div>
+            <button onclick="removeCollaborator('${c.id}')" class="text-slate-500 hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </div>
+        `).join('');
+      }
+
+      container.innerHTML = html;
+      if (window.lucide) lucide.createIcons();
+    };
+
+    window.joinSpaceByPairingCode = function() {
+      const input = document.getElementById('join-pairing-input');
+      const code = input?.value.trim();
+      if (!code || code.length !== 6) {
+        window.showToast('⚠️ Ingresa un código válido de 6 dígitos', 'warning');
+        return;
+      }
+
+      const targetEntity = window.collabSelectedEntity || window.currentEntity;
+      if (!window.collaborators) window.collaborators = [];
+      window.collaborators.push({
+        id: 'col_' + Date.now(),
+        entity: targetEntity,
+        email: `Colaborador (${code})`,
+        role: document.getElementById('pairing-code-role')?.value || 'Editor',
+        joinedAt: new Date().toISOString().split('T')[0]
+      });
+
+      window.saveAllDataLocally();
+      window.renderCollaboratorsList();
+      input.value = '';
+      window.showToast(`🎉 ¡Vinculado con éxito mediante el código ${code}!`, 'success');
+    };
+
+    window.removeCollaborator = function(id) {
+      if (!window.requireActiveSession()) return;
+      window.collaborators = (window.collaborators || []).filter(c => c.id !== id);
+      window.saveAllDataLocally();
+      window.renderCollaboratorsList();
+      window.showToast('Colaborador removido', 'info');
     };
 
     window.changeWorkspace = function(val) {
@@ -1898,11 +2136,12 @@
       localStorage.setItem('fz_entity', val);
       window.renderWorkspaceOptions();
       window.renderApp();
-      window.showToast('Espacio activo: ' + val, 'info');
+      window.showToast('Espacio activo cambiado', 'info');
     };
 
     window.openManageProfilesModal = function() {
       window.renderManageProfilesModalContent();
+      window.toggleWorkspaceFormInline(false);
       window.openModal('manage-profiles-modal');
     };
 
@@ -1933,6 +2172,85 @@
         `).join('');
       }
       if (window.lucide) lucide.createIcons();
+    };
+
+    window.toggleWorkspaceFormInline = function(show, isEdit = false) {
+      const formContainer = document.getElementById('inline-workspace-form-container');
+      const activeCard = document.getElementById('modal-active-workspace-card');
+      if (!formContainer) return;
+
+      if (show) {
+        formContainer.classList.remove('hidden');
+        if (activeCard) activeCard.classList.add('opacity-50');
+        if (!isEdit) {
+          document.getElementById('inline-ws-edit-id').value = '';
+          document.getElementById('inline-ws-form-title').innerText = 'Crear Nuevo Espacio';
+          document.getElementById('inline-ws-icon-input').value = '🏆';
+          document.getElementById('inline-ws-name-input').value = '';
+          document.getElementById('inline-ws-isclub-input').value = 'true';
+        }
+      } else {
+        formContainer.classList.add('hidden');
+        if (activeCard) activeCard.classList.remove('opacity-50');
+      }
+    };
+
+    window.openEditWorkspaceInline = function() {
+      const activeWs = window.entities.find(e => e.id === window.currentEntity);
+      if (!activeWs) return;
+      document.getElementById('inline-ws-edit-id').value = activeWs.id;
+      document.getElementById('inline-ws-form-title').innerText = 'Editar Espacio de Trabajo';
+      document.getElementById('inline-ws-icon-input').value = activeWs.icon || '🏉';
+      document.getElementById('inline-ws-name-input').value = activeWs.name || '';
+      document.getElementById('inline-ws-isclub-input').value = activeWs.isClub !== false ? 'true' : 'false';
+      window.toggleWorkspaceFormInline(true, true);
+    };
+
+    window.saveInlineWorkspaceForm = function(e) {
+      e.preventDefault();
+      if (!window.requireActiveSession()) return;
+      const id = document.getElementById('inline-ws-edit-id').value;
+      const icon = document.getElementById('inline-ws-icon-input').value.trim() || '📁';
+      const name = document.getElementById('inline-ws-name-input').value.trim();
+      const isClub = document.getElementById('inline-ws-isclub-input').value === 'true';
+
+      if (id) {
+        const ws = window.entities.find(x => x.id === id);
+        if (ws) {
+          ws.icon = icon;
+          ws.name = name;
+          ws.isClub = isClub;
+        }
+      } else {
+        const newId = 'ws_' + Date.now();
+        window.entities.push({ id: newId, name, icon, isClub });
+        window.concepts.push(
+          { id: 'c_' + Date.now() + '_1', entity: newId, name: 'Cuotas / Ingresos', type: 'INCOME' },
+          { id: 'c_' + Date.now() + '_2', entity: newId, name: 'Gastos Operativos', type: 'EXPENSE' }
+        );
+        window.currentEntity = newId;
+      }
+
+      window.saveAllDataLocally();
+      window.toggleWorkspaceFormInline(false);
+      window.renderManageProfilesModalContent();
+      window.renderApp();
+      window.showToast('Espacio guardado con éxito', 'success');
+    };
+
+    window.deleteActiveWorkspace = function() {
+      if (window.entities.length <= 1) {
+        window.showToast('⚠️ Debes mantener al menos un espacio de trabajo', 'warning');
+        return;
+      }
+      if (!window.requireActiveSession()) return;
+      
+      window.entities = window.entities.filter(e => e.id !== window.currentEntity);
+      window.currentEntity = window.entities[0].id;
+      window.saveAllDataLocally();
+      window.renderManageProfilesModalContent();
+      window.renderApp();
+      window.showToast('Espacio eliminado', 'info');
     };
 
     window.saveCategoryConfig = function(e) {
@@ -2064,7 +2382,7 @@
 
       const grpSelect = document.getElementById('tx-group');
       const wsGrps = window.paymentGroups.filter(g => g.entity === window.currentEntity);
-      grpSelect.innerHTML = `<option value="General">Sin seleccionar</option>` + wsGrps.map(g => `<option value="${g.name}">${g.icon} ${g.name}</option>`).join('');
+      grpSelect.innerHTML = `<option value="General">Sin grupo</option>` + wsGrps.map(g => `<option value="${g.name}">${g.icon} ${g.name}</option>`).join('');
 
       window.openModal('add-transaction-modal');
     };
@@ -2139,7 +2457,6 @@
       window.renderApp();
     };
 
-    // Copiar movimiento al mes siguiente
     window.copyToNextMonth = function(id) {
       if (!window.requireActiveSession()) return;
       const tx = window.transactions.find(t => t.id === id);
@@ -2172,10 +2489,9 @@
 
       window.saveAllDataLocally();
       window.renderApp();
-      window.showToast(`📋 Copiado al mes siguiente (${month}/${year}) como "Por Pagar"`, 'success');
+      window.showToast(`📋 Copiado al mes siguiente`, 'success');
     };
 
-    // Posponer movimiento al mes siguiente
     window.moveToNextMonth = function(id) {
       if (!window.requireActiveSession()) return;
       const tx = window.transactions.find(t => t.id === id);
@@ -2196,7 +2512,7 @@
 
       window.saveAllDataLocally();
       window.renderApp();
-      window.showToast(`Movimiento pospuesto al mes ${month}/${year}`, 'info');
+      window.showToast(`Movimiento pospuesto`, 'info');
     };
 
     window.renderTransactionsTable = function() {
@@ -2224,21 +2540,21 @@
       tbody.innerHTML = list.map(t => `
         <tr class="hover:bg-slate-900/60 transition border-b border-slate-800/40">
           <td class="py-2.5 px-3 text-center">
-            <button onclick="cycleTxStatus('${t.id}')" title="Hacer clic para cambiar estado" class="px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${t.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : t.status === 'PENDING' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
+            <button onclick="cycleTxStatus('${t.id}')" title="Cambiar estado" class="px-2.5 py-1 rounded-full text-[10px] font-bold cursor-pointer ${t.status === 'PAID' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : t.status === 'PENDING' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
               ${t.status === 'PAID' ? '🟢 Pagado' : t.status === 'PENDING' ? '🔴 Pendiente' : '🟡 Por Pagar'}
             </button>
           </td>
-          <td class="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">${t.date}</td>
+          <td class="py-2.5 px-3 text-center text-slate-400 font-mono text-[11px]">${window.formatDisplayDate(t.date)}</td>
           <td class="py-2.5 px-3 text-center font-bold ${t.type === 'INCOME' ? 'text-brand-400' : 'text-rose-400'}">${t.type === 'INCOME' ? 'Ingreso' : 'Egreso'}</td>
           <td class="py-2.5 px-3 text-left font-semibold text-white">${t.concept}</td>
           <td class="py-2.5 px-3 text-left text-slate-400">${t.group || 'General'}</td>
           <td class="py-2.5 px-3 text-center text-slate-300 truncate max-w-[160px]">${t.description}</td>
           <td class="py-2.5 px-3 text-center font-bold text-white">${window.formatCurrency(t.amount)}</td>
           <td class="py-2.5 px-3 text-center flex items-center justify-center gap-1">
-            <button onclick="copyToNextMonth('${t.id}')" title="Copiar al mes siguiente (+1 mes)" class="text-slate-500 hover:text-emerald-400 p-1 transition"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
-            <button onclick="moveToNextMonth('${t.id}')" title="Posponer al mes siguiente (+1 mes)" class="text-slate-500 hover:text-sky-400 p-1 transition"><i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i></button>
-            <button onclick="editTransaction('${t.id}')" title="Editar movimiento" class="text-slate-500 hover:text-amber-400 p-1 transition"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
-            <button onclick="deleteTransaction('${t.id}')" title="Eliminar movimiento" class="text-slate-500 hover:text-rose-400 p-1 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+            <button onclick="copyToNextMonth('${t.id}')" title="Copiar al mes siguiente" class="text-slate-500 hover:text-emerald-400 p-1 transition"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+            <button onclick="moveToNextMonth('${t.id}')" title="Posponer al mes siguiente" class="text-slate-500 hover:text-sky-400 p-1 transition"><i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i></button>
+            <button onclick="editTransaction('${t.id}')" title="Editar" class="text-slate-500 hover:text-amber-400 p-1 transition"><i data-lucide="edit-2" class="w-3.5 h-3.5"></i></button>
+            <button onclick="deleteTransaction('${t.id}')" title="Eliminar" class="text-slate-500 hover:text-rose-400 p-1 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
           </td>
         </tr>
       `).join('');
@@ -2251,7 +2567,6 @@
       const wsGroups = window.paymentGroups.filter(g => g.entity === window.currentEntity);
       let txs = window.transactions.filter(t => t.entity === window.currentEntity);
 
-      // Strict Month and Year Filtering
       txs = txs.filter(t => {
         const { year, month } = window.parseTxDate(t.date);
         if (year !== window.currentYear) return false;
@@ -2259,14 +2574,12 @@
         return true;
       });
 
-      // Update indicator label for current selected period
       const labelEl = document.getElementById('payment-groups-month-label');
       if (labelEl) {
         const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
         labelEl.innerText = window.currentMonth === 'ALL' ? `(${window.currentYear})` : `(${monthNames[Number(window.currentMonth)]} ${window.currentYear})`;
       }
 
-      // Check for transactions with "General" or unassigned group to also show a card
       const unassignedTxs = txs.filter(t => !t.group || t.group === 'General' || !wsGroups.some(g => g.name === t.group));
 
       if (wsGroups.length === 0 && unassignedTxs.length === 0) {
@@ -2280,10 +2593,7 @@
       }
 
       container.innerHTML = groupsToRender.map(g => {
-        const groupTxs = g.isUnassigned 
-          ? unassignedTxs 
-          : txs.filter(t => t.group === g.name);
-
+        const groupTxs = g.isUnassigned ? unassignedTxs : txs.filter(t => t.group === g.name);
         const inc = groupTxs.filter(t => t.type === 'INCOME' && t.status === 'PAID').reduce((a, b) => a + Number(b.amount), 0);
         const exp = groupTxs.filter(t => t.type === 'EXPENSE' && t.status === 'PAID').reduce((a, b) => a + Number(b.amount), 0);
         const net = inc - exp;
@@ -2513,7 +2823,6 @@
 
       let balance = income - expense;
 
-      // Handle Rollover from Previous Months if enabled
       const rolloverBanner = document.getElementById('dashboard-rollover-banner');
       if (window.enableRollover && window.currentMonth !== 'ALL') {
         const curM = Number(window.currentMonth);
@@ -2558,7 +2867,6 @@
         }
       });
 
-      // Monthly Comparison Bar Chart
       const ctx1 = document.getElementById('chart-monthly-comparison')?.getContext('2d');
       if (ctx1) {
         if (chartMonthlyComp) chartMonthlyComp.destroy();
@@ -2583,7 +2891,6 @@
         });
       }
 
-      // Category Doughnut Chart
       const catMap = {};
       txs.filter(t => t.type === 'EXPENSE' && t.status === 'PAID').forEach(t => {
         catMap[t.concept] = (catMap[t.concept] || 0) + Number(t.amount);
@@ -2612,7 +2919,6 @@
         });
       }
 
-      // Interannual Chart
       const ctx3 = document.getElementById('chart-interannual')?.getContext('2d');
       if (ctx3) {
         if (chartInterannual) chartInterannual.destroy();
@@ -2665,10 +2971,10 @@
       const img = document.getElementById('receipt-preview-img');
       if (!img.src) return;
 
-      window.showToast('🔍 Analizando comprobante con Gemini IA...', 'info');
+      window.showToast('🔍 Analizando comprobante...', 'info');
       try {
         const base64Data = img.src.split(',')[1];
-        const prompt = "Analiza este recibo/comprobante de pago. Extrae el monto total, la fecha, el concepto principal y sugiere si es egreso o ingreso en formato JSON: {\"amount\": number, \"date\": \"YYYY-MM-DD\", \"concept\": string, \"type\": \"EXPENSE\"|\"INCOME\"}";
+        const prompt = "Analiza este recibo/comprobante de pago. Extrae el monto total, la fecha, el concepto principal y tipo en formato JSON: {\"amount\": number, \"date\": \"YYYY-MM-DD\", \"concept\": string, \"type\": \"EXPENSE\"|\"INCOME\"}";
         
         const apiKey = "";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
@@ -2691,7 +2997,7 @@
         if (response.ok) {
           const resJson = await response.json();
           const txt = resJson.candidates?.[0]?.content?.parts?.[0]?.text || '';
-          window.showToast('✅ Comprobante procesado exitosamente', 'success');
+          window.showToast('✅ Comprobante procesado', 'success');
           window.openAddTransactionModal();
           try {
             const parsed = JSON.parse(txt.substring(txt.indexOf('{'), txt.lastIndexOf('}') + 1));
@@ -2722,7 +3028,7 @@
 
         const payload = {
           contents: [{ parts: [{ text: userText }] }],
-          systemInstruction: { parts: [{ text: "Eres un asesor financiero inteligente para personas y clubes deportivos de rugby. Responde de forma concisa y práctica en español." }] }
+          systemInstruction: { parts: [{ text: "Eres un asesor financiero inteligente. Responde de forma concisa y práctica en español." }] }
         };
 
         const response = await window.fetchWithRetry(apiUrl, {
@@ -2757,6 +3063,9 @@
         activeMembers = activeMembers.filter(m => m.entity === window.currentEntity);
       }
 
+      const currWs = window.entities.find(e => e.id === window.currentEntity);
+      const isClub = currWs ? (currWs.isClub !== false) : true;
+
       const totalInc = activeTxs.filter(t => t.type === 'INCOME' && t.status === 'PAID').reduce((a, b) => a + Number(b.amount), 0);
       const totalExp = activeTxs.filter(t => t.type === 'EXPENSE' && t.status === 'PAID').reduce((a, b) => a + Number(b.amount), 0);
       const netBalance = totalInc - totalExp;
@@ -2769,7 +3078,7 @@
           <div>
             <span class="px-2.5 py-1 bg-purple-500/20 text-purple-300 rounded-lg text-[10px] font-extrabold uppercase tracking-wider">Auditoría Ejecutiva</span>
             <h2 class="text-xl font-black text-white mt-1">Informe de Desempeño Financiero & Operativo</h2>
-            <p class="text-xs text-slate-400">Generado automáticamente el ${new Date().toLocaleDateString('es-CL')} • Alcance: ${scope === 'CURRENT' ? 'Espacio Activo' : 'Global (Todos los espacios)'}</p>
+            <p class="text-xs text-slate-400">Generado el ${new Date().toLocaleDateString('es-CL')} • Alcance: ${scope === 'CURRENT' ? (currWs?.name || 'Espacio Activo') : 'Global'}</p>
           </div>
           <button onclick="window.print()" class="px-3.5 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 no-print">
             <i data-lucide="printer" class="w-4 h-4"></i> Imprimir Reporte
@@ -2791,7 +3100,7 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 ${isClub ? 'md:grid-cols-2' : ''} gap-4">
           <div class="p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-2">
             <h4 class="font-bold text-xs text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <i data-lucide="alert-circle" class="w-4 h-4"></i> Facturas y Deudas Por Cobrar/Pagar
@@ -2806,6 +3115,7 @@
             </div>
           </div>
 
+          ${isClub ? `
           <div class="p-4 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-2">
             <h4 class="font-bold text-xs text-purple-400 uppercase tracking-wider flex items-center gap-2">
               <i data-lucide="shield" class="w-4 h-4"></i> Estado Nómina Deportiva
@@ -2818,7 +3128,7 @@
               <span class="text-slate-400">Cuotas Sociales Activas:</span>
               <strong class="text-emerald-400">${activeMembers.filter(m => !m.isExempt).length} Pagadores</strong>
             </div>
-          </div>
+          </div>` : ''}
         </div>
       `;
       if (window.lucide) lucide.createIcons();
@@ -2830,21 +3140,19 @@
       if (!tbody) return;
 
       if (!window.currentUser) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-500 font-medium">🔒 Inicia sesión para ver y gestionar la nómina de jugadores.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-500 font-medium">🔒 Inicia sesión para ver jugadores.</td></tr>`;
         return;
       }
 
       const list = window.members.filter(m => m.entity === window.currentEntity);
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No hay jugadores registrados en este espacio de trabajo.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No hay jugadores registrados en este espacio.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = list.map(m => {
         const totalDebt = (m.isExempt ? 0 : Number(m.commitments?.cuota || 0)) + Number(m.commitments?.rifa || 0) + Number(m.commitments?.evento || 0) + Number(m.commitments?.partido || 0) + Number(m.commitments?.tercer || 0);
-        
         const fenaxScore = Math.round(((m.evalTech || 80) + (m.evalTact || 75) + (m.evalPhys || 85) + (m.evalAtt || 90)) / 4);
-
         const posText = [m.position, m.posSecondary, m.posTertiary].filter(Boolean).join(' / ') || 'Sin Posición';
 
         const statusBadge = m.status === 'INJURED' 
@@ -2863,7 +3171,7 @@
               <img src="${m.photoURL || 'https://placehold.co/80x80/064e3b/10b981?text=' + (m.name?.[0] || 'R')}" class="w-8 h-8 rounded-full border border-slate-700 object-cover flex-shrink-0">
               <div>
                 <p class="font-bold text-white text-xs">${m.name}</p>
-                <p class="text-[10px] text-slate-400">${m.age ? m.age + ' años' : 'Ficha Deportiva'}</p>
+                <p class="text-[10px] text-slate-400">${m.age ? m.age + ' años' : 'Ficha'}</p>
               </div>
             </td>
             <td class="p-3.5 font-bold text-amber-400 text-xs">${m.division || 'SUB18'}</td>
@@ -2874,8 +3182,8 @@
             </td>
             <td class="p-3.5 text-center">${finBadge}</td>
             <td class="p-3.5 text-center" onclick="event.stopPropagation()">
-              <button onclick="openPlayerDetailModal('${m.id}')" title="Ver / Editar Ficha" class="text-slate-400 hover:text-emerald-400 p-1.5 transition"><i data-lucide="eye" class="w-4 h-4"></i></button>
-              <button onclick="deleteClubMember('${m.id}')" title="Eliminar Jugador" class="text-slate-400 hover:text-rose-400 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+              <button onclick="openPlayerDetailModal('${m.id}')" title="Ver Ficha" class="text-slate-400 hover:text-emerald-400 p-1.5 transition"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button onclick="deleteClubMember('${m.id}')" title="Eliminar" class="text-slate-400 hover:text-rose-400 p-1.5 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </td>
           </tr>
         `;
@@ -2913,7 +3221,7 @@
       window.saveAllDataLocally();
       window.closeModal('add-member-modal');
       window.renderApp();
-      window.showToast('Jugador agregado exitosamente', 'success');
+      window.showToast('Jugador agregado', 'success');
       window.openPlayerDetailModal(newPlayer.id);
     };
 
@@ -2932,7 +3240,6 @@
       if (!player) return;
       window.activePlayerId = id;
 
-      // Defensive fallbacks for player object structures
       player.commitments = player.commitments || { cuota: 0, rifa: 0, evento: 0, partido: 0, tercer: 0 };
       player.contactData = player.contactData || { phone: '', email: '', parentName: '', parentPhone: '' };
       player.physical = player.physical || { weight: '', height: '', bmi: '', sprint: '' };
@@ -2942,7 +3249,7 @@
       document.getElementById('pdetail-name').innerText = player.name;
       document.getElementById('pdetail-sport-text').innerText = player.sport || 'Rugby XV';
       document.getElementById('pdetail-division').innerText = player.division || 'SUB18';
-      document.getElementById('pdetail-age').innerText = player.age ? `${player.age} años` : 'Ficha Deportiva';
+      document.getElementById('pdetail-age').innerText = player.age ? `${player.age} años` : 'Ficha';
 
       document.getElementById('pdetail-pos1').innerText = `1ra: ${player.position || 'N/A'}`;
       document.getElementById('pdetail-pos2').innerText = `2da: ${player.posSecondary || 'N/A'}`;
@@ -2950,10 +3257,8 @@
 
       document.getElementById('pdetail-avatar').src = player.photoURL || `https://placehold.co/120x120/064e3b/10b981?text=${player.name[0]}`;
 
-      // Set Physical Status Badge
       window.updatePlayerPhysicalBadgeUI(player.status || 'ACTIVE');
 
-      // Fill Evaluation Tab Inputs
       document.getElementById('peval-sport-input').value = player.sport || 'Rugby XV';
       document.getElementById('peval-status-select').value = player.status || 'ACTIVE';
       document.getElementById('peval-pos1-input').value = player.position || '';
@@ -2971,23 +3276,18 @@
 
       document.getElementById('peval-coach-notes').value = player.coachNotes || '';
 
-      // Attendance
       document.getElementById('patt-train-att').value = player.attendance?.trainAtt || 0;
       document.getElementById('patt-train-tot').value = player.attendance?.trainTot || 5;
       document.getElementById('patt-match-att').value = player.attendance?.matchAtt || 0;
       document.getElementById('patt-match-tot').value = player.attendance?.matchTot || 3;
       window.recalculateAttendanceUI();
-
-      // FENAX Score Calculation
       window.recalculateFENAXScore();
 
-      // Physical Tab
       document.getElementById('pphys-weight').value = player.physical?.weight || '';
       document.getElementById('pphys-height').value = player.physical?.height || '';
       document.getElementById('pphys-sprint').value = player.physical?.sprint || '';
       window.calculatePlayerBMI();
 
-      // Finances Tab
       document.getElementById('pfin-exempt-check').checked = !!player.isExempt;
       document.getElementById('pfin-amt-cuota').value = player.commitments?.cuota || 0;
       document.getElementById('pfin-amt-rifa').value = player.commitments?.rifa || 0;
@@ -2997,13 +3297,11 @@
       window.updateFinancialBadgesUI();
       window.renderPlayerPaymentHistoryUI(player);
 
-      // Medical Tab
       document.getElementById('pmed-blood').value = player.medical?.blood || 'O+';
       document.getElementById('pmed-insurance').value = player.medical?.insurance || '';
       document.getElementById('pmed-allergies').value = player.medical?.allergies || '';
       window.renderPlayerInjuriesListUI(player);
 
-      // Contact Tab
       document.getElementById('pcnt-phone').value = player.contactData?.phone || '';
       document.getElementById('pcnt-email').value = player.contactData?.email || '';
       document.getElementById('pcnt-parent-name').value = player.contactData?.parentName || '';
@@ -3124,7 +3422,6 @@
 
       if (!amt || amt <= 0) { window.showToast('Ingresa un monto válido', 'warning'); return; }
 
-      // Deduct from commitment debt
       if (player.commitments && player.commitments[concept] !== undefined) {
         player.commitments[concept] = Math.max(0, player.commitments[concept] - amt);
       }
@@ -3138,7 +3435,6 @@
         date: new Date().toISOString().split('T')[0]
       });
 
-      // Update UI inputs
       if (document.getElementById(`pfin-amt-${concept}`)) {
         document.getElementById(`pfin-amt-${concept}`).value = player.commitments[concept];
       }
@@ -3156,7 +3452,7 @@
       if (!container) return;
 
       if (!player.paymentHistory || player.paymentHistory.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 p-2">Sin historial de abonos registrados.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-500 p-2">Sin historial de abonos.</p>`;
         return;
       }
 
@@ -3207,7 +3503,7 @@
       if (!container) return;
 
       if (!player.medical?.injuries || player.medical.injuries.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-500 p-2">Sin registro de lesiones activas.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-500 p-2">Sin registro de lesiones.</p>`;
         return;
       }
 
@@ -3291,11 +3587,22 @@
       window.saveAllDataLocally();
       window.closeModal('player-detail-modal');
       window.renderApp();
-      window.showToast('Ficha de jugador guardada', 'success');
+      window.showToast('Ficha guardada', 'success');
     };
 
     window.exportPlayerFichaPDF = function() {
       window.print();
+    };
+
+    window.copyPairingCode = function() {
+      if (!window.activePairingCode) return;
+      const el = document.createElement('textarea');
+      el.value = window.activePairingCode;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      window.showToast('📋 Código de 6 dígitos copiado', 'success');
     };
 
     window.renderApp = function() {
@@ -3307,6 +3614,7 @@
       window.renderBudgetTable();
       window.renderGoals();
       window.renderClubMembersTable();
+      window.renderCollaboratorsList();
       window.renderCharts();
       if (window.lucide) lucide.createIcons();
     };
@@ -3325,11 +3633,11 @@
         window.transactions = JSON.parse(localStorage.getItem('fz_transactions')) || [
           { id: 'tx_1', entity: 'club', type: 'INCOME', amount: 1500000, status: 'PAID', date: `${window.currentYear}-09-05`, concept: 'Cuotas Sociales', group: 'Cobro Cuotas', description: 'Cuotas Mes Septiembre' },
           { id: 'tx_2', entity: 'club', type: 'EXPENSE', amount: 450000, status: 'PAID', date: `${window.currentYear}-09-10`, concept: 'Indumentaria & Balones', group: 'Equipamiento', description: 'Compra de Balones Gilbert' },
-          { id: 'tx_3', entity: 'club', type: 'EXPENSE', amount: 200000, status: 'PENDING', date: `${window.currentYear}-09-18`, concept: 'Cancha & Iluminación', group: 'Infraestructura', description: 'Arriendo Cancha Sintética' }
+          { id: 'tx_3', entity: 'club', type: 'EXPENSE', amount: 200000, status: 'PENDING', date: `${window.currentYear}-09-18`, concept: 'Cancha & Iluminación', group: 'Infraestructura', description: 'Arriendo Cancha Sintética' },
+          { id: 'tx_4', entity: 'personal', type: 'INCOME', amount: 950000, status: 'PAID', date: `${window.currentYear}-09-01`, concept: 'Sueldo', group: 'General', description: 'Salario Mensual' }
         ];
         window.budgets = JSON.parse(localStorage.getItem('fz_budgets')) || [
-          { id: 'b_1', entity: 'club', concept: 'Indumentaria & Balones', amount: 600000 },
-          { id: 'b_2', entity: 'club', concept: 'Cancha & Iluminación', amount: 300000 }
+          { id: 'b_1', entity: 'club', concept: 'Indumentaria & Balones', amount: 600000 }
         ];
         window.savingsGoals = JSON.parse(localStorage.getItem('fz_savings_goals')) || [
           { id: 'g_1', entity: 'club', title: 'Fondo Gira Deportiva 2027', target: 5000000, current: 1800000 }
@@ -3355,13 +3663,14 @@
           { id: 'c_2', entity: 'club', name: 'Sponsors & Eventos', type: 'INCOME' },
           { id: 'c_3', entity: 'club', name: 'Indumentaria & Balones', type: 'EXPENSE' },
           { id: 'c_4', entity: 'club', name: 'Cancha & Iluminación', type: 'EXPENSE' },
-          { id: 'c_5', entity: 'club', name: 'Tercer Tiempo', type: 'EXPENSE' }
+          { id: 'c_5', entity: 'personal', name: 'Sueldo', type: 'INCOME' },
+          { id: 'c_6', entity: 'personal', name: 'Gastos Personales', type: 'EXPENSE' }
         ];
         window.paymentGroups = JSON.parse(localStorage.getItem('fz_payment_groups')) || [
           { id: 'g_1', entity: 'club', name: 'Cobro Cuotas', icon: '👥' },
-          { id: 'g_2', entity: 'club', name: 'Equipamiento', icon: '🏉' },
-          { id: 'g_3', entity: 'club', name: 'Infraestructura', icon: '🏟️' }
+          { id: 'g_2', entity: 'club', name: 'Equipamiento', icon: '🏉' }
         ];
+        window.collaborators = JSON.parse(localStorage.getItem('fz_collaborators')) || [];
       } catch (err) {
         console.error('Error al inicializar datos:', err);
       }
